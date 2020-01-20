@@ -1,0 +1,28 @@
+###############################################################################
+# Licensed Materials - Property of IBM
+# (C) Copyright IBM Corporation 2018, 2019 All Rights Reserved
+# US Government Users Restricted Rights - Use, duplication or disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
+###############################################################################
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: {{ .Values.platformApi.name }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/name:  {{ .Release.Name }}
+    helm.sh/chart: {{ .Release.Name }}
+  name: "{{ .Values.platformApi.name }}"
+spec:
+  type: ClusterIP
+  ports:
+    - port: 6969
+      targetPort: 6969
+  selector:
+    k8s-app: "{{ .Values.platformApi.name }}"
+    release: {{ .Release.Name }}

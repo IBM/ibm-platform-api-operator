@@ -1,0 +1,29 @@
+###############################################################################
+# Licensed Materials - Property of IBM
+# (C) Copyright IBM Corporation 2019 All Rights Reserved
+# US Government Users Restricted Rights - Use, duplication or disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
+###############################################################################
+
+qualification:
+  levelName: "certified-ibm-cloud-pak"
+  levelDescription: "IBM certified container"
+  issueDate: "11/2019"
+  duration: "12M"
+  terms: "Valid from date of issue. Security vulnerability management and enhancements are delivered on the latest version of the chart and images."
+
+prereqs:
+  security:
+    kubernetes:
+      podSecurityPolicy:
+        name: "ibm-restricted-psp"
+    openshift:
+      securityContextConstraints:
+        name: "ibm-restricted-scc"
+    ibmCloudPrivate:
+      installerRole:
+        name: "ClusterAdministrator"
+  k8sDistros:
+    kubernetes: 
+      semver: ">=1.11.0"
+    openshift:
+      semver: ">=1.11.0"

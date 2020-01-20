@@ -1,0 +1,355 @@
+###############################################################################
+# Licensed Materials - Property of IBM
+# (C) Copyright IBM Corporation 2018, 2019 All Rights Reserved
+# US Government Users Restricted Rights - Use, duplication or disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
+###############################################################################
+
+runAsUser:
+  __metadata:
+    label: "Run as User"
+    description: "What user to run as"
+    type: "string"
+    immutable: false
+    required: false
+    
+platformApi:
+  __metadata:
+    label: "Platform Api parameters"
+    description: "Platform Api Chart configuration"
+  name:
+    __metadata:
+      name: "name"
+      label: "Name"
+      description: "platformApi.name: Helm Release Name"
+      type: "string"
+      immutable: false
+      required: true
+      
+  replicaCount:
+    __metadata:
+      name: "replicaCount"
+      label: "Replica count"
+      description: "platformApi.replicaCount: Number of replica pods"
+      type: "number"
+      immutable: false
+      required: true
+  
+  hostNetwork:
+    __metadata:
+      name: "hostNetwork"
+      label: "Host network"
+      description: "platformApi.hostNetwork: Host Network"
+      type: "boolean"
+      immutable: false
+      required: true
+  
+  ## Image configuration metadata
+  image:
+    label: "Docker image"
+    description: "platformApi.image: Platform Api image"
+    repository:
+      __metadata:
+        name: "repository"
+        label: "Docker repository"
+        description: "platformApi.image.repository: Repository for the platform api image"
+        type: "string"
+        immutable: false
+        required: true
+    tag:
+      __metadata:
+        name: "tag"
+        label: "Tag"
+        description: "platformApi.image.tag: Tag for the platform api image"
+        type: "string"
+        immutable: false
+        required: true
+    pullPolicy:
+      __metadata:
+        name: "pullPolicy"
+        label: "Docker image pull policy"
+        description: "platformApi.image.pullPolicy: Pull Policy for the platform api image"
+        type: "string"
+        immutable: false
+        required: true
+        options:
+        - label: "IfNotPresent"
+          value: "IfNotPresent"
+        - label: "Always"
+          value: "Always"
+        - label: "Never"
+          value: "Never"
+
+  namespace:
+    __metadata:
+      name: "namespace"
+      label: "Namespace"
+      description: "platformApi.meta.namespace: Cluster resource namespace"
+      type: "string"
+      immutable: false
+      required: true
+
+  ## Resource requests and limits configuration metadata
+  resources:
+    label: "Resources"
+    description: "platformApi.resources: Resources"
+    requests:
+      cpu: 
+        __metadata: 
+          label: "CPU request"
+          description: "platformApi.resources.requests.cpu: The requested CPU"
+          type: "string"
+          required: true   
+      memory: 
+        __metadata: 
+          label: "Memory request"
+          description: "platformApi.resources.requests.memory: The memory request"
+          type: "string"
+          required: true   
+    limits:
+      cpu: 
+        __metadata: 
+          label: "CPU limit"
+          description: "platformApi.resources.limits.cpu: The CPU limit"
+          type: "string"
+          required: true   
+      memory: 
+        __metadata: 
+          label: "Memory limit"
+          description: "platformApi.resources.limits.memory: The memory limit"
+          type: "string"
+          required: true   
+
+  ## Cluster Configuration metadata
+  config:
+    label: "Cluster configuration"
+    description: "platformApi.config: Configuration"
+    clusterInternalAddress:
+      __metadata:
+        name: "clusterInternalAddress"
+        label: "Cluster Internal address"
+        description: "platformApi.config.clusterInternalAddress: The cluster internal address"
+        type: "string"
+        immutable: false
+        required: true
+    # etcdConfig:
+    #   __metadata:
+    #     name: "etcdConfig"
+    #     label: "etcd configuration"
+    #     description: "platformApi.config.etcdConfig: The etcd configuration"
+    #     type: "string"
+    #     immutable: false
+    #     required: true
+    etcdSecret:
+      __metadata:
+        name: "etcdSecret"
+        label: "etcd secret"
+        description: "platformApi.config.etcdSecret: The etcd secret"
+        type: "string"
+        immutable: false
+        required: true
+    clusterCASecret:
+      __metadata:
+        name: "clusterCASecret"
+        label: "Cluster CA Secret"
+        description: "platformApi.config.clusterCASecret: The cluster ca secret"
+        type: "string"
+        immutable: false
+        required: true
+    clusterExternalAddress:
+      __metadata:
+        name: "clusterExternalAddress"
+        label: "Cluster External address"
+        description: "platformApi.config.clusterExternalAddress: The cluster external address"
+        type: "string"
+        immutable: false
+        required: true
+    clusterSecurePort:
+      __metadata:
+        name: "clusterSecurePort"
+        label: "Cluster secure port"
+        description: "platformApi.config.clusterSecurePort: The Cluster Secure port"
+        type: "number"
+        immutable: false
+        required: true
+    kubeApiserverSecurePort:
+      __metadata:
+        name: "kubeApiserverSecurePort"
+        label: "Kube apiserver secure port"
+        description: "platformApi.config.kubeApiserverSecurePort: The Kube apiserver secure port"
+        type: "number"
+        immutable: false
+        required: true
+    clusterName:
+      __metadata:
+        name: "clusterName"
+        label: "Cluster Name"
+        description: "platformApi.config.clusterName: Cluster name"
+        type: "string"
+        immutable: false
+        required: true
+    clusterCAdomain:
+      __metadata:
+        name: "clusterCAdomain"
+        label: "Cluster CA Domain Name"
+        description: "platformApi.config.clusterCAdomain: The Cluster CA Domain"
+        type: "string"
+        immutable: false
+        required: true
+    acctName:
+      __metadata:
+        name: "acctName"
+        label: "Account Name"
+        description: "platformApi.config.acctName: The Account name"
+        type: "string"
+        immutable: false
+        required: true
+
+  ## NodeSelector Configuration
+  nodeSelector:
+    label: "Node Selector"
+    description: "platformApi.nodeSelector: The Node Selector"
+    master:
+      __metadata:
+        name: "master"
+        label: "master node"
+        description: "platformApi.nodeSelector.master: The master node"
+        type: "string"
+        immutable: false
+        required: true
+
+  ## tolerations configuration metadata
+  tolerations:
+    __metadata:
+      name: "tolerations"
+      label: "Tolerations"
+      description: "Toleration labels for pod assignment, e.g. [{\"key\": \"key\", \"operator\":\"Equal\", \"value\": \"value\", \"effect\":\"NoSchedule\"}]"
+      type: "string"
+      immutable: false
+      required: false
+    
+## Audit Service Configuration
+auditService:
+  __metadata:
+    label: "Audit Service Parameters"
+    description: "Configuration for the Audit Service sidecar in platform api chart configuration"
+
+  ## Image configuration metadata
+  image:
+    label: "Audit image"
+    description: "auditService.image: Audit image"
+    repository:
+      __metadata:
+        name: "repository"
+        label: "Docker repository"
+        description: "auditService.image.repository: Repository for the audit image"
+        type: "string"
+        immutable: false
+        required: true
+    tag:
+      __metadata:
+        name: "tag"
+        label: "Tag"
+        description: "auditService.image.tag: Tag for the audit image"
+        type: "string"
+        immutable: false
+        required: true
+    pullPolicy:
+      __metadata:
+        name: "pullPolicy"
+        label: "Docker image pull policy"
+        description: "auditService.image.pullPolicy: Pull Policy for the audit image"
+        type: "string"
+        immutable: false
+        required: true
+        options:
+        - label: "IfNotPresent"
+          value: "IfNotPresent"
+        - label: "Always"
+          value: "Always"
+        - label: "Never"
+          value: "Never"
+
+  ## Resource requests and limits configuration metadata
+  resources:
+    label: "Resources"
+    description: "auditService.resources: Resources"
+    requests:
+      cpu: 
+        __metadata: 
+          label: "CPU request"
+          description: "auditService.resources.requests.cpu: The requested CPU"
+          type: "string"
+          required: true   
+      memory: 
+        __metadata: 
+          label: "Memory request"
+          description: "auditService.resources.requests.memory: The memory request"
+          type: "string"
+          required: true   
+    limits:
+      cpu: 
+        __metadata: 
+          label: "CPU limit"
+          description: "auditService.resources.limits.cpu: The CPU limit"
+          type: "string"
+          required: true   
+      memory: 
+        __metadata: 
+          label: "Memory limit"
+          description: "auditService.resources.limits.memory: The memory limit"
+          type: "string"
+          required: true   
+
+  ## Cluster Configuration metadata
+  config:
+    label: "Configuration"
+    description: "auditService.config: Configuration"
+    enabled:
+      __metadata:
+        name: "enabled"
+        label: "enabled key"
+        description: "auditService.config.enabled: The enabled"
+        type: "boolean"
+        immutable: false
+        required: true
+    auditEnabled:
+      __metadata:
+        name: "auditEnabled"
+        label: "Audit enabled"
+        description: "auditService.config.auditEnabled: The audit enabled"
+        type: "boolean"
+        immutable: false
+        required: true
+    # journalPath:
+    #   __metadata:
+    #     name: "journalPath"
+    #     label: "Journal path"
+    #     description: "auditService.config.journalPath: The journal path"
+    #     type: "string"
+    #     immutable: false
+    #     required: true
+    auditLogPath:
+      __metadata:
+        name: "auditLogPath"
+        label: "Audit log path"
+        description: "auditService.config.auditLogPath: The audit log path"
+        type: "string"
+        immutable: false
+        required: true
+    logrotate:
+      __metadata:
+        name: "logrotate"
+        label: "Log rotate"
+        description: "auditService.config.logrotate: The logrotate"
+        type: "string"
+        immutable: false
+        required: true
+    logrotateConf:
+      __metadata:
+        name: "logrotateConf"
+        label: "Log rotate conf"
+        description: "auditService.config.logrotate: The log rotate conf"
+        type: "string"
+        immutable: false
+        required: true
+

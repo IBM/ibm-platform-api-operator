@@ -1,0 +1,40 @@
+###############################################################################
+# Licensed Materials - Property of IBM
+# (C) Copyright IBM Corporation 2018, 2019 All Rights Reserved
+# US Government Users Restricted Rights - Use, duplication or disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
+###############################################################################
+
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: platform-api
+  namespace: {{ .Values.platformApi.namespace }}
+  labels:
+    app: {{ .Values.platformApi.name }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    component: {{ .Values.platformApi.name }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/name:  {{ .Values.platformApi.name }}
+    helm.sh/chart: {{ .Release.Name }}
+data:
+  IDENTITY_PROVIDER_URL: "https://platform-identity-provider:4300"
+  KUBERNETES_API_URL: "https://kubernetes.default"
+  OIDC_URL: "https://platform-auth-service:9443"
+  CLUSTER_IP: "{{.Values.platformApi.config.clusterInternalAddress}}"
+  CLUSTER_NAME: "{{.Values.platformApi.config.clusterName}}"
+  CLUSTER_URL: "https://{{.Values.platformApi.config.clusterExternalAddress}}:{{.Values.platformApi.config.clusterSecurePort}}"
+  CLUSTER_CA_DOMAIN: "{{.Values.platformApi.config.clusterCAdomain}}"
+  CLUSTER_EXTERNAL_URL: "https://{{.Values.platformApi.config.clusterExternalAddress}}:{{.Values.platformApi.config.clusterSecurePort}}"
+  ACCT_NAME: "{{ .Values.platformApi.config.acctName }}"
+  IDENTITY_MGMT_URL: "https://platform-identity-management:4500"
+  KUBERNETES_API_EXTERNAL_URL: "https://{{.Values.platformApi.config.clusterExternalAddress}}:{{.Values.platformApi.config.kubeApiserverSecurePort}}"
+  AUDIT_ENABLED: "{{ .Values.auditService.config.auditEnabled }}"
+  AUDIT_LOG_PATH: "{{ .Values.auditService.config.auditLogPath }}"
+  LOGROTATE: |-
+{{ .Values.auditService.config.logrotate | indent 4 }}
+  LOGROTATE_CONF: |-
+{{ .Values.auditService.config.logrotateConf | indent 4 }}
