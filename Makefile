@@ -25,7 +25,7 @@ REGISTRY ?= quay.io/opencloudio
 # Override this variable ue with your own value if you're working on forked repo.
 GIT_HOST ?= github.com/IBM
 
-BASE_DIR := ibm-catalog-operator
+BASE_DIR := ibm-cloudctl-operator
 
 TESTARGS_DEFAULT := "-v"
 export TESTARGS ?= $(TESTARGS_DEFAULT)
