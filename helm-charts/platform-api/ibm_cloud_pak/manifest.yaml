@@ -1,0 +1,47 @@
+###############################################################################
+# Licensed Materials - Property of IBM
+# (C) Copyright IBM Corporation 2019 All Rights Reserved
+# US Government Users Restricted Rights - Use, duplication or disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
+###############################################################################
+
+charts:
+  - archive: file://repo/stable/platform-api-3.4.1.tgz
+    repository-keys:
+      - platformApi.image.repository
+      - auditService.image.repository
+
+images:
+  - image: ibmcom/icp-platform-api:3.3.0
+    references:
+      - repository: "ibmcom/icp-platform-api-amd64:3.3.0"
+        pull-repository: "ibmcom/icp-platform-api:3.3.0-amd64"
+        platform:
+          os: linux
+          architecture: amd64
+      - repository: "ibmcom/icp-platform-api-ppc64le:3.3.0"
+        pull-repository: "ibmcom/icp-platform-api:3.3.0-ppc64le"
+        platform:
+          os: linux
+          architecture: ppc64le
+      - repository: "ibmcom/icp-platform-api-s390x:3.3.0"
+        pull-repository: "ibmcom/icp-platform-api:3.3.0-s390x"
+        platform:
+          os: linux
+          architecture: s390x
+  - image: ibmcom/icp-audit-service:3.3.1
+    references:
+      - repository: "ibmcom/icp-audit-service-amd64:3.3.1"
+        pull-repository: "ibmcom/icp-audit-service:3.3.1-amd64"
+        platform:
+          os: linux
+          architecture: amd64
+      - repository: "ibmcom/icp-audit-service-ppc64le:3.3.1"
+        pull-repository: "ibmcom/icp-audit-service:3.3.1-ppc64le"
+        platform:
+          os: linux
+          architecture: ppc64le
+      - repository: "ibmcom/icp-audit-service-s390x:3.3.1"
+        pull-repository: "ibmcom/icp-audit-service:3.3.1-s390x"
+        platform:
+          os: linux
+          architecture: s390x

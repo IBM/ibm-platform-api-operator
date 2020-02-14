@@ -1,0 +1,40 @@
+###############################################################################
+# Licensed Materials - Property of IBM
+# (C) Copyright IBM Corporation 2018, 2019 All Rights Reserved
+# US Government Users Restricted Rights - Use, duplication or disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
+###############################################################################
+
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: platform-api
+  namespace: {{ .Values.platformApi.namespace }}
+  labels:
+    app: {{ .Values.platformApi.name }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    component: {{ .Values.platformApi.name }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/name:  {{ .Release.Name }}
+    helm.sh/chart: {{ .Release.Name }}
+  annotations:
+    kubernetes.io/ingress.class: "ibm-icp-management"
+    icp.management.ibm.com/rewrite-target: "/"
+    icp.management.ibm.com/configuration-snippet: |
+      add_header Cache-Control "no-cache, no-store, must-revalidate";
+            add_header Pragma no-cache;
+            add_header Expires 0;
+            add_header X-Frame-Options "SAMEORIGIN";
+            add_header X-Content-Type-Options nosniff;
+            add_header X-XSS-Protection "1; mode=block";
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /api/
+        backend:
+          serviceName: platform-api
+          servicePort: 6969

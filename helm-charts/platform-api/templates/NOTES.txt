@@ -1,0 +1,1 @@
+You have successfully installed platform api {{ .Chart.Version }}

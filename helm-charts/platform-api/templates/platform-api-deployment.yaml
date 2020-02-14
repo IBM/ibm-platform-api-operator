@@ -1,0 +1,281 @@
+###############################################################################
+# Licensed Materials - Property of IBM
+# (C) Copyright IBM Corporation 2018, 2019 All Rights Reserved
+# US Government Users Restricted Rights - Use, duplication or disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
+###############################################################################
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.platformApi.name }}
+  labels:
+    app: {{ .Values.platformApi.name }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    component: {{ .Values.platformApi.name }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/name:  {{ .Release.Name }}
+    helm.sh/chart: {{ .Release.Name }}
+spec:
+  minReadySeconds: 0
+  replicas: {{ .Values.platformApi.replicaCount }}
+  selector:
+    matchLabels:
+      k8s-app: {{ .Values.platformApi.name }}
+  strategy:
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.platformApi.name }}
+        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+        heritage: {{ .Release.Service }}
+        k8s-app: {{ .Values.platformApi.name }}
+        component: {{ .Values.platformApi.name }}
+        release: {{ .Release.Name }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/managed-by: {{ .Release.Service }}
+        app.kubernetes.io/name:  {{ .Release.Name }}
+        helm.sh/chart: {{ .Release.Name }}
+      annotations:
+        scheduler.alpha.kubernetes.io/critical-pod: ''
+        seccomp.security.alpha.kubernetes.io/pod: docker/default
+    spec:
+      hostPID: false
+      hostIPC: false
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                - key: beta.kubernetes.io/arch
+                  operator: In
+                  values:
+                  - amd64
+                  - ppc64le
+                  - s390x
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - {{ .Values.platformApi.name }}
+            topologyKey: "kubernetes.io/hostname"
+      terminationGracePeriodSeconds: 60
+      hostNetwork: {{ .Values.platformApi.hostNetwork }}
+      initContainers:
+      - name: check-certs
+        image: "{{ .Values.platformApi.image.repository }}:{{ .Values.platformApi.image.tag }}"
+        securityContext:
+          allowPrivilegeEscalation: false
+          privileged: false
+          runAsNonRoot: true
+          readOnlyRootFilesystem: true
+          runAsUser: {{ .Values.runAsUser }}
+          capabilities:
+            drop:
+            - ALL
+        resources:
+          limits:
+            cpu: "1"
+            memory: 512Mi
+          requests:
+            cpu: "0.5"
+            memory: 256Mi
+        volumeMounts:
+          - name: cluster-certs
+            mountPath: /etc/cluster
+        command:
+        - sh
+        - -c
+        - |
+          while true; do
+            ls /etc/cluster/* && kubectl && break
+            sleep 30
+          done
+      containers:
+      {{ if .Values.auditService.config.enabled }}
+      - name: audit-service
+        image: "{{ .Values.auditService.image.repository }}:{{ .Values.auditService.image.tag }}"
+        imagePullPolicy: {{ .Values.auditService.image.pullPolicy }}
+        securityContext:
+          seLinuxOptions:
+            type: spc_t
+        readinessProbe:
+          exec:
+            command:
+            - cat
+            - /opt/ibm/icp-audit/VERSION
+          initialDelaySeconds: 3
+          periodSeconds: 3
+        livenessProbe:
+          exec:
+            command:
+            - cat
+            - /opt/ibm/icp-audit/VERSION
+          initialDelaySeconds: 3
+          periodSeconds: 3
+        securityContext:
+          allowPrivilegeEscalation: false
+          privileged: false
+          runAsNonRoot: true
+          runAsUser: {{ .Values.runAsUser }}
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
+        env:
+          - name: LOGROTATE
+            valueFrom:
+              configMapKeyRef:
+                name: platform-api
+                key: LOGROTATE
+          - name: LOGROTATE_CONF
+            valueFrom:
+              configMapKeyRef:
+                name: platform-api
+                key: LOGROTATE_CONF
+        resources:
+{{ toYaml .Values.auditService.resources | indent 10 }}
+        volumeMounts:
+        - name: shared
+          mountPath: {{ .Values.auditService.config.auditLogPath }}
+        - name: logrotate
+          mountPath: "/etc/logrotate.d/audit"
+          subPath: audit
+        - name: logrotate-conf
+          mountPath: "/etc/logrotate.conf"
+          subPath: logrotate.conf
+      {{ end }}
+      - name: platform-api
+        image: "{{ .Values.platformApi.image.repository }}:{{ .Values.platformApi.image.tag }}"
+        imagePullPolicy: {{ .Values.platformApi.image.pullPolicy }}
+        securityContext:
+          allowPrivilegeEscalation: false
+          privileged: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          {{- if not (.Capabilities.APIVersions.Has "security.openshift.io/v1") }}
+          runAsUser: {{ .Values.runAsUser }}
+          {{- end }}
+          capabilities:
+            drop:
+            - ALL
+        readinessProbe:
+          httpGet:
+            path: "/v1/config"
+            scheme: HTTP
+            port: 6969
+        livenessProbe:
+          httpGet:
+            path: "/v1/config"
+            scheme: HTTP
+            port: 6969
+        env:
+          - name: SERVICE_NAME
+            value: {{ .Values.platformApi.name }}
+          - name: LOG_LEVEL
+            value: "info"
+          - name: IAM_URL
+            valueFrom:
+              configMapKeyRef:
+                name: platform-api
+                key: IDENTITY_PROVIDER_URL
+          - name: KUBERNETES_API_URL
+            valueFrom:
+              configMapKeyRef:
+                name: platform-api
+                key: KUBERNETES_API_URL
+          - name: CLUSTER_IP
+            valueFrom:
+              configMapKeyRef:
+                name: platform-api
+                key: CLUSTER_IP
+          - name: OIDC_URL
+            valueFrom:
+              configMapKeyRef:
+                name: platform-api
+                key: OIDC_URL
+          - name: POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: POD_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          - name: AUDIT_ENABLED
+            valueFrom:
+              configMapKeyRef:
+                name: platform-api
+                key: AUDIT_ENABLED
+          - name: AUDIT_LOG_PATH
+            valueFrom:
+              configMapKeyRef:
+                name: platform-api
+                key: AUDIT_LOG_PATH
+          - name: CLUSTER_CA_CERT
+            value: "/etc/kube/ca.crt"
+          - name: CLUSTER_ADMIN_CERT
+            value: "/etc/kube/client.crt"
+          - name: CLUSTER_ADMIN_KEY
+            value: "/etc/kube/client.key"
+          - name: CONTEXT_ROOT
+            value: "/api"
+          - name: IDENTITY_MGMT_URL
+            valueFrom:
+              configMapKeyRef:
+                name: platform-api
+                key: IDENTITY_MGMT_URL
+        resources:
+{{ toYaml .Values.platformApi.resources | indent 10 }}
+        volumeMounts:
+          - name: cluster-certs
+            mountPath: /etc/cluster
+          {{ if .Values.auditService.config.enabled }}
+          - name: shared
+            mountPath: {{ .Values.auditService.config.auditLogPath }}
+          {{ end }}
+    {{- if .Values.platformApi.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.platformApi.nodeSelector | indent 8 }}
+    {{- end }}
+    {{- if .Values.platformApi.tolerations }}
+      tolerations:
+{{ toYaml .Values.platformApi.tolerations | indent 8 }}
+    {{- end }}
+      volumes:
+        - name: cluster-certs
+          secret:
+            secretName: {{ .Values.platformApi.config.clusterCASecret }}
+            optional: true
+            items:
+            - key: tls.crt
+              path: ca.pem
+            - key: tls.key
+              path: key.pem
+        {{ if .Values.auditService.config.enabled }}
+        - name: shared
+          emptyDir: {}
+        - configMap:
+            defaultMode: 420
+            items:
+            - key: LOGROTATE
+              path: audit
+            name: platform-api
+          name: logrotate
+        - configMap:
+            defaultMode: 420
+            items:
+            - key: LOGROTATE_CONF
+              path: logrotate.conf
+            name: platform-api
+          name: logrotate-conf
+        {{ end }}
