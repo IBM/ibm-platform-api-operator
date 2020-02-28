@@ -1,0 +1,68 @@
+apiVersion: operator.ibm.com/v1alpha1
+kind: PlatformApi
+metadata:
+  name: example-platformapi
+spec:
+  # Default values copied from <project_dir>/helm-charts/platform-api/values.yaml
+  
+  auditService:
+    config:
+      auditEnabled: false
+      auditLogPath: /var/log/audit
+      enabled: true
+      logrotate: |-
+        /var/log/audit/*.log {
+          copytruncate
+          rotate 24
+          hourly
+          missingok
+          notifempty
+        }
+      logrotateConf: include /etc/logrotate.d
+    image:
+      pullPolicy: IfNotPresent
+      repository: quay.io/opencloudio/icp-audit-service
+      tag: 3.3.1
+    resources:
+      limits:
+        cpu: 100m
+        memory: 512Mi
+      requests:
+        cpu: 50m
+        memory: 256Mi
+  platformApi:
+    config:
+      acctName: mycluster Account
+      clusterCASecret: cluster-ca-cert
+      clusterCAdomain: mycluster.icp
+      clusterExternalAddress: 127.0.0.1
+      clusterInternalAddress: 127.0.0.1
+      clusterName: mycluster
+      clusterSecurePort: 8443
+      etcdSecret: etcd-secret
+      kubeApiserverSecurePort: 8001
+    hostNetwork: false
+    image:
+      pullPolicy: IfNotPresent
+      repository: quay.io/opencloudio/icp-platform-api
+      tag: 3.3.0
+    name: platform-api
+    namespace: ibm-common-services
+    nodeSelector:
+      master: "true"
+    replicaCount: 1
+    resources:
+      limits:
+        cpu: 500m
+        memory: 512Mi
+      requests:
+        cpu: 50m
+        memory: 96Mi
+    tolerations:
+    - effect: NoSchedule
+      key: dedicated
+      operator: Exists
+    - key: CriticalAddonsOnly
+      operator: Exists
+  runAsUser: 65534
+  

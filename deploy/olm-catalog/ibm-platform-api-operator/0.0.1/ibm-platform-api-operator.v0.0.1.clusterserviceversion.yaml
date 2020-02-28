@@ -1,0 +1,262 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: ClusterServiceVersion
+metadata:
+  annotations:
+    alm-examples: |-
+      [
+        {
+          "apiVersion": "operator.ibm.com/v1alpha1",
+          "kind": "PlatformApi",
+          "metadata": {
+            "name": "example-platformapi"
+          },
+          "spec": {
+            "auditService": {
+              "config": {
+                "auditEnabled": false,
+                "auditLogPath": "/var/log/audit",
+                "enabled": true,
+                "logrotate": "/var/log/audit/*.log {\n  copytruncate\n  rotate 24\n  hourly\n  missingok\n  notifempty\n}",
+                "logrotateConf": "include /etc/logrotate.d"
+              },
+              "image": {
+                "pullPolicy": "IfNotPresent",
+                "repository": "quay.io/opencloudio/icp-audit-service",
+                "tag": "3.3.1"
+              },
+              "resources": {
+                "limits": {
+                  "cpu": "100m",
+                  "memory": "512Mi"
+                },
+                "requests": {
+                  "cpu": "50m",
+                  "memory": "256Mi"
+                }
+              }
+            },
+            "platformApi": {
+              "config": {
+                "acctName": "mycluster Account",
+                "clusterCASecret": "cluster-ca-cert",
+                "clusterCAdomain": "mycluster.icp",
+                "clusterExternalAddress": "127.0.0.1",
+                "clusterInternalAddress": "127.0.0.1",
+                "clusterName": "mycluster",
+                "clusterSecurePort": 8443,
+                "etcdSecret": "etcd-secret",
+                "kubeApiserverSecurePort": 8001
+              },
+              "hostNetwork": false,
+              "image": {
+                "pullPolicy": "IfNotPresent",
+                "repository": "quay.io/opencloudio/icp-platform-api",
+                "tag": "3.3.0"
+              },
+              "name": "platform-api",
+              "namespace": "ibm-common-services",
+              "nodeSelector": {
+                "master": "true"
+              },
+              "replicaCount": 1,
+              "resources": {
+                "limits": {
+                  "cpu": "500m",
+                  "memory": "512Mi"
+                },
+                "requests": {
+                  "cpu": "50m",
+                  "memory": "96Mi"
+                }
+              },
+              "tolerations": [
+                {
+                  "effect": "NoSchedule",
+                  "key": "dedicated",
+                  "operator": "Exists"
+                },
+                {
+                  "key": "CriticalAddonsOnly",
+                  "operator": "Exists"
+                }
+              ]
+            },
+            "runAsUser": 65534
+          }
+        }
+      ]
+    capabilities: Basic Install
+  name: ibm-platform-api-operator.v0.0.1
+  namespace: placeholder
+spec:
+  apiservicedefinitions: {}
+  customresourcedefinitions:
+    owned:
+    - description: PlatformApi is the Schema for the IBM Platform API / cloudctl
+      displayName: IBM Platform API Operator
+      kind: PlatformApi
+      name: platformapis.operator.ibm.com
+      version: v1alpha1
+  description: Placeholder description
+  displayName: IBM Platform API Operator
+  install:
+    spec:
+      deployments:
+      - name: ibm-platform-api-operator
+        spec:
+          replicas: 1
+          selector:
+            matchLabels:
+              name: ibm-platform-api-operator
+          strategy: {}
+          template:
+            metadata:
+              labels:
+                name: ibm-platform-api-operator
+            spec:
+              containers:
+              - env:
+                - name: WATCH_NAMESPACE
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.annotations['olm.targetNamespaces']
+                - name: POD_NAME
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.name
+                - name: OPERATOR_NAME
+                  value: ibm-platform-api-operator
+                image: quay.io/opencloudio/ibm-platform-api-operator:v0.0.1
+                imagePullPolicy: Always
+                name: ibm-platform-api-operator
+                resources: {}
+              serviceAccountName: ibm-platform-api-operator
+      permissions:
+      - rules:
+        - apiGroups:
+          - ""
+          resources:
+          - pods
+          - services
+          - services/finalizers
+          - endpoints
+          - persistentvolumeclaims
+          - events
+          - configmaps
+          - secrets
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - apps
+          resources:
+          - deployments
+          - daemonsets
+          - replicasets
+          - statefulsets
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - ""
+          resources:
+          - namespaces
+          verbs:
+          - get
+        - apiGroups:
+          - ""
+          resources:
+          - configmaps
+          - secrets
+          verbs:
+          - '*'
+        - apiGroups:
+          - ""
+          resources:
+          - events
+          verbs:
+          - create
+        - apiGroups:
+          - monitoring.coreos.com
+          resources:
+          - servicemonitors
+          verbs:
+          - get
+          - create
+        - apiGroups:
+          - apps
+          resourceNames:
+          - ibm-platform-api-operator
+          resources:
+          - deployments/finalizers
+          verbs:
+          - update
+        - apiGroups:
+          - ""
+          resources:
+          - pods
+          verbs:
+          - get
+        - apiGroups:
+          - apps
+          resources:
+          - replicasets
+          - deployments
+          verbs:
+          - get
+        - apiGroups:
+          - operator.ibm.com
+          resources:
+          - '*'
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - passwordrules.icp.ibm.com
+          resources:
+          - '*'
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        serviceAccountName: ibm-platform-api-operator
+    strategy: deployment
+  installModes:
+  - supported: true
+    type: OwnNamespace
+  - supported: true
+    type: SingleNamespace
+  - supported: false
+    type: MultiNamespace
+  - supported: true
+    type: AllNamespaces
+  keywords:
+  - IBM
+  - Cloud
+  maintainers:
+  - email: support@ibm.com
+    name: IBM Support
+  maturity: alpha
+  provider:
+    name: IBM
+  replaces: ibm-platform-api-operator.v0.0.0
+  version: 0.0.1

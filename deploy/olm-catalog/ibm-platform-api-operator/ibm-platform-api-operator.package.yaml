@@ -1,0 +1,5 @@
+channels:
+- currentCSV: ibm-platform-api-operator.v0.0.1
+  name: alpha
+defaultChannel: alpha
+packageName: ibm-platform-api-operator-app

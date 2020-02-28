@@ -1,9 +1,9 @@
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
-  name: platformapis.charts.helm.k8s.io
+  name: platformapis.operator.ibm.com
 spec:
-  group: charts.helm.k8s.io
+  group: operator.ibm.com
   names:
     kind: PlatformApi
     listKind: PlatformApiList

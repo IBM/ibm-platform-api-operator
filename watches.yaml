@@ -1,5 +1,5 @@
 ---
 - version: v1alpha1
-  group: charts.helm.k8s.io
+  group: operator.ibm.com
   kind: PlatformApi
   chart: helm-charts/platform-api
