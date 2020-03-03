@@ -11,37 +11,37 @@ charts:
       - auditService.image.repository
 
 images:
-  - image: quay.io/opencloudio/icp-platform-api:3.3.0
+  - image: hyc-cloud-private-integration-docker-local.artifactory.swg-devops.com/ibmcom/icp-platform-api:3.3.0
     references:
-      - repository: "quay.io/opencloudio/icp-platform-api-amd64:3.3.0"
-        pull-repository: "quay.io/opencloudio/icp-platform-api:3.3.0-amd64"
+      - repository: "hyc-cloud-private-integration-docker-local.artifactory.swg-devops.com/ibmcom/icp-platform-api-amd64:3.3.0"
+        pull-repository: "hyc-cloud-private-integration-docker-local.artifactory.swg-devops.com/ibmcom/icp-platform-api:3.3.0-amd64"
         platform:
           os: linux
           architecture: amd64
-      - repository: "quay.io/opencloudio/icp-platform-api-ppc64le:3.3.0"
-        pull-repository: "quay.io/opencloudio/icp-platform-api:3.3.0-ppc64le"
+      - repository: "hyc-cloud-private-integration-docker-local.artifactory.swg-devops.com/ibmcom/icp-platform-api-ppc64le:3.3.0"
+        pull-repository: "hyc-cloud-private-integration-docker-local.artifactory.swg-devops.com/ibmcom/icp-platform-api:3.3.0-ppc64le"
         platform:
           os: linux
           architecture: ppc64le
-      - repository: "quay.io/opencloudio/icp-platform-api-s390x:3.3.0"
-        pull-repository: "quay.io/opencloudio/icp-platform-api:3.3.0-s390x"
+      - repository: "hyc-cloud-private-integration-docker-local.artifactory.swg-devops.com/ibmcom/icp-platform-api-s390x:3.3.0"
+        pull-repository: "hyc-cloud-private-integration-docker-local.artifactory.swg-devops.com/ibmcom/icp-platform-api:3.3.0-s390x"
         platform:
           os: linux
           architecture: s390x
-  - image: quay.io/opencloudio/icp-audit-service:3.3.1
+  - image: hyc-cloud-private-integration-docker-local.artifactory.swg-devops.com/ibmcom/icp-audit-service:3.3.1
     references:
-      - repository: "quay.io/opencloudio/icp-audit-service-amd64:3.3.1"
-        pull-repository: "quay.io/opencloudio/icp-audit-service:3.3.1-amd64"
+      - repository: "hyc-cloud-private-integration-docker-local.artifactory.swg-devops.com/ibmcom/icp-audit-service-amd64:3.3.1"
+        pull-repository: "hyc-cloud-private-integration-docker-local.artifactory.swg-devops.com/ibmcom/icp-audit-service:3.3.1-amd64"
         platform:
           os: linux
           architecture: amd64
-      - repository: "quay.io/opencloudio/icp-audit-service-ppc64le:3.3.1"
-        pull-repository: "quay.io/opencloudio/icp-audit-service:3.3.1-ppc64le"
+      - repository: "hyc-cloud-private-integration-docker-local.artifactory.swg-devops.com/ibmcom/icp-audit-service-ppc64le:3.3.1"
+        pull-repository: "hyc-cloud-private-integration-docker-local.artifactory.swg-devops.com/ibmcom/icp-audit-service:3.3.1-ppc64le"
         platform:
           os: linux
           architecture: ppc64le
-      - repository: "quay.io/opencloudio/icp-audit-service-s390x:3.3.1"
-        pull-repository: "quay.io/opencloudio/icp-audit-service:3.3.1-s390x"
+      - repository: "hyc-cloud-private-integration-docker-local.artifactory.swg-devops.com/ibmcom/icp-audit-service-s390x:3.3.1"
+        pull-repository: "hyc-cloud-private-integration-docker-local.artifactory.swg-devops.com/ibmcom/icp-audit-service:3.3.1-s390x"
         platform:
           os: linux
           architecture: s390x

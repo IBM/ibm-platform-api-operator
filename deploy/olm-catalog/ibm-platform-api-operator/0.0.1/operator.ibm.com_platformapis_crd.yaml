@@ -5,8 +5,8 @@ metadata:
 spec:
   group: operator.ibm.com
   names:
-    kind: PlatformApi
-    listKind: PlatformApiList
+    kind: PlatformAPI
+    listKind: PlatformAPIList
     plural: platformapis
     singular: platformapi
   scope: Namespaced

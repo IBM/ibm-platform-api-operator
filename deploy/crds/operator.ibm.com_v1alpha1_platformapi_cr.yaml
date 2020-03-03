@@ -1,7 +1,7 @@
 apiVersion: operator.ibm.com/v1alpha1
-kind: PlatformApi
+kind: PlatformAPI
 metadata:
-  name: example-platformapi
+  name: default
 spec:
   # Default values copied from <project_dir>/helm-charts/platform-api/values.yaml
   
@@ -21,7 +21,7 @@ spec:
       logrotateConf: include /etc/logrotate.d
     image:
       pullPolicy: IfNotPresent
-      repository: quay.io/opencloudio/icp-audit-service
+      repository: hyc-cloud-private-integration-docker-local.artifactory.swg-devops.com/ibmcom/icp-audit-service-amd64
       tag: 3.3.1
     resources:
       limits:
@@ -33,7 +33,7 @@ spec:
   platformApi:
     config:
       acctName: mycluster Account
-      clusterCASecret: cluster-ca-cert
+      clusterCASecret: platform-api-cluster-ca-cert
       clusterCAdomain: mycluster.icp
       clusterExternalAddress: 127.0.0.1
       clusterInternalAddress: 127.0.0.1
@@ -44,12 +44,10 @@ spec:
     hostNetwork: false
     image:
       pullPolicy: IfNotPresent
-      repository: quay.io/opencloudio/icp-platform-api
+      repository: hyc-cloud-private-integration-docker-local.artifactory.swg-devops.com/ibmcom/icp-platform-api-amd64
       tag: 3.3.0
     name: platform-api
     namespace: ibm-common-services
-    nodeSelector:
-      master: "true"
     replicaCount: 1
     resources:
       limits:

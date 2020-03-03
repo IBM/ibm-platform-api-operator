@@ -54,5 +54,6 @@ curl -H "Content-Type: application/json" \
 {
     "blob": "'"${BLOB}"'",
     "release": "'"${RELEASE}"'",
-    "media_type": "helm"
+    "media_type": "helm",
+    "visibility": "public"
 }'

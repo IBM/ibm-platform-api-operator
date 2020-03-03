@@ -14,7 +14,7 @@ auditService:
     logrotateConf: include /etc/logrotate.d
   image:
     pullPolicy: IfNotPresent
-    repository: quay.io/opencloudio/icp-audit-service
+    repository: hyc-cloud-private-integration-docker-local.artifactory.swg-devops.com/ibmcom/icp-audit-service
     tag: 3.3.1
   resources:
     limits:
@@ -26,9 +26,9 @@ auditService:
 platformApi:
   config:
     acctName: mycluster Account
-    clusterCASecret: cluster-ca-cert
+    clusterCASecret: platform-api-cluster-ca-cert
     clusterCAdomain: mycluster.icp
-    clusterExternalAddress: 127.0.0.1
+    clusterExternalAddress: localhost
     clusterInternalAddress: 127.0.0.1
     clusterName: mycluster
     clusterSecurePort: 8443
@@ -37,12 +37,10 @@ platformApi:
   hostNetwork: false
   image:
     pullPolicy: IfNotPresent
-    repository: quay.io/opencloudio/icp-platform-api
+    repository: hyc-cloud-private-integration-docker-local.artifactory.swg-devops.com/ibmcom/icp-platform-api-amd64
     tag: 3.3.0
   name: platform-api
   namespace: ibm-common-services
-  nodeSelector:
-    master: "true"
   replicaCount: 1
   resources:
     limits:

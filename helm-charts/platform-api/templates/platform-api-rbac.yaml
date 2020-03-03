@@ -1,0 +1,13 @@
+# Licensed Materials - Property of IBM
+# 5737-E67
+# @ Copyright IBM Corporation 2016, 2020 All Rights Reserved
+# US Government Users Restricted Rights - Use, duplication or disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: platform-api
+  labels:
+    app.kubernetes.io/name: platform-api
+    app.kubernetes.io/part-of: platform-api
