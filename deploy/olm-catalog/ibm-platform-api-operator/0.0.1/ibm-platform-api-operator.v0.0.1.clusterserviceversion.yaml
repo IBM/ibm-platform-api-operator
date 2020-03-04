@@ -6,6 +6,17 @@ metadata:
       [
         {
           "apiVersion": "operator.ibm.com/v1alpha1",
+          "kind": "PasswordRule",
+          "metadata": {
+            "name": "rule-default"
+          },
+          "spec": {
+            "description": "default password rule",
+            "regex": "^([a-zA-Z0-9\\\\-](32,))$"
+          }
+        },
+        {
+          "apiVersion": "operator.ibm.com/v1alpha1",
           "kind": "PlatformAPI",
           "metadata": {
             "name": "default"
@@ -90,9 +101,14 @@ spec:
   customresourcedefinitions:
     owned:
     - description: PlatformAPI is the Schema for the platformapis API
-      displayName: Platform API
+      displayName: PlatformAPI
       kind: PlatformAPI
       name: platformapis.operator.ibm.com
+      version: v1alpha1
+    - description: PasswordRule is the Schema for the passwordrules API
+      displayName: PasswordRule
+      kind: PasswordRule
+      name: passwordrules.operator.ibm.com
       version: v1alpha1
   description: Platform API is a REST API service for managing cluster and providing
     access to command line tools, such as cloudctl and kubectl.
