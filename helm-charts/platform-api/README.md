@@ -151,7 +151,7 @@ volumes:
 To install the chart:
 
 ```console
-$ helm install <chartname>.tgz --name platform-api --namespace kube-system --tls
+$ helm install <chartname>.tgz --name platform-api --namespace ibm-common-services --tls
 ```
 
 ## Uninstalling the Chart
@@ -171,11 +171,10 @@ The following tables lists the configurable parameters of the chart and their de
 Parameter                                        | Description                                               | Default
 ------------------------------------------------ | --------------------------------------------------------- | --------------------
 `platformApi.replicaCount`                       | number of deployment replicas                             | 1      
-`platformApi.hostNetwork`                        | host network                                              | false   
-`platformApi.nodeSelector.master`                | run on master node                                        | true                
-`platformApi.meta.namespace`                     | namespace for this chart                                  | kube-system         
+`platformApi.hostNetwork`                        | host network                                              | false               
+`platformApi.meta.namespace`                     | namespace for this chart                                  | ibm-common-services         
 `platformApi.name`                               | platformApi container name                                | platform-api        
-`platformApi.image.repository`                   | platformApi image path                                    | ibmcom/icp-platform-api   
+`platformApi.image.repository`                   | platformApi image path                                    | hyc-cloud-private-integration-docker-local.artifactory.swg-devops.com/ibmcom/icp-platform-api   
 `platformApi.image.tag`                          | platformApi image tag                                     | latest              
 `platformApi.image.pullPolicy`                   | platformApi pullpolicy                                    | IfNotPresent        
 `platformApi.resources.limits.cpu`               | platformApi cpu limits                                    | 500m
@@ -184,14 +183,14 @@ Parameter                                        | Description                  
 `platformApi.resources.requests.memory`          | platformApi memory requests                               | 96Mi     
 `platformApi.config.clusterInternalAddress`      | Cluster internal address                                  | 127.0.0.1   
 `platformApi.config.etcdSecret`                  | platformApi etcd secret                                   | etcd-secret
-`platformApi.config.clusterCASecret`             | Cluster CA secret name                                    | cluster-ca-cert 
+`platformApi.config.clusterCASecret`             | Cluster CA secret name                                    | platform-api-cluster-ca-cert 
 `platformApi.config.clusterExternalAddress`      | Cluster external address                                  | 127.0.0.1   
 `platformApi.config.clusterSecurePort`           | cluster secure port                                       | 8443
 `platformApi.config.kubeApiserverSecurePort`     | Kube API server secure port                               | 8001 
 `platformApi.config.clusterName`                 | Cluster name                                              | mycluster 
 `platformApi.config.clusterCAdomain`             | Cluster CA domain                                         | mycluster.icp
 `platformApi.config.acctName`                    | account name                                              | mycluster account 
-`auditService.image.repository`                  | audit service image path                                  | ibmcom/icp-audit-service   
+`auditService.image.repository`                  | audit service image path                                  | hyc-cloud-private-integration-docker-local.artifactory.swg-devops.com/ibmcom/icp-audit-service   
 `auditService.image.tag`                         | audit service image tag                                   | latest             
 `auditService.image.pullPolicy`                  | auditService pullpolicy                                   | IfNotPresent    
 `auditService.resources.limits.cpu`              | auditService cpu limits                                   | 100m

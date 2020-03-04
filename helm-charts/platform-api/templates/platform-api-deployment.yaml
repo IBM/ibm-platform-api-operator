@@ -42,10 +42,8 @@ spec:
         app.kubernetes.io/managed-by: {{ .Release.Service }}
         app.kubernetes.io/name:  {{ .Release.Name }}
         helm.sh/chart: {{ .Release.Name }}
-      annotations:
-        scheduler.alpha.kubernetes.io/critical-pod: ''
-        seccomp.security.alpha.kubernetes.io/pod: docker/default
     spec:
+      serviceAccountName: platform-api
       hostPID: false
       hostIPC: false
       affinity:
@@ -243,14 +241,6 @@ spec:
           - name: shared
             mountPath: {{ .Values.auditService.config.auditLogPath }}
           {{ end }}
-    {{- if .Values.platformApi.nodeSelector }}
-      nodeSelector:
-{{ toYaml .Values.platformApi.nodeSelector | indent 8 }}
-    {{- end }}
-    {{- if .Values.platformApi.tolerations }}
-      tolerations:
-{{ toYaml .Values.platformApi.tolerations | indent 8 }}
-    {{- end }}
       volumes:
         - name: cluster-certs
           secret:

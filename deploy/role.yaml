@@ -2,19 +2,20 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   creationTimestamp: null
-  name: platform-api-operator
+  name: ibm-platform-api-operator
 rules:
 - apiGroups:
   - ""
   resources:
+  - configmaps
+  - endpoints
+  - events
+  - persistentvolumeclaims
   - pods
+  - secrets
+  - serviceaccounts
   - services
   - services/finalizers
-  - endpoints
-  - persistentvolumeclaims
-  - events
-  - configmaps
-  - secrets
   verbs:
   - create
   - delete
@@ -23,6 +24,25 @@ rules:
   - patch
   - update
   - watch
+- apiGroups:
+  - ""
+  resources:
+  - namespaces
+  verbs:
+  - '*'
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  - secrets
+  verbs:
+  - '*'
+- apiGroups:
+  - ""
+  resources:
+  - events
+  verbs:
+  - create
 - apiGroups:
   - apps
   resources:
@@ -39,18 +59,45 @@ rules:
   - update
   - watch
 - apiGroups:
-  - ""
+  - apps
   resources:
-  - namespaces
+  - replicasets
+  - deployments
   verbs:
   - get
 - apiGroups:
-  - ""
+  - apps
+  resourceNames:
+  - ibm-platform-api-operator
   resources:
-  - configmaps
-  - secrets
+  - deployments/finalizers
   verbs:
+  - update
+- apiGroups:
+  - certmanager.k8s.io
+  resources:
   - '*'
+  - certificates
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - extensions
+  resources:
+  - ingresses
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
 - apiGroups:
   - monitoring.coreos.com
   resources:
@@ -59,30 +106,51 @@ rules:
   - get
   - create
 - apiGroups:
-  - apps
-  resourceNames:
-  - platform-api-operator
-  resources:
-  - deployments/finalizers
-  verbs:
-  - update
-- apiGroups:
-  - ""
-  resources:
-  - pods
-  verbs:
-  - get
-- apiGroups:
-  - apps
-  resources:
-  - replicasets
-  - deployments
-  verbs:
-  - get
-- apiGroups:
-  - charts.helm.k8s.io
+  - operator.ibm.com
   resources:
   - '*'
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: ibm-platform-api-operator
+rules:
+- apiGroups:
+  - apiextensions.k8s.io
+  resources:
+  - customresourcedefinitions
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - certmanager.k8s.io
+  resources:
+  - clusterissuers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - security.openshift.io
+  resources:
+  - securitycontextconstraints
   verbs:
   - create
   - delete

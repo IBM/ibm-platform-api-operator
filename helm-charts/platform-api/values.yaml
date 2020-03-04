@@ -1,79 +1,8 @@
-###############################################################################
-# Licensed Materials - Property of IBM
-# (C) Copyright IBM Corporation 2018, 2019 All Rights Reserved
-# US Government Users Restricted Rights - Use, duplication or disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
-###############################################################################
-
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-
-runAsUser: 65534
-
-platformApi:
-  name: platform-api
-  replicaCount: 1
-  hostNetwork: false
-  image:
-    repository: ibmcom/icp-platform-api
-    tag: 3.3.0
-    pullPolicy: IfNotPresent
-
-  namespace: kube-system
-    
-  resources:
-    limits:
-      cpu: 500m
-      memory: 512Mi
-    requests:
-      cpu: 50m
-      memory: 96Mi
-
-  #extraArgs: {}
-
-  config:
-    # ALWAYS set by the installer
-    clusterInternalAddress: 127.0.0.1
-    #etcdConfig: etcd-config
-    etcdSecret: etcd-secret
-    clusterCASecret: cluster-ca-cert
-    # The following values are no longer used by platform-api
-    # but must remain b/c they are used by IBM content teams
-    clusterExternalAddress: 127.0.0.1
-    clusterSecurePort: 8443
-    kubeApiserverSecurePort: 8001
-    clusterName: mycluster
-    clusterCAdomain: "mycluster.icp"
-    acctName: "mycluster Account"
-
-  nodeSelector:
-    master: 'true'
-
-  tolerations:
-    - key: "dedicated"
-      operator: "Exists"
-      effect: "NoSchedule"
-    - key: "CriticalAddonsOnly"
-      operator: "Exists"
-
 auditService:
-
-  image:
-    repository: ibmcom/icp-audit-service
-    tag: 3.3.1
-    pullPolicy: IfNotPresent
-
-  resources:
-    limits:
-      cpu: 100m
-      memory: 512Mi
-    requests:
-      cpu: 50m
-      memory: 256Mi
-
   config:
-    enabled: true
     auditEnabled: false
     auditLogPath: /var/log/audit
+    enabled: true
     logrotate: |-
       /var/log/audit/*.log {
         copytruncate
@@ -82,5 +11,48 @@ auditService:
         missingok
         notifempty
       }
-    logrotateConf: |-
-      include /etc/logrotate.d
+    logrotateConf: include /etc/logrotate.d
+  image:
+    pullPolicy: IfNotPresent
+    repository: hyc-cloud-private-integration-docker-local.artifactory.swg-devops.com/ibmcom/icp-audit-service
+    tag: 3.3.1
+  resources:
+    limits:
+      cpu: 100m
+      memory: 512Mi
+    requests:
+      cpu: 50m
+      memory: 256Mi
+platformApi:
+  config:
+    acctName: mycluster Account
+    clusterCASecret: platform-api-cluster-ca-cert
+    clusterCAdomain: mycluster.icp
+    clusterExternalAddress: localhost
+    clusterInternalAddress: 127.0.0.1
+    clusterName: mycluster
+    clusterSecurePort: 8443
+    etcdSecret: etcd-secret
+    kubeApiserverSecurePort: 8001
+  hostNetwork: false
+  image:
+    pullPolicy: IfNotPresent
+    repository: hyc-cloud-private-integration-docker-local.artifactory.swg-devops.com/ibmcom/icp-platform-api-amd64
+    tag: 3.3.0
+  name: platform-api
+  namespace: ibm-common-services
+  replicaCount: 1
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 50m
+      memory: 96Mi
+  tolerations:
+  - effect: NoSchedule
+    key: dedicated
+    operator: Exists
+  - key: CriticalAddonsOnly
+    operator: Exists
+runAsUser: 65534
