@@ -7,7 +7,7 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: platform-api
+  name: {{ .Values.platformApi.name }}
   labels:
-    app.kubernetes.io/name: platform-api
-    app.kubernetes.io/part-of: platform-api
+    app.kubernetes.io/name: {{ .Values.platformApi.name }}
+    app.kubernetes.io/part-of: {{ .Values.platformApi.name }}
