@@ -49,13 +49,13 @@ metadata:
             "platformApi": {
               "config": {
                 "acctName": "mycluster Account",
-                "clusterCASecret": "platform-api-ca-cert-secret",
+                "clusterCASecret": "cs-ca-certificate-secret",
                 "clusterCAdomain": "mycluster.icp",
                 "clusterExternalAddress": "127.0.0.1",
                 "clusterInternalAddress": "127.0.0.1",
                 "clusterName": "mycluster",
                 "clusterSecurePort": 8443,
-                "etcdSecret": "platform-api-etcd-secret",
+                "etcdSecret": "etcd-secret",
                 "kubeApiserverSecurePort": 8001
               },
               "hostNetwork": false,
@@ -65,7 +65,7 @@ metadata:
                 "tag": "3.3.0"
               },
               "name": "platform-api",
-              "namespace": "ibm-common-services",
+              "nodeSelector": {},
               "replicaCount": 1,
               "resources": {
                 "limits": {
@@ -95,7 +95,7 @@ metadata:
       ]
     capabilities: Basic Install
   name: ibm-platform-api-operator.v0.0.1
-  namespace: placeholder
+  namespace: ibm-common-services
 spec:
   apiservicedefinitions: {}
   customresourcedefinitions:
@@ -121,21 +121,16 @@ spec:
       clusterPermissions:
       - rules:
         - apiGroups:
-          - apiextensions.k8s.io
-          resources:
-          - customresourcedefinitions
-          verbs:
-          - create
-          - delete
-          - get
-          - list
-          - patch
-          - update
-          - watch
-        - apiGroups:
           - certmanager.k8s.io
           resources:
           - clusterissuers
+          verbs:
+          - use
+        - apiGroups:
+          - rbac.authorization.k8s.io
+          resources:
+          - clusterroles
+          - rolebindings
           verbs:
           - create
           - delete
@@ -146,16 +141,13 @@ spec:
           - watch
         - apiGroups:
           - security.openshift.io
+          resourceNames:
+          - hostaccess
+          - privileged
           resources:
           - securitycontextconstraints
           verbs:
-          - create
-          - delete
-          - get
-          - list
-          - patch
-          - update
-          - watch
+          - use
         serviceAccountName: ibm-platform-api-operator
       deployments:
       - name: ibm-platform-api-operator
@@ -261,7 +253,6 @@ spec:
         - apiGroups:
           - certmanager.k8s.io
           resources:
-          - '*'
           - certificates
           verbs:
           - create

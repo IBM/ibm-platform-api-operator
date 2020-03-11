@@ -33,13 +33,13 @@ spec:
   platformApi:
     config:
       acctName: mycluster Account
-      clusterCASecret: platform-api-ca-cert-secret
+      clusterCASecret: cs-ca-certificate-secret
       clusterCAdomain: mycluster.icp
       clusterExternalAddress: 127.0.0.1
       clusterInternalAddress: 127.0.0.1
       clusterName: mycluster
       clusterSecurePort: 8443
-      etcdSecret: platform-api-etcd-secret
+      etcdSecret: etcd-secret
       kubeApiserverSecurePort: 8001
     hostNetwork: false
     image:
@@ -47,7 +47,7 @@ spec:
       repository: quay.io/opencloudio/icp-platform-api
       tag: 3.3.0
     name: platform-api
-    namespace: ibm-common-services
+    nodeSelector: {}
     replicaCount: 1
     resources:
       limits:

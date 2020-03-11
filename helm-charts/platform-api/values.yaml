@@ -26,9 +26,9 @@ auditService:
 platformApi:
   config:
     acctName: mycluster Account
-    clusterCASecret: platform-api-cluster-ca-cert
+    clusterCASecret: cs-ca-certificate-secret
     clusterCAdomain: mycluster.icp
-    clusterExternalAddress: localhost
+    clusterExternalAddress: 127.0.0.1
     clusterInternalAddress: 127.0.0.1
     clusterName: mycluster
     clusterSecurePort: 8443
@@ -40,7 +40,7 @@ platformApi:
     repository: quay.io/opencloudio/icp-platform-api
     tag: 3.3.0
   name: platform-api
-  namespace: ibm-common-services
+  nodeSelector: {}
   replicaCount: 1
   resources:
     limits:

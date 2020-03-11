@@ -20,7 +20,7 @@
 BUILD_LOCALLY ?= 1
 
 # The namespace that the test operator will be deployed in
-NAMESPACE=ibm-platform-api-operator
+NAMESPACE=ibm-common-services
 
 # Image URL to use all building/pushing image targets;
 # Use your own docker registry and image name for dev/test by overridding the IMG and REGISTRY environment variable.
@@ -89,6 +89,14 @@ push-csv: ## Push CSV package to the catalog
 # test section
 ############################################################
 
+generate-scorecard: ## Generate scorecard yaml
+	@echo ... Generating .osdk-scorecard.yaml ...
+	- commonUtil/scripts/generate-scorecard.sh
+
+scorecard: ## Run scorecard test
+	@echo ... Running the scorecard test
+	- operator-sdk scorecard --verbose
+
 test: test-e2e ## Run integration e2e tests with different options
 
 test-e2e: 
@@ -97,10 +105,6 @@ test-e2e:
 	- operator-sdk test local ./test/e2e --verbose --up-local --namespace=${NAMESPACE}
 	# @echo ... Running with the param ...
 	# - operator-sdk test local ./test/e2e --namespace=${NAMESPACE}
-
-scorecard: ## Run scorecard test
-	@echo ... Running the scorecard test
-	- operator-sdk scorecard --verbose
 
 ############################################################
 # images section
@@ -161,8 +165,8 @@ install: ## Install all resources (CR/CRD's, RBCA and Operator)
 	@echo ....... Set environment variables ......
 	- export DEPLOY_DIR=deploy/crds
 	- export WATCH_NAMESPACE=${NAMESPACE}
-	@echo ....... Creating namespace .......
-	- kubectl create namespace ${NAMESPACE}
+	# @echo ....... Creating namespace .......
+	# - kubectl create namespace ${NAMESPACE}
 	@echo ....... Applying CRDS and Operator .......
 	- for crd in $(shell ls deploy/crds/*_crd.yaml); do kubectl apply -f $${crd}; done
 	@echo ....... Applying RBAC .......
@@ -170,24 +174,24 @@ install: ## Install all resources (CR/CRD's, RBCA and Operator)
 	- kubectl apply -f deploy/role.yaml -n ${NAMESPACE}
 	- kubectl apply -f deploy/role_binding.yaml -n ${NAMESPACE}
 	@echo ....... Applying Operator .......
-	- kubectl apply -f deploy/operator.yaml -n ${NAMESPACE}
+	- kubectl apply -f deploy/olm-catalog/${BASE_DIR}/${CSV_VERSION}/${BASE_DIR}.v${CSV_VERSION}.clusterserviceversion.yaml -n ${NAMESPACE}
 	@echo ....... Creating the Instance .......
-	- kubectl apply -f deploy/crds/operator.ibm.com_v1alpha1_*_cr.yaml -n ${NAMESPACE}
+	- for cr in $(shell ls deploy/crds/*_cr.yaml); do kubectl apply -f $${cr} -n ${NAMESPACE}; done
 
 uninstall: ## Uninstall all that all performed in the $ make install
 	@echo ....... Uninstalling .......
 	@echo ....... Deleting CR .......
-	- kubectl delete -f deploy/crds/operator.ibm.com_v1alpha1_*_cr.yaml -n ${NAMESPACE}
+	- for cr in $(shell ls deploy/crds/*_cr.yaml); do kubectl delete -f $${cr} -n ${NAMESPACE}; done
 	@echo ....... Deleting Operator .......
-	- kubectl delete -f deploy/operator.yaml -n ${NAMESPACE}
+	- kubectl delete -f deploy/olm-catalog/${BASE_DIR}/${CSV_VERSION}/${BASE_DIR}.v${CSV_VERSION}.clusterserviceversion.yaml -n ${NAMESPACE}
 	@echo ....... Deleting CRDs.......
 	- for crd in $(shell ls deploy/crds/*_crd.yaml); do kubectl delete -f $${crd}; done
 	@echo ....... Deleting Rules and Service Account .......
 	- kubectl delete -f deploy/role_binding.yaml -n ${NAMESPACE}
 	- kubectl delete -f deploy/service_account.yaml -n ${NAMESPACE}
 	- kubectl delete -f deploy/role.yaml -n ${NAMESPACE}
-	@echo ....... Deleting namespace ${NAMESPACE}.......
-	- kubectl delete namespace ${NAMESPACE}
+	# @echo ....... Deleting namespace .......
+	# - kubectl delete namespace ${NAMESPACE}
 
 ############################################################
 # operator source section
