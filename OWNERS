@@ -1,12 +1,13 @@
+  
 approvers:
-- kirtiapte
 - gyliu513
 - jchen989
 - cheewaio
-- ibm-ci-bot
+- bitscuit
+- bluzarraga
 reviewers:
-- kirtiapte
 - gyliu513
 - jchen989
 - cheewaio
-- ibm-ci-bot
+- bitscuit
+- bluzarraga
