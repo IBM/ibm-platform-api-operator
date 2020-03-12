@@ -165,8 +165,6 @@ install: ## Install all resources (CR/CRD's, RBCA and Operator)
 	@echo ....... Set environment variables ......
 	- export DEPLOY_DIR=deploy/crds
 	- export WATCH_NAMESPACE=${NAMESPACE}
-	# @echo ....... Creating namespace .......
-	# - kubectl create namespace ${NAMESPACE}
 	@echo ....... Applying CRDS and Operator .......
 	- for crd in $(shell ls deploy/crds/*_crd.yaml); do kubectl apply -f $${crd}; done
 	@echo ....... Applying RBAC .......
@@ -190,8 +188,6 @@ uninstall: ## Uninstall all that all performed in the $ make install
 	- kubectl delete -f deploy/role_binding.yaml -n ${NAMESPACE}
 	- kubectl delete -f deploy/service_account.yaml -n ${NAMESPACE}
 	- kubectl delete -f deploy/role.yaml -n ${NAMESPACE}
-	# @echo ....... Deleting namespace .......
-	# - kubectl delete namespace ${NAMESPACE}
 
 ############################################################
 # operator source section
