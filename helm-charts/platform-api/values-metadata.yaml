@@ -204,6 +204,19 @@ platformApi:
         immutable: false
         required: true
 
+  ## NodeSelector Configuration
+  nodeSelector:
+    label: "Node Selector"
+    description: "platformApi.nodeSelector: The Node Selector"
+    master:
+      __metadata:
+        name: "master"
+        label: "master node"
+        description: "platformApi.nodeSelector.master: The master node"
+        type: "string"
+        immutable: false
+        required: true
+
   ## tolerations configuration metadata
   tolerations:
     __metadata:

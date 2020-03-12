@@ -7,7 +7,30 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: platform-api
-  labels:
-    app.kubernetes.io/name: platform-api
-    app.kubernetes.io/part-of: platform-api
+  name: platform-api-sa
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: platform-api-privileged-role
+rules:
+- apiGroups:
+  - security.openshift.io
+  resources:
+  - securitycontextconstraints
+  resourceNames:
+  - privileged
+  verbs:
+  - use
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: platform-api-privileged
+subjects:
+- kind: ServiceAccount
+  name: platform-api-sa
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: platform-api-privileged-role

@@ -8,7 +8,7 @@ metadata:
           "apiVersion": "operator.ibm.com/v1alpha1",
           "kind": "PasswordRule",
           "metadata": {
-            "name": "rule-default"
+            "name": "default-rule"
           },
           "spec": {
             "description": "default password rule",
@@ -19,12 +19,12 @@ metadata:
           "apiVersion": "operator.ibm.com/v1alpha1",
           "kind": "PlatformAPI",
           "metadata": {
-            "name": "default"
+            "name": "default-platform-api"
           },
           "spec": {
             "auditService": {
               "config": {
-                "auditEnabled": false,
+                "auditEnabled": true,
                 "auditLogPath": "/var/log/audit",
                 "enabled": true,
                 "logrotate": "/var/log/audit/*.log {\n  copytruncate\n  rotate 24\n  hourly\n  missingok\n  notifempty\n}",
@@ -32,7 +32,7 @@ metadata:
               },
               "image": {
                 "pullPolicy": "IfNotPresent",
-                "repository": "hyc-cloud-private-integration-docker-local.artifactory.swg-devops.com/ibmcom/icp-audit-service-amd64",
+                "repository": "quay.io/opencloudio/icp-audit-service",
                 "tag": "3.3.1"
               },
               "resources": {
@@ -49,7 +49,7 @@ metadata:
             "platformApi": {
               "config": {
                 "acctName": "mycluster Account",
-                "clusterCASecret": "platform-api-cluster-ca-cert",
+                "clusterCASecret": "cs-ca-certificate-secret",
                 "clusterCAdomain": "mycluster.icp",
                 "clusterExternalAddress": "127.0.0.1",
                 "clusterInternalAddress": "127.0.0.1",
@@ -61,11 +61,11 @@ metadata:
               "hostNetwork": false,
               "image": {
                 "pullPolicy": "IfNotPresent",
-                "repository": "hyc-cloud-private-integration-docker-local.artifactory.swg-devops.com/ibmcom/icp-platform-api-amd64",
+                "repository": "quay.io/opencloudio/icp-platform-api",
                 "tag": "3.3.0"
               },
               "name": "platform-api",
-              "namespace": "ibm-common-services",
+              "nodeSelector": {},
               "replicaCount": 1,
               "resources": {
                 "limits": {
@@ -95,7 +95,7 @@ metadata:
       ]
     capabilities: Basic Install
   name: ibm-platform-api-operator.v0.0.1
-  namespace: placeholder
+  namespace: ibm-common-services
 spec:
   apiservicedefinitions: {}
   customresourcedefinitions:
@@ -121,21 +121,16 @@ spec:
       clusterPermissions:
       - rules:
         - apiGroups:
-          - apiextensions.k8s.io
-          resources:
-          - customresourcedefinitions
-          verbs:
-          - create
-          - delete
-          - get
-          - list
-          - patch
-          - update
-          - watch
-        - apiGroups:
           - certmanager.k8s.io
           resources:
           - clusterissuers
+          verbs:
+          - use
+        - apiGroups:
+          - rbac.authorization.k8s.io
+          resources:
+          - clusterroles
+          - rolebindings
           verbs:
           - create
           - delete
@@ -146,16 +141,13 @@ spec:
           - watch
         - apiGroups:
           - security.openshift.io
+          resourceNames:
+          - hostaccess
+          - privileged
           resources:
           - securitycontextconstraints
           verbs:
-          - create
-          - delete
-          - get
-          - list
-          - patch
-          - update
-          - watch
+          - use
         serviceAccountName: ibm-platform-api-operator
       deployments:
       - name: ibm-platform-api-operator
@@ -261,7 +253,6 @@ spec:
         - apiGroups:
           - certmanager.k8s.io
           resources:
-          - '*'
           - certificates
           verbs:
           - create
