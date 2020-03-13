@@ -74,6 +74,7 @@ spec:
       initContainers:
       - name: check-certs
         image: "{{ .Values.platformApi.image.repository }}:{{ .Values.platformApi.image.tag }}"
+        imagePullPolicy: {{ .Values.platformApi.image.pullPolicy }}
         securityContext:
           allowPrivilegeEscalation: false
           privileged: false
@@ -235,6 +236,13 @@ spec:
               configMapKeyRef:
                 name: platform-api
                 key: IDENTITY_MGMT_URL
+          - name: CP_CONSOLE_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: management-ingress-info
+                key: MANAGEMENT_INGRESS_ROUTE_HOST
+          - name: CP_PROXY_HOST
+            value: ""
         resources:
 {{ toYaml .Values.platformApi.resources | indent 10 }}
         volumeMounts:

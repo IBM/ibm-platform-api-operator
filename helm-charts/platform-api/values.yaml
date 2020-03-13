@@ -31,9 +31,9 @@ platformApi:
     clusterExternalAddress: 127.0.0.1
     clusterInternalAddress: 127.0.0.1
     clusterName: mycluster
-    clusterSecurePort: 8443
+    clusterSecurePort: 443
     etcdSecret: etcd-secret
-    kubeApiserverSecurePort: 8001
+    kubeApiserverSecurePort: 6443
   hostNetwork: false
   image:
     pullPolicy: IfNotPresent
