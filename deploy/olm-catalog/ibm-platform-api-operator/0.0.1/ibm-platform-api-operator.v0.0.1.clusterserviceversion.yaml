@@ -130,6 +130,8 @@ spec:
           - rbac.authorization.k8s.io
           resources:
           - clusterroles
+          - clusterrolebindings
+          - roles
           - rolebindings
           verbs:
           - create
@@ -254,6 +256,18 @@ spec:
           - certmanager.k8s.io
           resources:
           - certificates
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - batch
+          resources:
+          - jobs
           verbs:
           - create
           - delete
