@@ -1,7 +1,7 @@
 apiVersion: operator.ibm.com/v1alpha1
 kind: PlatformAPI
 metadata:
-  name: default-platform-api
+  name: platform-api
 spec:
   # Default values copied from <project_dir>/helm-charts/platform-api/values.yaml
   

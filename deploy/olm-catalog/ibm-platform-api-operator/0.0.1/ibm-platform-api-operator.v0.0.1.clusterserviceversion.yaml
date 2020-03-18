@@ -19,7 +19,7 @@ metadata:
           "apiVersion": "operator.ibm.com/v1alpha1",
           "kind": "PlatformAPI",
           "metadata": {
-            "name": "default-platform-api"
+            "name": "platform-api"
           },
           "spec": {
             "auditService": {
@@ -161,6 +161,11 @@ spec:
           strategy: {}
           template:
             metadata:
+              annotations:
+                productID: 068a62892a1e4db39641342e592daa25
+                productMetric: FREE
+                productName: IBM Cloud Platform Common Services
+                productVersion: 3.3.0
               labels:
                 name: ibm-platform-api-operator
             spec:

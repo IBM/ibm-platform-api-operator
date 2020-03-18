@@ -46,6 +46,12 @@ else
   BLOB=$(base64 -w0 < bundle.tar.gz)
 fi
 
+# Delete old release if it exists
+echo "Delete package ${QUAY_REPOSITORY}/${RELEASE} from namespace ${QUAY_NAMESPACE}"
+curl -H "Content-Type: application/json" \
+     -H "Authorization: ${AUTH_TOKEN}" \
+     -XDELETE https://quay.io/cnr/api/v1/packages/"${QUAY_NAMESPACE}"/"${QUAY_REPOSITORY}"/"${RELEASE}"/helm
+
 # Push application to repository
 echo "Push package ${QUAY_REPOSITORY} into namespace ${QUAY_NAMESPACE}"
 curl -H "Content-Type: application/json" \
