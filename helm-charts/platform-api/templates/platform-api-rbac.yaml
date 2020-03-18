@@ -18,6 +18,14 @@ rules:
   - ""
   resources:
   - configmaps
+  - endpoints
+  - events
+  - persistentvolumeclaims
+  - pods
+  - secrets
+  - serviceaccounts
+  - services
+  - services/finalizers
   verbs:
   - create
   - delete
