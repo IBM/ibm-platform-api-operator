@@ -1,15 +1,16 @@
 #!/bin/bash
 
+CSV_VERSION=$1
 SCORECARD_FILE=.osdk-scorecard.yaml
 CR_FILES=
-CVS_FILE=
+CSV_FILE=
 
 if [ -d "deploy/crds" ]; then
     CR_FILES=$(find deploy -path '*_cr.yaml' -exec echo "          - \"{}\"" \;)
 fi
 
 if [ -d "deploy/olm-catalog" ]; then
-    CVS_FILE=$(find deploy/olm-catalog -path '*.clusterserviceversion.yaml' -exec echo "        csv-path: \"{}\"" \; | head -1)
+    CSV_FILE=$(find deploy/olm-catalog -path "*${CSV_VERSION}*.clusterserviceversion.yaml" -exec echo "        csv-path: \"{}\"" \; | tail -1)
 fi
 
 cat <<EOF >${SCORECARD_FILE}
@@ -25,5 +26,5 @@ ${CR_FILES}
     - olm:
         cr-manifest:
 ${CR_FILES}
-${CVS_FILE}
+${CSV_FILE}
 EOF

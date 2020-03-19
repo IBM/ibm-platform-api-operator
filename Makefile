@@ -31,7 +31,7 @@ NAMESPACE=ibm-common-services
 # Use your own docker registry and image name for dev/test by overridding the IMG and REGISTRY environment variable.
 IMG ?= ibm-platform-api-operator
 REGISTRY ?= quay.io/opencloudio
-CSV_VERSION ?= 0.0.1
+CSV_VERSION ?= 3.5.0
 
 QUAY_USERNAME ?=
 QUAY_PASSWORD ?=
@@ -96,7 +96,7 @@ push-csv: ## Push CSV package to the catalog
 
 generate-scorecard: ## Generate scorecard yaml
 	@echo ... Generating .osdk-scorecard.yaml ...
-	- commonUtil/scripts/generate-scorecard.sh
+	- commonUtil/scripts/generate-scorecard.sh $(CSV_VERSION)
 
 scorecard: ## Run scorecard test
 	@echo ... Running the scorecard test
