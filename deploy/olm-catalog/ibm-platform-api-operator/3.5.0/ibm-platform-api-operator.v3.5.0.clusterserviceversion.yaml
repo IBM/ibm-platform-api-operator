@@ -181,7 +181,7 @@ spec:
                       fieldPath: metadata.name
                 - name: OPERATOR_NAME
                   value: ibm-platform-api-operator
-                image: quay.io/opencloudio/ibm-platform-api-operator:v0.0.1
+                image: quay.io/opencloudio/ibm-platform-api-operator:v3.5.0
                 imagePullPolicy: Always
                 name: ibm-platform-api-operator
                 resources: {}
