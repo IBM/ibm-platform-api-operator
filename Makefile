@@ -12,6 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+$(eval GIT_COMMIT := $(shell git rev-parse --short HEAD))
+$(eval VCS_REF := $(GIT_COMMIT))
+GIT_REMOTE_URL = $(shell git config --get remote.origin.url)
+$(eval DOCKER_BUILD_OPTS := --build-arg "VCS_REF=$(VCS_REF)" --build-arg "VCS_URL=$(GIT_REMOTE_URL)")
+
 # Default goal
 .DEFAULT_GOAL:=help
 
@@ -120,15 +125,15 @@ build: install-operator-sdk $(CONFIG_DOCKER_TARGET) build-amd64 build-ppc64le bu
 build-amd64:
 	$(eval ARCH := $(shell uname -m|sed 's/x86_64/amd64/'))
 	@echo "Building the ${IMG} amd64 binary..."
-	@operator-sdk build --image-build-args "-f build/Dockerfile" $(REGISTRY)/$(IMG)-amd64:$(VERSION)
+	@operator-sdk build --image-build-args "-f build/Dockerfile --build $(DOCKER_BUILD_OPTS)" $(REGISTRY)/$(IMG)-amd64:$(VERSION)
 
 build-ppc64le:
 	@echo "Building the ${IMG} ppc64le binary..."
-	@operator-sdk build --image-build-args "-f build/Dockerfile.ppc64le" $(REGISTRY)/$(IMG)-ppc64le:$(VERSION)
+	@operator-sdk build --image-build-args "-f build/Dockerfile.ppc64le $(DOCKER_BUILD_OPTS)" $(REGISTRY)/$(IMG)-ppc64le:$(VERSION)
 
 build-s390x:
 	@echo "Building the ${IMG} s390x binary..."
-	@operator-sdk build --image-build-args "-f build/Dockerfile.s390x" $(REGISTRY)/$(IMG)-s390x:$(VERSION)
+	@operator-sdk build --image-build-args "-f build/Dockerfile.s390x $(DOCKER_BUILD_OPTS)" $(REGISTRY)/$(IMG)-s390x:$(VERSION)
 
 ############################################################
 # Image section
