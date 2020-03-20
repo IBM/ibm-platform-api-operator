@@ -125,11 +125,7 @@ build: install-operator-sdk $(CONFIG_DOCKER_TARGET) build-amd64 build-ppc64le bu
 build-amd64:
 	$(eval ARCH := $(shell uname -m|sed 's/x86_64/amd64/'))
 	@echo "Building the ${IMG} amd64 binary..."
-<<<<<<< HEAD
 	@operator-sdk build --image-build-args "-f build/Dockerfile $(DOCKER_BUILD_OPTS)" $(REGISTRY)/$(IMG)-amd64:$(VERSION)
-=======
-	@operator-sdk build --image-build-args "-f build/Dockerfile --build $(DOCKER_BUILD_OPTS)" $(REGISTRY)/$(IMG)-amd64:$(VERSION)
->>>>>>> add labels and license to Dockerfile
 
 build-ppc64le:
 	@echo "Building the ${IMG} ppc64le binary..."
