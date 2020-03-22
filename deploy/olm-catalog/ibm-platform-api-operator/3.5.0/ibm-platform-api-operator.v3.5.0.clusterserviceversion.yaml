@@ -98,9 +98,9 @@ metadata:
     certified: "false"
     containerImage: quay.io/opencloudio/ibm-platform-api-operator:latest
     createdAt: "2020-03-19T20:00:00Z"
-    description: The PlatformAPI operator provides a simple Kubernetes CRD-Based API to 
-      manage the lifecycle of PlatformAPI. With this operator, you can simply deploy and
-      upgrade platform-api.
+    description: The PlatformAPI operator provides a simple Kubernetes CRD-Based API
+      to manage the lifecycle of PlatformAPI. With this operator, you can simply deploy
+      and upgrade platform-api.
     support: IBM
   name: ibm-platform-api-operator.v3.5.0
   namespace: ibm-common-services
@@ -129,6 +129,12 @@ spec:
       clusterPermissions:
       - rules:
         - apiGroups:
+          - ""
+          resources:
+          - serviceaccounts
+          verbs:
+          - '*'
+        - apiGroups:
           - certmanager.k8s.io
           resources:
           - clusterissuers
@@ -150,9 +156,14 @@ spec:
           - update
           - watch
         - apiGroups:
+          - policy
+          resources:
+          - podsecuritypolicies
+          verbs:
+          - '*'
+        - apiGroups:
           - security.openshift.io
           resourceNames:
-          - hostaccess
           - privileged
           resources:
           - securitycontextconstraints
