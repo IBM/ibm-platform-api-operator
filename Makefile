@@ -163,6 +163,16 @@ ifeq ($(TARGET_OS),$(filter $(TARGET_OS),linux darwin))
 endif
 
 ############################################################
+# Dev image section
+############################################################
+
+dev-image: clean build-amd64 push-amd64-dev ## Release development amd64 operator image 
+
+push-amd64-dev:
+	@docker tag $(REGISTRY)/$(IMG)-amd64:$(VERSION) $(REGISTRY)/$(IMG):dev
+	@docker push $(REGISTRY)/$(IMG):dev
+
+############################################################
 # application section
 ############################################################
 

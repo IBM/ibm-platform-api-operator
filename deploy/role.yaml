@@ -135,6 +135,12 @@ metadata:
   name: ibm-platform-api-operator
 rules:
 - apiGroups:
+  - ''
+  resources:
+  - serviceaccounts 
+  verbs:
+  - '*'
+- apiGroups:
   - certmanager.k8s.io
   resources:
   - clusterissuers
@@ -156,11 +162,16 @@ rules:
   - update
   - watch
 - apiGroups:
+  - policy
+  resources:
+  - podsecuritypolicies 
+  verbs:
+  - '*'
+- apiGroups:
   - security.openshift.io 
   resources:
   - securitycontextconstraints 
   resourceNames:
-  - hostaccess
   - privileged
   verbs:
   - use

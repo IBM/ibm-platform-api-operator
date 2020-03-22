@@ -12,7 +12,7 @@ metadata:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: platform-api-role
+  name: platform-api
 rules:
 - apiGroups:
   - ""
@@ -38,8 +38,28 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: platform-api-privileged-role
+  name: platform-api-privileged
 rules:
+- apiGroups:
+  - ''
+  resources:
+  - serviceaccounts 
+  verbs:
+  - '*'
+- apiGroups:
+  - policy
+  resources:
+  - podsecuritypolicies 
+  verbs:
+  - '*'
+- apiGroups:
+  - security.openshift.io
+  resources:
+  - securitycontextconstraints
+  resourceNames:
+  - privileged
+  verbs:
+  - use
 - apiGroups:
   - security.openshift.io
   resources:
@@ -59,16 +79,17 @@ subjects:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: platform-api-role
+  name: platform-api
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
+kind: ClusterRoleBinding
 metadata:
   name: platform-api-privileged
 subjects:
 - kind: ServiceAccount
   name: platform-api-sa
+  namespace: {{ .Release.Namespace }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: platform-api-privileged-role
+  name: platform-api-privileged
