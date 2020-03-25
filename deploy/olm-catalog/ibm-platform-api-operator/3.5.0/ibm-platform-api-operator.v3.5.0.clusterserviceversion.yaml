@@ -6,17 +6,6 @@ metadata:
       [
         {
           "apiVersion": "operator.ibm.com/v1alpha1",
-          "kind": "PasswordRule",
-          "metadata": {
-            "name": "default-rule"
-          },
-          "spec": {
-            "description": "default password rule",
-            "regex": "^([a-zA-Z0-9\\\\-](32,))$"
-          }
-        },
-        {
-          "apiVersion": "operator.ibm.com/v1alpha1",
           "kind": "PlatformAPI",
           "metadata": {
             "name": "platform-api"
@@ -96,8 +85,8 @@ metadata:
     capabilities: Basic Install
     categories: Developer Tools
     certified: "false"
-    containerImage: quay.io/opencloudio/ibm-platform-api-operator:v3.5.0
-    createdAt: "2020-03-19T20:00:00Z"
+    containerImage: quay.io/opencloudio/ibm-platform-api-operator:3.5.0
+    createdAt: "2020-03-25"
     description: The PlatformAPI operator provides a simple Kubernetes CRD-Based API
       to manage the lifecycle of PlatformAPI. With this operator, you can simply deploy
       and upgrade platform-api.
@@ -113,11 +102,34 @@ spec:
       displayName: PlatformAPI
       kind: PlatformAPI
       name: platformapis.operator.ibm.com
-      version: v1alpha1
-    - description: PasswordRule is the Schema for the passwordrules API
-      displayName: PasswordRule
-      kind: PasswordRule
-      name: passwordrules.operator.ibm.com
+      resources:
+      - kind: ConfigMap
+        name: ConfigMap
+        version: v1
+      - kind: Deployment
+        name: Deployment
+        version: v1
+      - kind: Ingress
+        name: Ingress
+        version: extensions/v1beta1
+      - kind: Role
+        name: Role
+        version: rbac.authorization.k8s.io/v1
+      - kind: RoleBinding
+        name: RoleBinding
+        version: rbac.authorization.k8s.io/v1
+      - kind: Service
+        name: Service
+        version: v1
+      - kind: ServiceAccount
+        name: ServiceAccount
+        version: v1
+      statusDescriptors:
+      - description: Phase describes the overall phase of PlatformAPI
+        displayName: Phase
+        path: phase
+        x-descriptors:
+        - urn:alm:descriptor:io.kubernetes.phase
       version: v1alpha1
   description: Platform API is a REST API service for managing cluster and providing
     access to command line tools, such as cloudctl and kubectl.
@@ -133,6 +145,12 @@ spec:
           - ""
           resources:
           - serviceaccounts
+          verbs:
+          - '*'
+        - apiGroups:
+          - apiextensions.k8s.io
+          resources:
+          - customresourcedefinitions
           verbs:
           - '*'
         - apiGroups:
@@ -201,7 +219,7 @@ spec:
                       fieldPath: metadata.name
                 - name: OPERATOR_NAME
                   value: ibm-platform-api-operator
-                image: quay.io/opencloudio/ibm-platform-api-operator:v3.5.0
+                image: quay.io/opencloudio/ibm-platform-api-operator:3.5.0
                 imagePullPolicy: Always
                 name: ibm-platform-api-operator
                 resources: {}

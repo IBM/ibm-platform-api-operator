@@ -1,9 +1,3 @@
-###############################################################################
-# Licensed Materials - Property of IBM
-# (C) Copyright IBM Corporation 2018, 2019 All Rights Reserved
-# US Government Users Restricted Rights - Use, duplication or disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
-###############################################################################
-
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -12,7 +6,6 @@ metadata:
   labels:
     app: {{ .Values.platformApi.name }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    component: {{ .Values.platformApi.name }}
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
     app.kubernetes.io/instance: {{ .Release.Name }}
@@ -25,10 +18,6 @@ spec:
   selector:
     matchLabels:
       k8s-app: {{ .Values.platformApi.name }}
-  strategy:
-    rollingUpdate:
-      maxSurge: 0
-      maxUnavailable: 1
   template:
     metadata:
       labels:
