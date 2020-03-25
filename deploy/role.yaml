@@ -141,6 +141,12 @@ rules:
   verbs:
   - '*'
 - apiGroups:
+  - apiextensions.k8s.io
+  resources:
+  - customresourcedefinitions
+  verbs:
+  - '*'
+- apiGroups:
   - certmanager.k8s.io
   resources:
   - clusterissuers
@@ -175,4 +181,3 @@ rules:
   - privileged
   verbs:
   - use
-
