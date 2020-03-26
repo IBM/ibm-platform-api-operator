@@ -30,8 +30,35 @@ spec:
           type: object
           x-kubernetes-preserve-unknown-fields: true
         status:
+          properties:
+            conditions:
+              items:
+                properties:
+                  lastTransitionTime:
+                    type: string
+                  lastUpdateTime:
+                    type: string
+                  message:
+                    type: string
+                  reason:
+                    type: string
+                  status:
+                    type: string
+                  type:
+                    type: string
+                required: 
+                - status
+                - type
+                type: object
+              type: array
+            deployedRelease:
+              properties:
+                manifest:
+                  type: string
+                name:
+                  type: string
+              type: object
           type: object
-          x-kubernetes-preserve-unknown-fields: true
       required:
       - metadata
       - spec     

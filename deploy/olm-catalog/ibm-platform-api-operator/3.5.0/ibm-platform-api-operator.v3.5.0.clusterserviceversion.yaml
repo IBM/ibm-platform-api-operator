@@ -112,6 +112,9 @@ spec:
       - kind: Ingress
         name: Ingress
         version: extensions/v1beta1
+      - kind: Pod
+        name: Pod
+        version: v1
       - kind: Role
         name: Role
         version: rbac.authorization.k8s.io/v1
@@ -124,12 +127,24 @@ spec:
       - kind: ServiceAccount
         name: ServiceAccount
         version: v1
+      specDescriptors:
+      - description: Configuration for the Audit Service sidecar in platform api chart
+          configuration
+        displayName: Audit Service Parameters
+        path: auditService
+      - description: Platform Api Chart configuration
+        displayName: Platform Api parameters
+        path: platformApi
+      - description: What user to run as
+        displayName: Run as User
+        path: runAsUser
       statusDescriptors:
-      - description: Phase describes the overall phase of PlatformAPI
-        displayName: Phase
-        path: phase
-        x-descriptors:
-        - urn:alm:descriptor:io.kubernetes.phase
+      - description: Conditions contains the observed states of the Helm release
+        displayName: Conditions
+        path: conditions
+      - description: Deployed Release shows the manifest of the deployed Helm release
+        displayName: Deployed Release
+        path: deployedRelease
       version: v1alpha1
   description: Platform API is a REST API service for managing cluster and providing
     access to command line tools, such as cloudctl and kubectl.
