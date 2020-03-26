@@ -22,7 +22,7 @@ metadata:
               "image": {
                 "pullPolicy": "IfNotPresent",
                 "repository": "quay.io/opencloudio/icp-audit-service",
-                "tag": "3.3.1"
+                "tag": "3.4.0"
               },
               "resources": {
                 "limits": {
