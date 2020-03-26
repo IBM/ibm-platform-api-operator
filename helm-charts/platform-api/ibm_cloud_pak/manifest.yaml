@@ -28,20 +28,20 @@ images:
         platform:
           os: linux
           architecture: s390x
-  - image: quay.io/opencloudio/icp-audit-service:3.3.1
+  - image: quay.io/opencloudio/icp-audit-service:3.4.0
     references:
-      - repository: "quay.io/opencloudio/icp-audit-service:3.3.1"
-        pull-repository: "quay.io/opencloudio/icp-audit-service:3.3.1"
+      - repository: "quay.io/opencloudio/icp-audit-service:3.4.0"
+        pull-repository: "quay.io/opencloudio/icp-audit-service:3.4.0"
         platform:
           os: linux
           architecture: amd64
-      - repository: "quay.io/opencloudio/icp-audit-service-ppc64le:3.3.1"
-        pull-repository: "quay.io/opencloudio/icp-audit-service:3.3.1-ppc64le"
+      - repository: "quay.io/opencloudio/icp-audit-service-ppc64le:3.4.0"
+        pull-repository: "quay.io/opencloudio/icp-audit-service:3.4.0-ppc64le"
         platform:
           os: linux
           architecture: ppc64le
-      - repository: "quay.io/opencloudio/icp-audit-service-s390x:3.3.1"
-        pull-repository: "quay.io/opencloudio/icp-audit-service:3.3.1-s390x"
+      - repository: "quay.io/opencloudio/icp-audit-service-s390x:3.4.0"
+        pull-repository: "quay.io/opencloudio/icp-audit-service:3.4.0-s390x"
         platform:
           os: linux
           architecture: s390x
