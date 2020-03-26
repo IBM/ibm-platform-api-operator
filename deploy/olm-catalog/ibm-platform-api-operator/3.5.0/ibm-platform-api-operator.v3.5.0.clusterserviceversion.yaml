@@ -115,6 +115,9 @@ spec:
       - kind: Pod
         name: Pod
         version: v1
+      - kind: ReplicaSet
+        name: ReplicaSet
+        version: v1
       - kind: Role
         name: Role
         version: rbac.authorization.k8s.io/v1
