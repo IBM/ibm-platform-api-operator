@@ -1,4 +1,4 @@
-# ibm-platform-api-operator
+# IBM Platform API Operator
 
 Operator used to manager IBM Platform API service, a REST service for viewing information about your cluster, manage your cluster, install Helm charts, download CLI tools, and much more.
 
