@@ -27,7 +27,102 @@ spec:
             submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
           type: string
         spec:
-          type: object
+          properties:
+            auditService:
+              type: object
+              properties:
+                config:
+                  type: object
+                  properties:
+                    auditEnabled:
+                      type: boolean
+                    auditLogPath:
+                      type: string
+                    enabled:
+                      type: boolean
+                    logrotate:
+                      type: string #really not sure if this is string or some kind of object
+                    logrotateConf:
+                      type: string
+                image:
+                  type: object
+                  properties:
+                    pullPolicy:
+                      type: string
+                    repository:
+                      type: string
+                    tag:
+                      type: string
+                resources:
+                  type: object
+                  properties:
+                    limits:
+                      type: object
+                      properties:
+                        cpu:
+                          type: string
+                        memory: 
+                          type: string
+            platformApi:
+              type: object
+              properties:
+                config:
+                  type: object
+                  properties:
+                    acctName:
+                      type: string
+                    clusterCASecret: 
+                      type: string
+                    clusterCAdomain: 
+                      type: string
+                    clusterExternalAddress: 
+                      type: string
+                    clusterInternalAddress: 
+                      type: string
+                    clusterName: 
+                      type: string
+                    clusterSecurePort: 
+                      type: integer #string?
+                    etcdSecret: 
+                      type: string
+                    kubeApiserverSecurePort: 
+                      type: integer #string?
+                hostNetwork:
+                  type: boolean
+                image:
+                  type: object
+                  properties:
+                    pullPolicy:
+                      type: string
+                    repository:
+                      type: string
+                    tag:
+                      type: string
+                name:
+                  type: string
+                nodeSelector:
+                  type: object
+                replicaCount:
+                  type: integer
+                resources:
+                  type: object
+                  properties:
+                    limits:
+                      type: object
+                      properties:
+                        cpu:
+                          type: string
+                        memory: 
+                          type: string
+                tolerations:
+                  type: object
+                  properties:
+                    effect:
+                      type: string
+                    key:
+                      type: string
+            runAsUser:
+              type: integer
           x-kubernetes-preserve-unknown-fields: true
         status:
           properties:
