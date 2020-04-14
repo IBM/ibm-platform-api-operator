@@ -393,3 +393,5 @@ spec:
   provider:
     name: IBM
   version: 3.6.0
+    spec:
+      replaces: ibm-platform-api-operator.v3.5.0
