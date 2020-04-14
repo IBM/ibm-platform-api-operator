@@ -14,7 +14,7 @@ Operator used to manage IBM Platform API service. The Platform API provides a RE
 
 ## Operator versions
 
-- 3.5.0
+- 3.6.0
 
 ## Prerequisites
 
@@ -59,7 +59,7 @@ Information about building and testing the operator.
 Check the Cluster Service Version (CSV) installation status
 ```
 # oc get csv
-# oc describe csv ibm-platform-api-operator.v3.5.0
+# oc describe csv ibm-platform-api-operator.v3.6.0
 ```
 
 Check the custom resource status
