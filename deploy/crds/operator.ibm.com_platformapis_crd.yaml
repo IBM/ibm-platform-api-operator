@@ -41,7 +41,7 @@ spec:
                     enabled:
                       type: boolean
                     logrotate:
-                      type: string #really not sure if this is string or some kind of object
+                      type: string 
                     logrotateConf:
                       type: string
                 image:
@@ -82,11 +82,11 @@ spec:
                     clusterName: 
                       type: string
                     clusterSecurePort: 
-                      type: integer #string?
+                      type: integer 
                     etcdSecret: 
                       type: string
                     kubeApiserverSecurePort: 
-                      type: integer #string?
+                      type: integer 
                 hostNetwork:
                   type: boolean
                 image:
@@ -115,7 +115,7 @@ spec:
                         memory: 
                           type: string
                 tolerations:
-                  type: object
+                  type: array
                   properties:
                     effect:
                       type: string
