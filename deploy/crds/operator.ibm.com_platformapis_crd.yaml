@@ -115,7 +115,7 @@ spec:
                         memory: 
                           type: string
                 tolerations:
-                  type: object
+                  type: array
                   properties:
                     effect:
                       type: string
