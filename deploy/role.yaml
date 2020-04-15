@@ -137,6 +137,7 @@ rules:
 - apiGroups:
   - ''
   resources:
+  - configmaps
   - serviceaccounts 
   verbs:
   - '*'
