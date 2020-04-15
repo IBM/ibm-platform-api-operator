@@ -38,7 +38,7 @@ platformApi:
   image:
     pullPolicy: IfNotPresent
     repository: quay.io/opencloudio/icp-platform-api
-    tag: 3.3.0
+    tag: 3.4.0
   name: platform-api
   nodeSelector: {}
   replicaCount: 1
