@@ -30,8 +30,8 @@ metadata:
                   "memory": "512Mi"
                 },
                 "requests": {
-                  "cpu": "50m",
-                  "memory": "256Mi"
+                  "cpu": "100m",
+                  "memory": "512Mi"
                 }
               }
             },
@@ -62,8 +62,8 @@ metadata:
                   "memory": "512Mi"
                 },
                 "requests": {
-                  "cpu": "50m",
-                  "memory": "96Mi"
+                  "cpu": "500m",
+                  "memory": "512Mi"
                 }
               },
               "tolerations": [
