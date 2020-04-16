@@ -67,7 +67,7 @@ spec:
       hostNetwork: {{ .Values.platformApi.hostNetwork }}
       initContainers:
       - name: check-certs
-        image: "{{ .Values.platformApi.image.repository }}:{{ .Values.platformApi.image.tag }}"
+        image: "{{ .Values.platformApi.image.imageRegistry }}/{{ .Values.platformApi.image.repository }}:{{ .Values.platformApi.image.tag }}"
         imagePullPolicy: {{ .Values.platformApi.image.pullPolicy }}
         securityContext:
           allowPrivilegeEscalation: false
@@ -99,7 +99,7 @@ spec:
       containers:
       {{ if .Values.auditService.config.enabled }}
       - name: audit-service
-        image: "{{ .Values.auditService.image.repository }}:{{ .Values.auditService.image.tag }}"
+        image: "{{ .Values.platformApi.image.imageRegistry }}/{{ .Values.auditService.image.repository }}:{{ .Values.auditService.image.tag }}"
         imagePullPolicy: {{ .Values.auditService.image.pullPolicy }}
         securityContext:
           seLinuxOptions:
@@ -151,7 +151,7 @@ spec:
           subPath: logrotate.conf
       {{ end }}
       - name: platform-api
-        image: "{{ .Values.platformApi.image.repository }}:{{ .Values.platformApi.image.tag }}"
+        image: "{{ .Values.platformApi.image.imageRegistry }}/{{ .Values.platformApi.image.repository }}:{{ .Values.platformApi.image.tag }}"
         imagePullPolicy: {{ .Values.platformApi.image.pullPolicy }}
         securityContext:
           allowPrivilegeEscalation: false

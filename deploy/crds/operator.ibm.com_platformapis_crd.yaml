@@ -49,6 +49,8 @@ spec:
                   properties:
                     pullPolicy:
                       type: string
+                    imageRegistry:
+                      type: string
                     repository:
                       type: string
                     tag:
@@ -94,6 +96,8 @@ spec:
                   properties:
                     pullPolicy:
                       type: string
+                    imageRegistry:
+                      type: string                      
                     repository:
                       type: string
                     tag:
@@ -117,9 +121,11 @@ spec:
                 tolerations:
                   type: array
                   properties:
-                    effect:
-                      type: string
                     key:
+                      type: string
+                    operator:
+                      type: string
+                    effect:
                       type: string
             runAsUser:
               type: integer
