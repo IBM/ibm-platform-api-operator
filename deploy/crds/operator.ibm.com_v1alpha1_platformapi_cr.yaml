@@ -21,7 +21,8 @@ spec:
       logrotateConf: include /etc/logrotate.d
     image:
       pullPolicy: IfNotPresent
-      repository: quay.io/opencloudio/icp-audit-service
+      imageRegistry: quay.io/opencloudio
+      repository: icp-audit-service
       tag: 3.4.0
     resources:
       limits:
@@ -44,7 +45,8 @@ spec:
     hostNetwork: false
     image:
       pullPolicy: IfNotPresent
-      repository: quay.io/opencloudio/icp-platform-api
+      imageRegistry: quay.io/opencloudio
+      repository: icp-platform-api
       tag: 3.4.0
     name: platform-api
     nodeSelector: {}

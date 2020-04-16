@@ -20,8 +20,9 @@ metadata:
                 "logrotateConf": "include /etc/logrotate.d"
               },
               "image": {
+                "imageRegistry": "quay.io/opencloudio",
                 "pullPolicy": "IfNotPresent",
-                "repository": "quay.io/opencloudio/icp-audit-service",
+                "repository": "icp-audit-service",
                 "tag": "3.4.0"
               },
               "resources": {
@@ -49,8 +50,9 @@ metadata:
               },
               "hostNetwork": false,
               "image": {
+                "imageRegistry": "quay.io/opencloudio",
                 "pullPolicy": "IfNotPresent",
-                "repository": "quay.io/opencloudio/icp-platform-api",
+                "repository": "icp-platform-api",
                 "tag": "3.4.0"
               },
               "name": "platform-api",
