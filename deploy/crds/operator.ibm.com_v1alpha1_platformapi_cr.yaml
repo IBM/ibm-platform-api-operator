@@ -26,11 +26,11 @@ spec:
       tag: 3.4.0
     resources:
       limits:
-        cpu: 100m
-        memory: 512Mi
+        cpu: 200m
+        memory: 250Mi
       requests:
-        cpu: 100m
-        memory: 512Mi
+        cpu: 200m
+        memory: 250Mi
   platformApi:
     config:
       acctName: mycluster Account
