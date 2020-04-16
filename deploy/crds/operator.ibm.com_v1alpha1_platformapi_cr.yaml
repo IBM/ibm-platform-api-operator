@@ -28,8 +28,8 @@ spec:
         cpu: 100m
         memory: 512Mi
       requests:
-        cpu: 50m
-        memory: 256Mi
+        cpu: 100m
+        memory: 512Mi
   platformApi:
     config:
       acctName: mycluster Account
@@ -54,8 +54,8 @@ spec:
         cpu: 500m
         memory: 512Mi
       requests:
-        cpu: 50m
-        memory: 96Mi
+        cpu: 500m
+        memory: 512Mi
     tolerations:
     - effect: NoSchedule
       key: dedicated
