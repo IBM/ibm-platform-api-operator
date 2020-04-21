@@ -23,7 +23,7 @@ spec:
       pullPolicy: Always
       imageRegistry: quay.io/opencloudio
       repository: icp-platform-api
-      tag: 3.4.0-dev
+      tag: 3.4.0
     resources:
       limits:
         cpu: 500m
