@@ -8,7 +8,7 @@ metadata:
     app.kubernetes.io/instance: platformapis.operator.ibm.com
     app.kubernetes.io/managed-by: platformapis.operator.ibm.com
     app.kubernetes.io/name: platformapis.operator.ibm.com
-    helm.sh/chart: "{{ Chart.Name }}-{{ Chart.Version }}"
+    helm.sh/chart: platform-api:3.6.0
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
@@ -19,7 +19,7 @@ metadata:
     app.kubernetes.io/instance: platformapis.operator.ibm.com
     app.kubernetes.io/managed-by: platformapis.operator.ibm.com
     app.kubernetes.io/name: platformapis.operator.ibm.com
-    helm.sh/chart: "{{ Chart.Name }}-{{ Chart.Version }}"
+    helm.sh/chart: platform-api:3.6.0
 rules:
 - apiGroups:
   - ""
@@ -51,7 +51,7 @@ metadata:
     app.kubernetes.io/instance: platformapis.operator.ibm.com
     app.kubernetes.io/managed-by: platformapis.operator.ibm.com
     app.kubernetes.io/name: platformapis.operator.ibm.com
-    helm.sh/chart: "{{ Chart.Name }}-{{ Chart.Version }}"
+    helm.sh/chart: platform-api:3.6.0
 rules:
 - apiGroups:
   - ''
