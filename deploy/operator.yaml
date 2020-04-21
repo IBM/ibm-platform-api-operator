@@ -38,6 +38,15 @@ spec:
             requests:
               cpu: 200m
               memory: 250Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1001
           env:
             - name: WATCH_NAMESPACE
               valueFrom:
