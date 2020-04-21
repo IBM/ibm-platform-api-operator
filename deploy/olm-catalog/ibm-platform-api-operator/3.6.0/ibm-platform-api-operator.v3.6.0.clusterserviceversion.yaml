@@ -35,7 +35,7 @@ metadata:
             "platformApi": {
               "image": {
                 "imageRegistry": "quay.io/opencloudio",
-                "pullPolicy": "Always",
+                "pullPolicy": "IfNotPresent",
                 "repository": "icp-platform-api",
                 "tag": "3.4.0"
               },

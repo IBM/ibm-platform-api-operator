@@ -20,7 +20,7 @@ spec:
         memory: 250Mi
   platformApi:
     image:
-      pullPolicy: Always
+      pullPolicy: IfNotPresent
       imageRegistry: quay.io/opencloudio
       repository: icp-platform-api
       tag: 3.4.0
