@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: platformapis.operator.ibm.com
+  name: ibm-platform-api-operator
   labels:
-    name: platformapis.operator.ibm.com
+    name: ibm-platform-api-operator
     app.kubernetes.io/instance: platformapis.operator.ibm.com
     app.kubernetes.io/managed-by: platformapis.operator.ibm.com
     app.kubernetes.io/name: platformapis.operator.ibm.com
@@ -16,9 +16,11 @@ spec:
     metadata:
       labels:
         name: ibm-platform-api-operator
-        app.kubernetes.io/instance: platformapis.operator.ibm.com
-        app.kubernetes.io/managed-by: platformapis.operator.ibm.com
-        app.kubernetes.io/name: platformapis.operator.ibm.com
+        labels:
+          name: ibm-platform-api-operator
+          app.kubernetes.io/instance: platformapis.operator.ibm.com
+          app.kubernetes.io/managed-by: platformapis.operator.ibm.com
+          app.kubernetes.io/name: platformapis.operator.ibm.com
       annotations:
         productName: IBM Cloud Platform Common Services
         productID: "068a62892a1e4db39641342e592daa25"

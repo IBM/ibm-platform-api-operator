@@ -2,9 +2,9 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   creationTimestamp: null
-  name: platformapis.operator.ibm.com
+  name: ibm-platform-api-operator
   labels:
-    name: platformapis.operator.ibm.com
+    name: ibm-platform-api-operator
     app.kubernetes.io/instance: platformapis.operator.ibm.com
     app.kubernetes.io/managed-by: platformapis.operator.ibm.com
     app.kubernetes.io/name: platformapis.operator.ibm.com
@@ -137,9 +137,9 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: platformapis.operator.ibm.com
+  name: ibm-platform-api-operator
   labels:
-    name: platformapis.operator.ibm.com
+    name: ibm-platform-api-operator
     app.kubernetes.io/instance: platformapis.operator.ibm.com
     app.kubernetes.io/managed-by: platformapis.operator.ibm.com
     app.kubernetes.io/name: platformapis.operator.ibm.com
