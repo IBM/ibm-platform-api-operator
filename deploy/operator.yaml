@@ -31,6 +31,13 @@ spec:
           # Replace this with the built image name
           image: quay.io/opencloudio/ibm-platform-api-operator:3.5.0 #make sure to change this back to 3.6
           imagePullPolicy: Always
+          resources:
+            limits:
+              cpu: 200m
+              memory: 250Mi
+            requests:
+              cpu: 200m
+              memory: 250Mi
           env:
             - name: WATCH_NAMESPACE
               valueFrom:
