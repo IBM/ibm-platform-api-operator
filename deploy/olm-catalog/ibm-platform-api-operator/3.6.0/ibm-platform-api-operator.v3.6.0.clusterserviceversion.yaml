@@ -35,12 +35,10 @@ metadata:
             "platformApi": {
               "image": {
                 "imageRegistry": "quay.io/opencloudio",
-                "pullPolicy": "IfNotPresent",
+                "pullPolicy": "Always",
                 "repository": "icp-platform-api",
-                "tag": "3.4.0"
+                "tag": "3.4.0-dev"
               },
-              "name": "platform-api",
-              "replicaCount": 1,
               "resources": {
                 "limits": {
                   "cpu": "500m",
@@ -51,7 +49,8 @@ metadata:
                   "memory": "512Mi"
                 }
               }
-            }
+            },
+            "replicaCount": 1
           }
         },
         {
@@ -81,7 +80,7 @@ metadata:
               }
             ]
           }
-        } 
+        }        
       ]
     capabilities: Basic Install
     categories: Developer Tools
@@ -136,10 +135,12 @@ spec:
           configuration
         displayName: Audit Service Parameters
         path: auditService
-      - description: Platform Api Chart configuration
-        displayName: Platform Api parameters
+      - description: Platform API Chart configuration
+        displayName: Platform API parameters
         path: platformApi
-
+      - description: Number of the deployment replicas to deploy
+        displayName: Deployment replica count
+        path: replicaCount
       statusDescriptors:
       - description: Conditions contains the observed states of the Helm release
         displayName: Conditions
@@ -237,7 +238,7 @@ spec:
                       fieldPath: metadata.name
                 - name: OPERATOR_NAME
                   value: ibm-platform-api-operator
-                image: quay.io/opencloudio/ibm-platform-api-operator:dev
+                image: quay.io/opencloudio/ibm-platform-api-operator:3.6.0
                 imagePullPolicy: Always
                 name: ibm-platform-api-operator
                 resources: {}

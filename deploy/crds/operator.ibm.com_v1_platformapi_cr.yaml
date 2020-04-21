@@ -24,7 +24,6 @@ spec:
       imageRegistry: quay.io/opencloudio
       repository: icp-platform-api
       tag: 3.4.0-dev
-    replicaCount: 1
     resources:
       limits:
         cpu: 500m
@@ -32,4 +31,5 @@ spec:
       requests:
         cpu: 500m
         memory: 512Mi
+  replicaCount: 1
   

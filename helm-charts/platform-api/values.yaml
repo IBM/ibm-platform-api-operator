@@ -43,7 +43,6 @@ platformApi:
     tag: 3.4.0
   name: platform-api
   nodeSelector: {}
-  replicaCount: 1
   resources:
     limits:
       cpu: 500m
@@ -57,4 +56,5 @@ platformApi:
     operator: Exists
   - key: CriticalAddonsOnly
     operator: Exists
+replicaCount: 1
 runAsUser: 65534

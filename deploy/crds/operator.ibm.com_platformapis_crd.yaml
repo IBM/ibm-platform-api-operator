@@ -71,10 +71,6 @@ spec:
                       type: string
                     tag:
                       type: string
-                name:
-                  type: string
-                replicaCount:
-                  type: integer
                 resources:
                   type: object
                   properties:
@@ -85,6 +81,8 @@ spec:
                           type: string
                         memory: 
                           type: string
+            replicaCount:
+              type: integer                          
           type: object
         status:
           properties:
