@@ -36,14 +36,6 @@ spec:
                   properties:
                     auditEnabled:
                       type: boolean
-                    auditLogPath:
-                      type: string
-                    enabled:
-                      type: boolean
-                    logrotate:
-                      type: string 
-                    logrotateConf:
-                      type: string
                 image:
                   type: object
                   properties:
@@ -68,29 +60,6 @@ spec:
             platformApi:
               type: object
               properties:
-                config:
-                  type: object
-                  properties:
-                    acctName:
-                      type: string
-                    clusterCASecret: 
-                      type: string
-                    clusterCAdomain: 
-                      type: string
-                    clusterExternalAddress: 
-                      type: string
-                    clusterInternalAddress: 
-                      type: string
-                    clusterName: 
-                      type: string
-                    clusterSecurePort: 
-                      type: integer 
-                    etcdSecret: 
-                      type: string
-                    kubeApiserverSecurePort: 
-                      type: integer 
-                hostNetwork:
-                  type: boolean
                 image:
                   type: object
                   properties:
@@ -104,8 +73,6 @@ spec:
                       type: string
                 name:
                   type: string
-                nodeSelector:
-                  type: object
                 replicaCount:
                   type: integer
                 resources:
@@ -118,17 +85,7 @@ spec:
                           type: string
                         memory: 
                           type: string
-                tolerations:
-                  type: array
-                  properties:
-                    key:
-                      type: string
-                    operator:
-                      type: string
-                    effect:
-                      type: string
-            runAsUser:
-              type: integer
+          type: object
         status:
           properties:
             conditions:
@@ -161,10 +118,10 @@ spec:
           type: object
       required:
       - metadata
-      - spec     
+      - spec
       type: object
-  version: v1alpha1
+  version: v1
   versions:
-  - name: v1alpha1
+  - name: v1
     served: true
     storage: true

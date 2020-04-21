@@ -5,7 +5,7 @@ metadata:
     alm-examples: |-
       [
         {
-          "apiVersion": "operator.ibm.com/v1alpha1",
+          "apiVersion": "operator.ibm.com/v1",
           "kind": "PlatformAPI",
           "metadata": {
             "name": "platform-api"
@@ -13,11 +13,7 @@ metadata:
           "spec": {
             "auditService": {
               "config": {
-                "auditEnabled": true,
-                "auditLogPath": "/var/log/audit",
-                "enabled": true,
-                "logrotate": "/var/log/audit/*.log {\n  copytruncate\n  rotate 24\n  hourly\n  missingok\n  notifempty\n}",
-                "logrotateConf": "include /etc/logrotate.d"
+                "auditEnabled": true
               },
               "image": {
                 "imageRegistry": "quay.io/opencloudio",
@@ -37,18 +33,6 @@ metadata:
               }
             },
             "platformApi": {
-              "config": {
-                "acctName": "mycluster Account",
-                "clusterCASecret": "cs-ca-certificate-secret",
-                "clusterCAdomain": "mycluster.icp",
-                "clusterExternalAddress": "127.0.0.1",
-                "clusterInternalAddress": "127.0.0.1",
-                "clusterName": "mycluster",
-                "clusterSecurePort": 443,
-                "etcdSecret": "etcd-secret",
-                "kubeApiserverSecurePort": 6443
-              },
-              "hostNetwork": false,
               "image": {
                 "imageRegistry": "quay.io/opencloudio",
                 "pullPolicy": "IfNotPresent",
@@ -56,7 +40,6 @@ metadata:
                 "tag": "3.4.0"
               },
               "name": "platform-api",
-              "nodeSelector": {},
               "replicaCount": 1,
               "resources": {
                 "limits": {
@@ -67,20 +50,8 @@ metadata:
                   "cpu": "500m",
                   "memory": "512Mi"
                 }
-              },
-              "tolerations": [
-                {
-                  "effect": "NoSchedule",
-                  "key": "dedicated",
-                  "operator": "Exists"
-                },
-                {
-                  "key": "CriticalAddonsOnly",
-                  "operator": "Exists"
-                }
-              ]
-            },
-            "runAsUser": 65534
+              }
+            }
           }
         },
         {
@@ -110,7 +81,7 @@ metadata:
               }
             ]
           }
-        }
+        } 
       ]
     capabilities: Basic Install
     categories: Developer Tools
@@ -168,9 +139,7 @@ spec:
       - description: Platform Api Chart configuration
         displayName: Platform Api parameters
         path: platformApi
-      - description: What user to run as
-        displayName: Run as User
-        path: runAsUser
+
       statusDescriptors:
       - description: Conditions contains the observed states of the Helm release
         displayName: Conditions
@@ -178,7 +147,7 @@ spec:
       - description: Deployed Release shows the manifest of the deployed Helm release
         displayName: Deployed Release
         path: deployedRelease
-      version: v1alpha1
+      version: v1
   description: Platform API is a REST API service for managing cluster and providing
     access to command line tools, such as cloudctl and kubectl.
   displayName: IBM Platform API Operator
@@ -268,7 +237,7 @@ spec:
                       fieldPath: metadata.name
                 - name: OPERATOR_NAME
                   value: ibm-platform-api-operator
-                image: quay.io/opencloudio/ibm-platform-api-operator:3.6.0
+                image: quay.io/opencloudio/ibm-platform-api-operator:dev
                 imagePullPolicy: Always
                 name: ibm-platform-api-operator
                 resources: {}
