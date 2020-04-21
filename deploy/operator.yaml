@@ -1,25 +1,30 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ibm-platform-api-operator
+  name: platformapis.operator.ibm.com
+  labels:
+    name: platformapis.operator.ibm.com
+    app.kubernetes.io/instance: platformapis.operator.ibm.com
+    app.kubernetes.io/managed-by: platformapis.operator.ibm.com
+    app.kubernetes.io/name: platformapis.operator.ibm.com
 spec:
   replicas: 1
   selector:
     matchLabels:
-      name: ibm-platform-api-operator
+      name: platformapis.operator.ibm.com
   template:
     metadata:
       labels:
-        name: ibm-platform-api-operator
+        name: platformapis.operator.ibm.com
       annotations:
         productName: IBM Cloud Platform Common Services
         productID: "068a62892a1e4db39641342e592daa25"
         productVersion: "3.3.0"
         productMetric: FREE
     spec:
-      serviceAccountName: ibm-platform-api-operator
+      serviceAccountName: platformapis.operator.ibm.com
       containers:
-        - name: ibm-platform-api-operator
+        - name: platformapis.operator.ibm.com
           # Replace this with the built image name
           image: quay.io/opencloudio/ibm-platform-api-operator:3.5.0 #make sure to change this back to 3.6
           imagePullPolicy: Always
@@ -33,4 +38,4 @@ spec:
                 fieldRef:
                   fieldPath: metadata.name
             - name: OPERATOR_NAME
-              value: "ibm-platform-api-operator"
+              value: "platformapis.operator.ibm.com"

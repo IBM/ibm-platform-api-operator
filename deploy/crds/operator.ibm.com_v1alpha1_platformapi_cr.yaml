@@ -1,7 +1,12 @@
 apiVersion: operator.ibm.com/v1alpha1
 kind: PlatformAPI
 metadata:
-  name: platform-api
+  name: platformapis.operator.ibm.com
+  labels:
+    name: platformapis.operator.ibm.com
+    app.kubernetes.io/instance: platformapis.operator.ibm.com
+    app.kubernetes.io/managed-by: platformapis.operator.ibm.com
+    app.kubernetes.io/name: platformapis.operator.ibm.com
 spec:
   # Default values copied from <project_dir>/helm-charts/platform-api/values.yaml
   
