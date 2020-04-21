@@ -107,7 +107,7 @@ metadata:
     app.kubernetes.io/instance: platformapis.operator.ibm.com
     app.kubernetes.io/managed-by: platformapis.operator.ibm.com
     app.kubernetes.io/name: platformapis.operator.ibm.com
-    helm.sh/chart: "{{ Chart.Name }}-{{ Chart.Version }}"
+    helm.sh/chart: platform-api:3.6.0
 subjects:
 - kind: ServiceAccount
   name: platform-api-sa
@@ -125,7 +125,7 @@ metadata:
     app.kubernetes.io/instance: platformapis.operator.ibm.com
     app.kubernetes.io/managed-by: platformapis.operator.ibm.com
     app.kubernetes.io/name: platformapis.operator.ibm.com
-    helm.sh/chart: "{{ Chart.Name }}-{{ Chart.Version }}"
+    helm.sh/chart: platform-api:3.6.0
 subjects:
 - kind: ServiceAccount
   name: platform-api-sa
