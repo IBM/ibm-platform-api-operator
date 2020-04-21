@@ -1,5 +1,5 @@
 channels:
-- currentCSV: ibm-platform-api-operator.v3.6.0
+- currentCSV: ibm-platform-api-operator.v3.5.0 #TODO change this back to 3.6
   name: stable-v1
 defaultChannel: stable-v1
 packageName: ibm-platform-api-operator-app
