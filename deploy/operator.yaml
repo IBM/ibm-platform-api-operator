@@ -11,20 +11,20 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      name: platformapis.operator.ibm.com
+      name: ibm-platform-api-operator
   template:
     metadata:
       labels:
-        name: platformapis.operator.ibm.com
+        name: ibm-platform-api-operator
       annotations:
         productName: IBM Cloud Platform Common Services
         productID: "068a62892a1e4db39641342e592daa25"
         productVersion: "3.3.0"
         productMetric: FREE
     spec:
-      serviceAccountName: platformapis.operator.ibm.com
+      serviceAccountName: ibm-platform-api-operator
       containers:
-        - name: platformapis.operator.ibm.com
+        - name: ibm-platform-api-operator
           # Replace this with the built image name
           image: quay.io/opencloudio/ibm-platform-api-operator:3.5.0 #make sure to change this back to 3.6
           imagePullPolicy: Always
@@ -38,4 +38,4 @@ spec:
                 fieldRef:
                   fieldPath: metadata.name
             - name: OPERATOR_NAME
-              value: "platformapis.operator.ibm.com"
+              value: "ibm-platform-api-operator"
