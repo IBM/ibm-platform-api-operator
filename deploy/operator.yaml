@@ -2,6 +2,11 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ibm-platform-api-operator
+  labels:
+    name: ibm-platform-api-operator
+    app.kubernetes.io/instance: platformapis.operator.ibm.com
+    app.kubernetes.io/managed-by: platformapis.operator.ibm.com
+    app.kubernetes.io/name: platformapis.operator.ibm.com
 spec:
   replicas: 1
   selector:
@@ -11,18 +16,40 @@ spec:
     metadata:
       labels:
         name: ibm-platform-api-operator
+        app.kubernetes.io/instance: platformapis.operator.ibm.com
+        app.kubernetes.io/managed-by: platformapis.operator.ibm.com
+        app.kubernetes.io/name: platformapis.operator.ibm.com
       annotations:
         productName: IBM Cloud Platform Common Services
         productID: "068a62892a1e4db39641342e592daa25"
         productVersion: "3.3.0"
         productMetric: FREE
     spec:
+      hostNetwork: false
+      hostPID: false
+      hostIPC: false
       serviceAccountName: ibm-platform-api-operator
       containers:
         - name: ibm-platform-api-operator
           # Replace this with the built image name
-          image: quay.io/opencloudio/ibm-platform-api-operator:3.6.0
+          image: quay.io/opencloudio/ibm-platform-api-operator:3.5.0 #make sure to change this back to 3.6
           imagePullPolicy: Always
+          resources:
+            limits:
+              cpu: 200m
+              memory: 250Mi
+            requests:
+              cpu: 200m
+              memory: 250Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1001
           env:
             - name: WATCH_NAMESPACE
               valueFrom:

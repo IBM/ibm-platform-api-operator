@@ -13,6 +13,7 @@ keywords:
 - Development
 - Commercial
 kubeVersion: '>=1.11.0'
+tillerVersion: '>=2.16.1'
 maintainers:
 - email: icpapi@us.ibm.com
   name: IBM Cloud Private

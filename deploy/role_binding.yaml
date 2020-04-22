@@ -2,6 +2,11 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: ibm-platform-api-operator
+  labels:
+    name: ibm-platform-api-operator
+    app.kubernetes.io/instance: platformapis.operator.ibm.com
+    app.kubernetes.io/managed-by: platformapis.operator.ibm.com
+    app.kubernetes.io/name: platformapis.operator.ibm.com
 subjects:
 - kind: ServiceAccount
   name: ibm-platform-api-operator
@@ -14,6 +19,11 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: ibm-platform-api-operator
+  labels:
+    name: ibm-platform-api-operator
+    app.kubernetes.io/instance: platformapis.operator.ibm.com
+    app.kubernetes.io/managed-by: platformapis.operator.ibm.com
+    app.kubernetes.io/name: platformapis.operator.ibm.com
 subjects:
 - kind: ServiceAccount
   name: ibm-platform-api-operator

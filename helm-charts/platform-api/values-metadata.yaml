@@ -11,7 +11,16 @@ runAsUser:
     type: "string"
     immutable: false
     required: false
-    
+
+replicaCount:
+    __metadata:
+      name: "replicaCount"
+      label: "Replica count"
+      description: "replicaCount: Number of replica pods"
+      type: "number"
+      immutable: false
+      required: true 
+
 platformApi:
   __metadata:
     label: "Platform Api parameters"
@@ -22,15 +31,6 @@ platformApi:
       label: "Name"
       description: "platformApi.name: Helm Release Name"
       type: "string"
-      immutable: false
-      required: true
-      
-  replicaCount:
-    __metadata:
-      name: "replicaCount"
-      label: "Replica count"
-      description: "platformApi.replicaCount: Number of replica pods"
-      type: "number"
       immutable: false
       required: true
   
@@ -47,6 +47,14 @@ platformApi:
   image:
     label: "Docker image"
     description: "platformApi.image: Platform Api image"
+    imageRegistry:
+      __metadata:
+        name: "imageRegistry"
+        label: "Docker registry"
+        description: "platformApi.image.imageRegistry: Registry for the platform api image"
+        type: "string"
+        immutable: false
+        required: true
     repository:
       __metadata:
         name: "repository"
@@ -237,6 +245,14 @@ auditService:
   image:
     label: "Audit image"
     description: "auditService.image: Audit image"
+    imageRegistry:
+      __metadata:
+        name: "imageRegistry"
+        label: "Docker registry"
+        description: "auditService.image.imageRegistry: Registry for the audit image"
+        type: "string"
+        immutable: false
+        required: true
     repository:
       __metadata:
         name: "repository"
@@ -309,14 +325,6 @@ auditService:
         name: "enabled"
         label: "enabled key"
         description: "auditService.config.enabled: The enabled"
-        type: "boolean"
-        immutable: false
-        required: true
-    auditEnabled:
-      __metadata:
-        name: "auditEnabled"
-        label: "Audit enabled"
-        description: "auditService.config.auditEnabled: The audit enabled"
         type: "boolean"
         immutable: false
         required: true
