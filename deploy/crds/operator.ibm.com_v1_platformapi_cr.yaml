@@ -5,7 +5,7 @@ metadata:
 spec:
   auditService:
     config:
-      auditEnabled: true
+      enabled: true
     image:
       pullPolicy: IfNotPresent
       imageRegistry: quay.io/opencloudio

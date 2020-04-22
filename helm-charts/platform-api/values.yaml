@@ -1,6 +1,5 @@
 auditService:
   config:
-    auditEnabled: false
     auditLogPath: /var/log/audit
     enabled: true
     logrotate: |-
