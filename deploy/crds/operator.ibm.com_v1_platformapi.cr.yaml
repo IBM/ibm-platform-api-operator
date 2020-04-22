@@ -1,0 +1,34 @@
+apiVersion: operator.ibm.com/v1
+kind: PlatformAPI
+metadata:
+  name: platform-api
+spec:
+  auditService:
+    config:
+      enabled: true
+    image:
+      pullPolicy: IfNotPresent
+      imageRegistry: quay.io/opencloudio
+      repository: icp-audit-service
+      tag: 3.4.0
+    resources:
+      limits:
+        cpu: 200m
+        memory: 250Mi
+      requests:
+        cpu: 200m
+        memory: 250Mi
+  platformApi:
+    image:
+      pullPolicy: IfNotPresent
+      imageRegistry: quay.io/opencloudio
+      repository: icp-platform-api
+      tag: 3.4.0
+    resources:
+      limits:
+        cpu: 500m
+        memory: 512Mi
+      requests:
+        cpu: 500m
+        memory: 512Mi
+  replicaCount: 1

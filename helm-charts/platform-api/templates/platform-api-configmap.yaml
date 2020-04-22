@@ -26,7 +26,7 @@ data:
   ACCT_NAME: "{{ .Values.platformApi.config.acctName }}"
   IDENTITY_MGMT_URL: "https://platform-identity-management:4500"
   KUBERNETES_API_EXTERNAL_URL: "https://{{.Values.platformApi.config.clusterExternalAddress}}:{{.Values.platformApi.config.kubeApiserverSecurePort}}"
-  AUDIT_ENABLED: "{{ .Values.auditService.config.auditEnabled }}"
+  AUDIT_ENABLED: "{{ .Values.auditService.config.enabled }}"
   AUDIT_LOG_PATH: "{{ .Values.auditService.config.auditLogPath }}"
   LOGROTATE: |-
 {{ .Values.auditService.config.logrotate | indent 4 }}

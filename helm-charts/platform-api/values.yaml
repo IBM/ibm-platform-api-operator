@@ -1,6 +1,5 @@
 auditService:
   config:
-    auditEnabled: false
     auditLogPath: /var/log/audit
     enabled: true
     logrotate: |-
@@ -45,7 +44,6 @@ platformApi:
   nodeSelector: 
     master: ""
   namespace: "ibm-common-services"
-  replicaCount: 1
   resources:
     limits:
       cpu: 500m
@@ -59,4 +57,5 @@ platformApi:
     operator: Exists
   - key: CriticalAddonsOnly
     operator: Exists
+replicaCount: 1
 runAsUser: 65534
