@@ -25,6 +25,9 @@ spec:
         productVersion: "3.3.0"
         productMetric: FREE
     spec:
+      hostNetwork: false
+      hostPID: false
+      hostIPC: false
       serviceAccountName: ibm-platform-api-operator
       containers:
         - name: ibm-platform-api-operator
