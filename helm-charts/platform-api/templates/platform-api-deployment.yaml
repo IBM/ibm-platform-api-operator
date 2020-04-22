@@ -99,7 +99,7 @@ spec:
       containers:
       {{ if .Values.auditService.config.enabled }}
       - name: audit-service
-        image: "{{ .Values.platformApi.image.imageRegistry }}/{{ .Values.auditService.image.repository }}:{{ .Values.auditService.image.tag }}"
+        image: "{{ .Values.auditService.image.imageRegistry }}/{{ .Values.auditService.image.repository }}:{{ .Values.auditService.image.tag }}"
         imagePullPolicy: {{ .Values.auditService.image.pullPolicy }}
         securityContext:
           seLinuxOptions:
