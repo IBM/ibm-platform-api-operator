@@ -47,6 +47,14 @@ platformApi:
   image:
     label: "Docker image"
     description: "platformApi.image: Platform Api image"
+    imageRegistry:
+      __metadata:
+        name: "imageRegistry"
+        label: "Docker registry"
+        description: "platformApi.image.imageRegistry: Registry for the platform api image"
+        type: "string"
+        immutable: false
+        required: true
     repository:
       __metadata:
         name: "repository"
@@ -237,6 +245,14 @@ auditService:
   image:
     label: "Audit image"
     description: "auditService.image: Audit image"
+    imageRegistry:
+      __metadata:
+        name: "imageRegistry"
+        label: "Docker registry"
+        description: "auditService.image.imageRegistry: Registry for the audit image"
+        type: "string"
+        immutable: false
+        required: true
     repository:
       __metadata:
         name: "repository"

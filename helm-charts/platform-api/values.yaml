@@ -42,7 +42,9 @@ platformApi:
     repository: icp-platform-api
     tag: 3.3.0 #make sure to change back to 3.4
   name: platform-api
-  nodeSelector: {}
+  nodeSelector: 
+    master: ""
+  namespace: "ibm-common-services"
   replicaCount: 1
   resources:
     limits:
