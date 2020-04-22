@@ -2,6 +2,11 @@ apiVersion: operator.ibm.com/v1
 kind: PlatformAPI
 metadata:
   name: platform-api
+  labels:
+    name: platform-api
+    app.kubernetes.io/instance: platformapis.operator.ibm.com
+    app.kubernetes.io/managed-by: platformapis.operator.ibm.com
+    app.kubernetes.io/name: platformapis.operator.ibm.com
 spec:
   auditService:
     config:
