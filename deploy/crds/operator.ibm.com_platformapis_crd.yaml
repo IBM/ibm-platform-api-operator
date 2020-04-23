@@ -62,6 +62,13 @@ spec:
                           type: string
                         memory: 
                           type: string
+                    requests:
+                      type: object
+                      properties:
+                        cpu:
+                          type: string
+                        memory:
+                          type: string
             platformApi:
               type: object
               properties: 
@@ -85,6 +92,13 @@ spec:
                         cpu:
                           type: string
                         memory: 
+                          type: string
+                    requests:
+                      type: object
+                      properties:
+                        cpu:
+                          type: string
+                        memory:
                           type: string
             replicaCount:
               type: integer                          
