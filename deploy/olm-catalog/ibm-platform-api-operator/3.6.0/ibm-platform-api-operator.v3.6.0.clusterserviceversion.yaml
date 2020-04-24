@@ -160,6 +160,37 @@ spec:
       clusterPermissions:
       - rules:
         - apiGroups:
+          - icp.ibm.com
+          resources:
+          - passwordrules
+          verbs:
+          - list
+        - apiGroups:
+          - apps
+          resources:
+          - deployments
+          - daemonsets
+          - replicasets
+          - statefulsets
+          verbs:
+          - get
+          - list
+          - update
+          - patch
+        - apiGroups:
+          - ''
+          resources:
+          - namespaces
+          verbs:
+          - get
+        - apiGroups:
+          - ''
+          resources:
+          - secrets
+          verbs:
+          - get
+          - update
+        - apiGroups:
           - ""
           resources:
           - configmaps
