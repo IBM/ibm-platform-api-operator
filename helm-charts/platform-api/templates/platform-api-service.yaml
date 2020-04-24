@@ -11,7 +11,7 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/name:  {{ .Values.platformApi.name }}
     helm.sh/chart: {{ .Release.Name }}
-  name: platform-api
+  name: {{ .Values.platformApi.name }}
 spec:
   type: ClusterIP
   ports:
