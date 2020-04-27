@@ -246,10 +246,6 @@ spec:
           - name: shared
             mountPath: {{ .Values.auditService.config.auditLogPath }}
           {{ end }}
-    {{- if .Values.platformApi.nodeSelector }}
-      nodeSelector:
-{{ toYaml .Values.platformApi.nodeSelector | indent 8 }}
-    {{- end }}
     {{- if .Values.platformApi.tolerations }}
       tolerations:
 {{ toYaml .Values.platformApi.tolerations | indent 8 }}
