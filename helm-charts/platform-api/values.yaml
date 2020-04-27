@@ -41,8 +41,6 @@ platformApi:
     repository: icp-platform-api
     tag: 3.4.0
   name: platform-api
-  nodeSelector: 
-    master: ""
   namespace: "ibm-common-services"
   resources:
     limits:
