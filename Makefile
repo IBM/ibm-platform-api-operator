@@ -31,7 +31,7 @@ NAMESPACE=ibm-common-services
 # Use your own docker registry and image name for dev/test by overridding the IMG and REGISTRY environment variable.
 IMG ?= ibm-platform-api-operator
 REGISTRY ?= quay.io/opencloudio
-CSV_VERSION ?= 3.5.0 #TODO change back to 3.6
+CSV_VERSION ?= 3.6.0
 
 QUAY_USERNAME ?=
 QUAY_PASSWORD ?=
@@ -169,8 +169,8 @@ endif
 dev-image: clean build-amd64 push-amd64-dev ## Release development amd64 operator image 
 
 push-amd64-dev:
-	@docker tag $(REGISTRY)/$(IMG)-amd64:$(VERSION) $(REGISTRY)/$(IMG):dev
-	@docker push $(REGISTRY)/$(IMG):dev
+	@docker tag $(REGISTRY)/$(IMG)-amd64:$(VERSION) $(REGISTRY)/$(IMG):latest
+	@docker push $(REGISTRY)/$(IMG):latest
 
 ############################################################
 # application section

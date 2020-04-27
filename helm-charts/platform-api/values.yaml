@@ -39,8 +39,8 @@ platformApi:
     pullPolicy: IfNotPresent
     imageRegistry: quay.io/opencloudio
     repository: icp-platform-api
-    tag: 3.3.0 #make sure to change back to 3.4
-  name: platformapis.operator.ibm.com
+    tag: 3.4.0
+  name: platform-api
   nodeSelector: 
     master: ""
   namespace: "ibm-common-services"
