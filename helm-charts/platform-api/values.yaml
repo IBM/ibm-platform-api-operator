@@ -15,7 +15,8 @@ auditService:
     pullPolicy: IfNotPresent
     imageRegistry: quay.io/opencloudio 
     repository: icp-audit-service
-    tag: "sha256:334fae7bd3ae4c04611f4e82207a2f7836dbc589f7fc2b3cd172bd93572bfe16"
+    tag: 3.4.0
+    sha: "sha256:334fae7bd3ae4c04611f4e82207a2f7836dbc589f7fc2b3cd172bd93572bfe16"
   resources:
     limits:
       cpu: 200m
@@ -39,7 +40,8 @@ platformApi:
     pullPolicy: IfNotPresent
     imageRegistry: quay.io/opencloudio
     repository: icp-platform-api
-    tag: "sha256:56781f7cd9b620a8a6240fd47b839070f7441506f89ffb52be4d812a11b871cd"
+    tag: 3.4.0
+    sha: "sha256:56781f7cd9b620a8a6240fd47b839070f7441506f89ffb52be4d812a11b871cd"
   name: platform-api
   namespace: "ibm-common-services"
   resources:

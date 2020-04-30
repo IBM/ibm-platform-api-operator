@@ -25,7 +25,8 @@ metadata:
                 "imageRegistry": "quay.io/opencloudio",
                 "pullPolicy": "IfNotPresent",
                 "repository": "icp-audit-service",
-                "tag": "sha256:334fae7bd3ae4c04611f4e82207a2f7836dbc589f7fc2b3cd172bd93572bfe16"
+                "tag": "3.4.0"
+                "sha": "sha256:334fae7bd3ae4c04611f4e82207a2f7836dbc589f7fc2b3cd172bd93572bfe16"
               },
               "resources": {
                 "limits": {
@@ -43,7 +44,8 @@ metadata:
                 "imageRegistry": "quay.io/opencloudio",
                 "pullPolicy": "IfNotPresent",
                 "repository": "icp-platform-api",
-                "tag": "sha256:56781f7cd9b620a8a6240fd47b839070f7441506f89ffb52be4d812a11b871cd"
+                "tag": "3.4.0"
+                "sha": "sha256:56781f7cd9b620a8a6240fd47b839070f7441506f89ffb52be4d812a11b871cd"
               },
               "resources": {
                 "limits": {
@@ -91,7 +93,7 @@ metadata:
     capabilities: Basic Install
     categories: Developer Tools
     certified: "false"
-    containerImage: quay.io/opencloudio/ibm-platform-api-operator@sha256:4eb7e4aea8ac99b94a2e9164ae9d7c5c7509c19f21d580afddf8b9e7c02b5c12
+    containerImage: quay.io/opencloudio/ibm-platform-api-operator:latest
     createdAt: "2020-03-25"
     description: The PlatformAPI operator provides a simple Kubernetes CRD-Based API
       to manage the lifecycle of PlatformAPI. With this operator, you can simply deploy
