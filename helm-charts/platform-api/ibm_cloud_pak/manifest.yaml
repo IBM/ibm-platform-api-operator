@@ -11,37 +11,37 @@ charts:
       - auditService.image.repository
 
 images:
-  - image: quay.io/opencloudio/icp-platform-api:3.3.0
+  - image: quay.io/opencloudio/icp-platform-api@sha256:56781f7cd9b620a8a6240fd47b839070f7441506f89ffb52be4d812a11b871cd
     references:
-      - repository: "quay.io/opencloudio/icp-platform-api:3.3.0"
-        pull-repository: "quay.io/opencloudio/icp-platform-api:3.3.0"
+      - repository: "quay.io/opencloudio/icp-platform-api@sha256:0ac25a9d7c6fb08308b3bc5cd8b6a098ab423317336e4ff389572c08650e859e"
+        pull-repository: "quay.io/opencloudio/icp-platform-api@sha256:0ac25a9d7c6fb08308b3bc5cd8b6a098ab423317336e4ff389572c08650e859e"
         platform:
           os: linux
           architecture: amd64
-      - repository: "quay.io/opencloudio/icp-platform-api-ppc64le:3.3.0"
-        pull-repository: "quay.io/opencloudio/icp-platform-api:3.3.0-ppc64le"
+      - repository: "quay.io/opencloudio/icp-platform-api-ppc64le@sha256:9cc3b5af289b49a4c31cffa1a3898526ae7e0b6f5419c15f0d2b86b0f834f20d"
+        pull-repository: "quay.io/opencloudio/icp-platform-api@sha256:9cc3b5af289b49a4c31cffa1a3898526ae7e0b6f5419c15f0d2b86b0f834f20d"
         platform:
           os: linux
           architecture: ppc64le
-      - repository: "quay.io/opencloudio/icp-platform-api-s390x:3.3.0"
-        pull-repository: "quay.io/opencloudio/icp-platform-api:3.3.0-s390x"
+      - repository: "quay.io/opencloudio/icp-platform-api-s390x@sha256:859ebfc389cd571bee87bf3e10f5c4f6cc66ca26f0d4834b2198dc1d1f758551"
+        pull-repository: "quay.io/opencloudio/icp-platform-api@sha256:859ebfc389cd571bee87bf3e10f5c4f6cc66ca26f0d4834b2198dc1d1f758551"
         platform:
           os: linux
           architecture: s390x
-  - image: quay.io/opencloudio/icp-audit-service:3.4.0
+  - image: quay.io/opencloudio/icp-audit-service@sha256:334fae7bd3ae4c04611f4e82207a2f7836dbc589f7fc2b3cd172bd93572bfe16
     references:
-      - repository: "quay.io/opencloudio/icp-audit-service:3.4.0"
-        pull-repository: "quay.io/opencloudio/icp-audit-service:3.4.0"
+      - repository: "quay.io/opencloudio/icp-audit-service@sha256:0ee9537ca05ebf8c1657fd409c584519b0beeaa3350655c28b239a5fba6655a8"
+        pull-repository: "quay.io/opencloudio/icp-audit-service@sha256:0ee9537ca05ebf8c1657fd409c584519b0beeaa3350655c28b239a5fba6655a8"
         platform:
           os: linux
           architecture: amd64
-      - repository: "quay.io/opencloudio/icp-audit-service-ppc64le:3.4.0"
-        pull-repository: "quay.io/opencloudio/icp-audit-service:3.4.0-ppc64le"
+      - repository: "quay.io/opencloudio/icp-audit-service-ppc64le@sha256:aa27400d45aa15f56f100828c1cb972ba41a30d70807435a9c9dbd2aa0aacfc4"
+        pull-repository: "quay.io/opencloudio/icp-audit-service@sha256:aa27400d45aa15f56f100828c1cb972ba41a30d70807435a9c9dbd2aa0aacfc4"
         platform:
           os: linux
           architecture: ppc64le
-      - repository: "quay.io/opencloudio/icp-audit-service-s390x:3.4.0"
-        pull-repository: "quay.io/opencloudio/icp-audit-service:3.4.0-s390x"
+      - repository: "quay.io/opencloudio/icp-audit-service-s390x@sha256:d5e7c7c7ca051ec8f5376f8e1fefb125aea4df81a2c18741125561bcc1d9e6f4"
+        pull-repository: "quay.io/opencloudio/icp-audit-service@sha256:d5e7c7c7ca051ec8f5376f8e1fefb125aea4df81a2c18741125561bcc1d9e6f4"
         platform:
           os: linux
           architecture: s390x
