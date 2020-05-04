@@ -25,8 +25,8 @@ metadata:
                 "imageRegistry": "quay.io/opencloudio",
                 "pullPolicy": "IfNotPresent",
                 "repository": "icp-audit-service",
-                "tag": "3.4.0",
-                "sha": "sha256:334fae7bd3ae4c04611f4e82207a2f7836dbc589f7fc2b3cd172bd93572bfe16"
+                "sha": "sha256:334fae7bd3ae4c04611f4e82207a2f7836dbc589f7fc2b3cd172bd93572bfe16",
+                "tag": "3.4.0"
               },
               "resources": {
                 "limits": {
@@ -44,8 +44,8 @@ metadata:
                 "imageRegistry": "quay.io/opencloudio",
                 "pullPolicy": "IfNotPresent",
                 "repository": "icp-platform-api",
-                "tag": "3.4.0",
-                "sha": "sha256:56781f7cd9b620a8a6240fd47b839070f7441506f89ffb52be4d812a11b871cd"
+                "sha": "sha256:56781f7cd9b620a8a6240fd47b839070f7441506f89ffb52be4d812a11b871cd",
+                "tag": "3.4.0"
               },
               "resources": {
                 "limits": {
@@ -285,11 +285,11 @@ spec:
                 name: ibm-platform-api-operator
                 resources:
                   limits:
-                    cpu: 200m
-                    memory: 250Mi
+                    cpu: 150m
+                    memory: 150Mi
                   requests:
-                    cpu: 200m
-                    memory: 250Mi
+                    cpu: 150m
+                    memory: 150Mi
                 securityContext:
                   allowPrivilegeEscalation: false
                   capabilities:
@@ -298,7 +298,7 @@ spec:
                   privileged: false
                   readOnlyRootFilesystem: true
                   runAsNonRoot: true
-                  runAsUser: 1001
+                  runAsUser: 1000550000
               serviceAccountName: ibm-platform-api-operator
       permissions:
       - rules:

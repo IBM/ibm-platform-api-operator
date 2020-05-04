@@ -32,15 +32,13 @@ spec:
         app.kubernetes.io/name:  {{ .Values.platformApi.name }}
         helm.sh/chart: {{ .Release.Name }}
       annotations:
-        scheduler.alpha.kubernetes.io/critical-pod: ''
-        seccomp.security.alpha.kubernetes.io/pod: docker/default
         productName: IBM Cloud Platform Common Services
         productID: "068a62892a1e4db39641342e592daa25"
         productVersion: "3.3.0"
         productMetric: FREE
         clusterhealth.ibm.com/dependencies: "auth-idp, auth-pap, auth-pdp, cert-manager, icp-management-ingress"
     spec:
-      serviceAccountName: platform-api-sa
+      serviceAccountName: ibm-platform-api-operand
       hostPID: false
       hostIPC: false
       affinity:
@@ -54,15 +52,6 @@ spec:
                   - amd64
                   - ppc64le
                   - s390x
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchExpressions:
-              - key: app
-                operator: In
-                values:
-                - {{ .Values.platformApi.name }}
-            topologyKey: "kubernetes.io/hostname"
       terminationGracePeriodSeconds: 60
       hostNetwork: {{ .Values.platformApi.hostNetwork }}
       initContainers:
