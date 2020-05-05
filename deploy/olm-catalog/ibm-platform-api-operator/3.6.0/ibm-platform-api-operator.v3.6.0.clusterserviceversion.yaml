@@ -5,7 +5,7 @@ metadata:
     alm-examples: |-
       [
         {
-          "apiVersion": "operator.ibm.com/v1",
+          "apiVersion": "operator.ibm.com/v1alpha1",
           "kind": "PlatformAPI",
           "metadata": {
             "labels": {
@@ -88,7 +88,7 @@ metadata:
               }
             ]
           }
-        }        
+        }
       ]
     capabilities: Basic Install
     categories: Developer Tools
@@ -156,7 +156,7 @@ spec:
       - description: Deployed Release shows the manifest of the deployed Helm release
         displayName: Deployed Release
         path: deployedRelease
-      version: v1
+      version: v1alpha1
   description: Platform API is a REST API service for managing cluster and providing
     access to command line tools, such as cloudctl and kubectl.
   displayName: IBM Platform API Operator
