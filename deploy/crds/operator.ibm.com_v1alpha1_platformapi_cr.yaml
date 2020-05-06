@@ -2,21 +2,18 @@ apiVersion: operator.ibm.com/v1alpha1
 kind: PlatformAPI
 metadata:
   name: platform-api
+  annotations:
+    helm.operator-sdk/upgrade-force: "True"  
   labels:
-    name: platform-api
     app.kubernetes.io/instance: platformapis.operator.ibm.com
     app.kubernetes.io/managed-by: platformapis.operator.ibm.com
-    app.kubernetes.io/name: platformapis.operator.ibm.com
+    app.kubernetes.io/name: platform-api
 spec:
   auditService:
     config:
       enabled: true
     image:
-      pullPolicy: IfNotPresent
       imageRegistry: quay.io/opencloudio
-      repository: icp-audit-service
-      tag: 3.4.0
-      sha: "sha256:334fae7bd3ae4c04611f4e82207a2f7836dbc589f7fc2b3cd172bd93572bfe16"
     resources:
       limits:
         cpu: 500m
@@ -26,11 +23,7 @@ spec:
         memory: 512Mi
   platformApi:
     image:
-      pullPolicy: IfNotPresent
       imageRegistry: quay.io/opencloudio
-      repository: icp-platform-api
-      tag: 3.4.0
-      sha: "sha256:56781f7cd9b620a8a6240fd47b839070f7441506f89ffb52be4d812a11b871cd"
     resources:
       limits:
         cpu: 500m

@@ -169,8 +169,8 @@ endif
 dev-image: clean build-amd64 push-amd64-dev ## Release development amd64 operator image 
 
 push-amd64-dev:
-	@docker tag $(REGISTRY)/$(IMG)-amd64:$(VERSION) $(REGISTRY)/$(IMG):latest
-	@docker push $(REGISTRY)/$(IMG):latest
+	@docker tag $(REGISTRY)/$(IMG)-amd64:$(VERSION) $(REGISTRY)/$(IMG):dev
+	@docker push $(REGISTRY)/$(IMG):dev
 
 ############################################################
 # application section

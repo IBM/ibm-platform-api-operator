@@ -52,7 +52,7 @@ spec:
                       type: string
                     tag:
                       type: string
-                    sha:
+                    digest:
                       type: string
                 resources:
                   type: object
@@ -85,7 +85,7 @@ spec:
                       type: string
                     tag:
                       type: string
-                    sha:
+                    digest:
                       type: string
                 resources:
                   type: object

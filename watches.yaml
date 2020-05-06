@@ -3,3 +3,6 @@
   group: operator.ibm.com
   kind: PlatformAPI
   chart: helm-charts/platform-api
+  overrideValues:
+    auditService.image.digest: ${IMAGE_DIGEST_FOR_AUDIT_SERVICE}
+    platformApi.image.digest: ${IMAGE_DIGEST_FOR_PLATFORM_API}

@@ -55,19 +55,19 @@ platformApi:
         type: "string"
         immutable: false
         required: true
-    repository:
+    name:
       __metadata:
-        name: "repository"
-        label: "Docker repository"
-        description: "platformApi.image.repository: Repository for the platform api image"
+        name: "name"
+        label: "Image name"
+        description: "platformApi.image.name: The platform api image name"
         type: "string"
         immutable: false
         required: true
-    tag:
+    digest:
       __metadata:
-        name: "tag"
-        label: "Tag"
-        description: "platformApi.image.tag: Tag for the platform api image"
+        name: "digest"
+        label: "Image digest"
+        description: "platformApi.image.digest: Image digest for the platform api image"
         type: "string"
         immutable: false
         required: true
@@ -253,19 +253,19 @@ auditService:
         type: "string"
         immutable: false
         required: true
-    repository:
+    name:
       __metadata:
-        name: "repository"
-        label: "Docker repository"
-        description: "auditService.image.repository: Repository for the audit image"
+        name: "name"
+        label: "Image name"
+        description: "auditService.image.name: The audit image name"
         type: "string"
         immutable: false
         required: true
-    tag:
+    digest:
       __metadata:
-        name: "tag"
-        label: "Tag"
-        description: "auditService.image.tag: Tag for the audit image"
+        name: "digest"
+        label: "Image digest"
+        description: "auditService.image.digest: Image digest for the audit image"
         type: "string"
         immutable: false
         required: true
