@@ -32,8 +32,23 @@ spec:
       containers:
         - name: ibm-platform-api-operator
           # Replace this with the built image name
-          image: quay.io/opencloudio/ibm-platform-api-operator:latest
+          image: quay.io/opencloudio/ibm-platform-api-operator:dev
           imagePullPolicy: Always
+          env:
+            - name: WATCH_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: OPERATOR_NAME
+              value: "ibm-platform-api-operator"
+            - name: IMAGE_DIGEST_FOR_AUDIT_SERVICE
+              value: "sha256:334fae7bd3ae4c04611f4e82207a2f7836dbc589f7fc2b3cd172bd93572bfe16"
+            - name: IMAGE_DIGEST_FOR_PLATFORM_API
+              value: "sha256:56781f7cd9b620a8a6240fd47b839070f7441506f89ffb52be4d812a11b871cd"          
           resources:
             limits:
               cpu: 150m
@@ -50,14 +65,3 @@ spec:
             readOnlyRootFilesystem: true
             runAsNonRoot: true
             runAsUser: 1000550000
-          env:
-            - name: WATCH_NAMESPACE
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.namespace
-            - name: POD_NAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.name
-            - name: OPERATOR_NAME
-              value: "ibm-platform-api-operator"

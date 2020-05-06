@@ -8,7 +8,7 @@ Operator used to manage IBM Platform API service. The Platform API provides a RE
 
 ### Platforms
 
-- Red Hat OpenShift Container Plataform 4.x
+- Red Hat OpenShift Container Platform 4.3 and above
 
 ### Operating Systems
 

@@ -18,6 +18,8 @@ spec:
   selector:
     matchLabels:
       k8s-app: {{ .Values.platformApi.name }}
+  strategy:
+    type: Recreate
   template:
     metadata:
       labels:
@@ -56,21 +58,21 @@ spec:
       hostNetwork: {{ .Values.platformApi.hostNetwork }}
       initContainers:
       - name: check-certs
-      {{- if .Values.platformApi.image.sha }}
-        image: "{{ .Values.platformApi.image.imageRegistry }}/{{ .Values.platformApi.image.repository }}@{{ .Values.platformApi.image.sha }}"
+      {{- if hasPrefix "sha256:" .Values.platformApi.image.digest }}
+        image: "{{ .Values.platformApi.image.imageRegistry }}/{{ .Values.platformApi.image.name }}@{{ .Values.platformApi.image.digest }}"
       {{- else }}
-        image: "{{ .Values.platformApi.image.imageRegistry }}/{{ .Values.platformApi.image.repository }}:{{ .Values.platformApi.image.tag }}"
+        image: "{{ .Values.platformApi.image.imageRegistry }}/{{ .Values.platformApi.image.name }}:{{ .Values.platformApi.image.digest }}"
       {{- end }}
         imagePullPolicy: {{ .Values.platformApi.image.pullPolicy }}
         securityContext:
           allowPrivilegeEscalation: false
-          privileged: false
-          runAsNonRoot: true
-          readOnlyRootFilesystem: true
-          runAsUser: {{ .Values.runAsUser }}
           capabilities:
             drop:
             - ALL
+          privileged: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: {{ .Values.runAsUser }}
         resources:
           limits:
             cpu: "1"
@@ -92,15 +94,12 @@ spec:
       containers:
       {{ if .Values.auditService.config.enabled }}
       - name: audit-service
-      {{- if .Values.auditService.image.sha }}
-        image: "{{ .Values.auditService.image.imageRegistry }}/{{ .Values.auditService.image.repository }}@{{ .Values.auditService.image.sha }}"
+      {{- if hasPrefix "sha256:" .Values.auditService.image.digest }}
+        image: "{{ .Values.auditService.image.imageRegistry }}/{{ .Values.auditService.image.name }}@{{ .Values.auditService.image.digest }}"
       {{- else }}
-        image: "{{ .Values.auditService.image.imageRegistry }}/{{ .Values.auditService.image.repository }}:{{ .Values.auditService.image.tag }}"
+        image: "{{ .Values.auditService.image.imageRegistry }}/{{ .Values.auditService.image.name }}:{{ .Values.auditService.image.digest }}"
       {{- end }}
         imagePullPolicy: {{ .Values.auditService.image.pullPolicy }}
-        securityContext:
-          seLinuxOptions:
-            type: spc_t
         readinessProbe:
           exec:
             command:
@@ -117,13 +116,15 @@ spec:
           periodSeconds: 3
         securityContext:
           allowPrivilegeEscalation: false
-          privileged: false
-          runAsNonRoot: true
-          runAsUser: {{ .Values.runAsUser }}
-          readOnlyRootFilesystem: true
           capabilities:
             drop:
             - ALL
+          privileged: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: {{ .Values.runAsUser }}
+          seLinuxOptions:
+            type: spc_t
         env:
           - name: LOGROTATE
             valueFrom:
@@ -138,6 +139,8 @@ spec:
         resources:
 {{ toYaml .Values.auditService.resources | indent 10 }}
         volumeMounts:
+        - name: journal
+          mountPath: "/run/systemd/journal"        
         - name: shared
           mountPath: {{ .Values.auditService.config.auditLogPath }}
         - name: logrotate
@@ -148,10 +151,10 @@ spec:
           subPath: logrotate.conf
       {{ end }}
       - name: platform-api
-      {{- if .Values.platformApi.image.sha }}
-        image: "{{ .Values.platformApi.image.imageRegistry }}/{{ .Values.platformApi.image.repository }}@{{ .Values.platformApi.image.sha }}"
+      {{- if hasPrefix "sha256:" .Values.platformApi.image.digest }}
+        image: "{{ .Values.platformApi.image.imageRegistry }}/{{ .Values.platformApi.image.name }}@{{ .Values.platformApi.image.digest }}"
       {{- else }}
-        image: "{{ .Values.platformApi.image.imageRegistry }}/{{ .Values.platformApi.image.repository }}:{{ .Values.platformApi.image.tag }}"
+        image: "{{ .Values.platformApi.image.imageRegistry }}/{{ .Values.platformApi.image.name }}:{{ .Values.platformApi.image.digest }}"
       {{- end }}
         imagePullPolicy: {{ .Values.platformApi.image.pullPolicy }}
         securityContext:
@@ -262,6 +265,9 @@ spec:
             - key: tls.key
               path: key.pem
         {{ if .Values.auditService.config.enabled }}
+        - name: journal
+          hostPath:
+            path: /run/systemd/journal        
         - name: shared
           emptyDir: {}
         - configMap:
