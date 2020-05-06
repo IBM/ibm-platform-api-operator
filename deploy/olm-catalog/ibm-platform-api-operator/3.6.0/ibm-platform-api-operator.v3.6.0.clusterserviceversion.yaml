@@ -95,11 +95,9 @@ metadata:
     certified: "false"
     containerImage: quay.io/opencloudio/ibm-platform-api-operator:latest
     createdAt: "2020-03-25"
-    description: "#IBM Platform API Operator\n> **Important:** Do not install this operator directly. Only install this operator using the IBM Common Services Operator. For more information about installing this operator and other Common Services operators, see [Installer documentation](http://ibm.biz/cpcs_opinstall). If you are using this operator as part of an IBM Cloud Pak, see the documentation for that IBM Cloud Pak to learn more about how to install and use the operator service. For more information about IBM Cloud Paks, see [IBM Cloud Paks that use Common Services](http://ibm.biz/cpcs_cloudpaks).
-    \n\nOperator used to manage IBM Platform API service. The Platform API provides a REST service for viewing information about your cluster, manage your cluster, install Helm charts, download CLI tools, and much more.
-    \n\n## Supported platforms\n\n### Platforms\n\n- Red Hat OpenShift Container Plataform 4.x\n\n### Operating Systems\n\n- Red Hat Enterprise Linux CoreOS\n\n## Operator versions\n\n- 3.6.0
-    \n\n## Prerequisites\n\n[1.] Red Hat OpenShift Container Plataform 4.x installed\n[2.] Cluster Admin role for installation\n[3.] [IBM Cert Manager Operator](https://github.com/IBM/ibm-cert-manager-operator)\n[4.] [IBM MongoDB Operator](https://github.com/IBM/ibm-mongodb-operator)\n[5.] [IBM IAM Operator](https://github.com/IBM/ibm-iam-operator)\n[6.] [IBM Management Ingress Operator](https://github.com/IBM/ibm-management-ingress-operator)
-    \n\n## Documentation\nFor installation and configuration, see links in **Important** section."
+    description: The PlatformAPI operator provides a simple Kubernetes CRD-Based API
+      to manage the lifecycle of PlatformAPI. With this operator, you can simply deploy
+      and upgrade platform-api.
     repository: https://github.com/IBM/ibm-platform-api-operator
     support: IBM
   name: ibm-platform-api-operator.v3.6.0
@@ -108,7 +106,11 @@ spec:
   apiservicedefinitions: {}
   customresourcedefinitions:
     owned:
-    - description: PlatformAPI is the Schema for the platformapis API
+    - description: "#IBM Platform API Operator\n> **Important:** Do not install this operator directly. Only install this operator using the IBM Common Services Operator. For more information about installing this operator and other Common Services operators, see [Installer documentation](http://ibm.biz/cpcs_opinstall). If you are using this operator as part of an IBM Cloud Pak, see the documentation for that IBM Cloud Pak to learn more about how to install and use the operator service. For more information about IBM Cloud Paks, see [IBM Cloud Paks that use Common Services](http://ibm.biz/cpcs_cloudpaks).
+    \n\nOperator used to manage IBM Platform API service. The Platform API provides a REST service for viewing information about your cluster, manage your cluster, install Helm charts, download CLI tools, and much more.
+    \n\n## Supported platforms\n\n### Platforms\n\n- Red Hat OpenShift Container Platform 4.3+\n\n### Operating Systems\n\n- Red Hat Enterprise Linux CoreOS\n\n## Operator versions\n\n- 3.6.0
+    \n\n## Prerequisites\n\n[1.] Red Hat OpenShift Container Plataform 4.3+ installed\n[2.] Cluster Admin role for installation\n[3.] [IBM Cert Manager Operator](https://github.com/IBM/ibm-cert-manager-operator)\n[4.] [IBM MongoDB Operator](https://github.com/IBM/ibm-mongodb-operator)\n[5.] [IBM IAM Operator](https://github.com/IBM/ibm-iam-operator)\n[6.] [IBM Management Ingress Operator](https://github.com/IBM/ibm-management-ingress-operator)
+    \n\n## Documentation\nFor installation and configuration, see links in **Important** section."
       displayName: PlatformAPI
       kind: PlatformAPI
       name: platformapis.operator.ibm.com
