@@ -44,15 +44,9 @@ spec:
                 image:
                   type: object
                   properties:
-                    pullPolicy:
+                    digest:
                       type: string
                     imageRegistry:
-                      type: string
-                    repository:
-                      type: string
-                    tag:
-                      type: string
-                    digest:
                       type: string
                 resources:
                   type: object
@@ -77,15 +71,9 @@ spec:
                 image:
                   type: object
                   properties:
-                    pullPolicy:
+                    digest:
                       type: string
                     imageRegistry:
-                      type: string                      
-                    repository:
-                      type: string
-                    tag:
-                      type: string
-                    digest:
                       type: string
                 resources:
                   type: object
