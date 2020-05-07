@@ -12,7 +12,7 @@ auditService:
       }
     logrotateConf: include /etc/logrotate.d
   image:
-    digest: "sha256:334fae7bd3ae4c04611f4e82207a2f7836dbc589f7fc2b3cd172bd93572bfe16"
+    digest: "sha256:24a220374c39652f8b031637d852995bfaec5be2601f9e4c41eb1925531f466d"
     imageRegistry: quay.io/opencloudio
     name: icp-audit-service
     pullPolicy: IfNotPresent
@@ -36,7 +36,7 @@ platformApi:
     kubeApiserverSecurePort: 6443
   hostNetwork: false
   image:
-    digest: "sha256:56781f7cd9b620a8a6240fd47b839070f7441506f89ffb52be4d812a11b871cd"
+    digest: "sha256:643903bdf72dbae02b21199312a1ea2202595dc3d8bc176a7d10b5764f3a29f2"
     imageRegistry: quay.io/opencloudio
     name: icp-platform-api
     pullPolicy: IfNotPresent

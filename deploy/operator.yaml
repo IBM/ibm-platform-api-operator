@@ -46,9 +46,9 @@ spec:
             - name: OPERATOR_NAME
               value: "ibm-platform-api-operator"
             - name: IMAGE_DIGEST_FOR_AUDIT_SERVICE
-              value: "sha256:334fae7bd3ae4c04611f4e82207a2f7836dbc589f7fc2b3cd172bd93572bfe16"
+              value: "sha256:24a220374c39652f8b031637d852995bfaec5be2601f9e4c41eb1925531f466d"
             - name: IMAGE_DIGEST_FOR_PLATFORM_API
-              value: "sha256:56781f7cd9b620a8a6240fd47b839070f7441506f89ffb52be4d812a11b871cd"          
+              value: "sha256:643903bdf72dbae02b21199312a1ea2202595dc3d8bc176a7d10b5764f3a29f2"          
           resources:
             limits:
               cpu: 150m
