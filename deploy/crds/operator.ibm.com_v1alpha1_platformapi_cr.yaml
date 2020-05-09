@@ -12,8 +12,6 @@ spec:
   auditService:
     config:
       enabled: true
-    image:
-      imageRegistry: quay.io/opencloudio
     resources:
       limits:
         cpu: 500m
@@ -22,8 +20,6 @@ spec:
         cpu: 500m
         memory: 512Mi
   platformApi:
-    image:
-      imageRegistry: quay.io/opencloudio
     resources:
       limits:
         cpu: 500m

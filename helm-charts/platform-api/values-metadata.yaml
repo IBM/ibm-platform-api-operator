@@ -47,14 +47,6 @@ platformApi:
   image:
     label: "Docker image"
     description: "platformApi.image: Platform Api image"
-    imageRegistry:
-      __metadata:
-        name: "imageRegistry"
-        label: "Docker registry"
-        description: "platformApi.image.imageRegistry: Registry for the platform api image"
-        type: "string"
-        immutable: false
-        required: true
     name:
       __metadata:
         name: "name"
@@ -63,13 +55,11 @@ platformApi:
         type: "string"
         immutable: false
         required: true
-    digest:
+    repository:
       __metadata:
-        name: "digest"
-        label: "Image digest"
-        description: "platformApi.image.digest: Image digest for the platform api image"
+        label: "Repository"
+        description: "Docker image location"
         type: "string"
-        immutable: false
         required: true
     pullPolicy:
       __metadata:
@@ -245,14 +235,6 @@ auditService:
   image:
     label: "Audit image"
     description: "auditService.image: Audit image"
-    imageRegistry:
-      __metadata:
-        name: "imageRegistry"
-        label: "Docker registry"
-        description: "auditService.image.imageRegistry: Registry for the audit image"
-        type: "string"
-        immutable: false
-        required: true
     name:
       __metadata:
         name: "name"
@@ -261,13 +243,11 @@ auditService:
         type: "string"
         immutable: false
         required: true
-    digest:
+    repository:
       __metadata:
-        name: "digest"
-        label: "Image digest"
-        description: "auditService.image.digest: Image digest for the audit image"
+        label: "Repository"
+        description: "Docker image location"
         type: "string"
-        immutable: false
         required: true
     pullPolicy:
       __metadata:
