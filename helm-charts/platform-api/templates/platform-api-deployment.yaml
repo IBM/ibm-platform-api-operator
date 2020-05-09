@@ -40,6 +40,7 @@ spec:
         productMetric: FREE
         clusterhealth.ibm.com/dependencies: "auth-idp, auth-pap, auth-pdp, cert-manager, icp-management-ingress"
     spec:
+      serviceAccount: ibm-platform-api-operand
       serviceAccountName: ibm-platform-api-operand
       hostPID: false
       hostIPC: false
@@ -58,11 +59,7 @@ spec:
       hostNetwork: {{ .Values.platformApi.hostNetwork }}
       initContainers:
       - name: check-certs
-      {{- if hasPrefix "sha256:" .Values.platformApi.image.digest }}
-        image: "{{ .Values.platformApi.image.imageRegistry }}/{{ .Values.platformApi.image.name }}@{{ .Values.platformApi.image.digest }}"
-      {{- else }}
-        image: "{{ .Values.platformApi.image.imageRegistry }}/{{ .Values.platformApi.image.name }}:{{ .Values.platformApi.image.digest }}"
-      {{- end }}
+        image: {{ .Values.platformApi.image.repository }}
         imagePullPolicy: {{ .Values.platformApi.image.pullPolicy }}
         securityContext:
           allowPrivilegeEscalation: false
@@ -94,11 +91,7 @@ spec:
       containers:
       {{ if .Values.auditService.config.enabled }}
       - name: audit-service
-      {{- if hasPrefix "sha256:" .Values.auditService.image.digest }}
-        image: "{{ .Values.auditService.image.imageRegistry }}/{{ .Values.auditService.image.name }}@{{ .Values.auditService.image.digest }}"
-      {{- else }}
-        image: "{{ .Values.auditService.image.imageRegistry }}/{{ .Values.auditService.image.name }}:{{ .Values.auditService.image.digest }}"
-      {{- end }}
+        image: {{ .Values.auditService.image.repository }}
         imagePullPolicy: {{ .Values.auditService.image.pullPolicy }}
         readinessProbe:
           exec:
@@ -151,20 +144,14 @@ spec:
           subPath: logrotate.conf
       {{ end }}
       - name: platform-api
-      {{- if hasPrefix "sha256:" .Values.platformApi.image.digest }}
-        image: "{{ .Values.platformApi.image.imageRegistry }}/{{ .Values.platformApi.image.name }}@{{ .Values.platformApi.image.digest }}"
-      {{- else }}
-        image: "{{ .Values.platformApi.image.imageRegistry }}/{{ .Values.platformApi.image.name }}:{{ .Values.platformApi.image.digest }}"
-      {{- end }}
+        image: {{ .Values.platformApi.image.repository }}
         imagePullPolicy: {{ .Values.platformApi.image.pullPolicy }}
         securityContext:
           allowPrivilegeEscalation: false
           privileged: false
           readOnlyRootFilesystem: true
           runAsNonRoot: true
-          {{- if not (.Capabilities.APIVersions.Has "security.openshift.io/v1") }}
           runAsUser: {{ .Values.runAsUser }}
-          {{- end }}
           capabilities:
             drop:
             - ALL

@@ -4,5 +4,5 @@
   kind: PlatformAPI
   chart: helm-charts/platform-api
   overrideValues:
-    auditService.image.digest: ${IMAGE_DIGEST_FOR_AUDIT_SERVICE}
-    platformApi.image.digest: ${IMAGE_DIGEST_FOR_PLATFORM_API}
+    auditService.image.repository: ${OPERAND_AUDIT_SERVICE_IMAGE}
+    platformApi.image.repository: ${OPERAND_PLATFORM_API_IMAGE}

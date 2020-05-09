@@ -41,13 +41,6 @@ spec:
                   properties:
                     enabled:
                       type: boolean
-                image:
-                  type: object
-                  properties:
-                    digest:
-                      type: string
-                    imageRegistry:
-                      type: string
                 resources:
                   type: object
                   properties:
@@ -67,14 +60,7 @@ spec:
                           type: string
             platformApi:
               type: object
-              properties: 
-                image:
-                  type: object
-                  properties:
-                    digest:
-                      type: string
-                    imageRegistry:
-                      type: string
+              properties:
                 resources:
                   type: object
                   properties:
