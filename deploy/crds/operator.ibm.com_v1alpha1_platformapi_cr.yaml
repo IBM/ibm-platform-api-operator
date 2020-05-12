@@ -14,11 +14,11 @@ spec:
       enabled: true
     resources:
       limits:
-        cpu: 500m
-        memory: 512Mi
+        cpu: 200m
+        memory: 250Mi
       requests:
-        cpu: 500m
-        memory: 512Mi
+        cpu: 200m
+        memory: 250Mi
   platformApi:
     resources:
       limits:
