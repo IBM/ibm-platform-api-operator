@@ -5,7 +5,7 @@ metadata:
   annotations:
     helm.operator-sdk/upgrade-force: "True"  
   labels:
-    app.kubernetes.io/instance: platformapis.operator.ibm.com
+    app.kubernetes.io/instance: platform-api
     app.kubernetes.io/managed-by: platformapis.operator.ibm.com
     app.kubernetes.io/name: platform-api
 spec:
