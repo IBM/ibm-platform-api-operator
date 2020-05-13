@@ -278,7 +278,7 @@ spec:
                 productName: IBM Cloud Platform Common Services
                 productVersion: 3.4.0
               labels:
-                app.kubernetes.io/instance: platformapis.operator.ibm.com
+                app.kubernetes.io/instance: platform-api
                 app.kubernetes.io/managed-by: platformapis.operator.ibm.com
                 app.kubernetes.io/name: platformapis.operator.ibm.com
                 name: ibm-platform-api-operator
