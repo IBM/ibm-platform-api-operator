@@ -249,28 +249,28 @@ auditService:
   image:
     label: "Audit image"
     description: "auditService.image: Audit image"
-    name:
-      __metadata:
-        name: "name"
-        label: "Image name"
-        description: "auditService.image.name: The audit image name"
-        type: "string"
-        immutable: false
-        required: true
-    imageRegistry:
-      __metadata:
-        name: "imageRegistry"
-        label: "imageRegistry location for audit service"
-        description: "imageRegistry location for audit service."
-        type: "string"
-        required: true
-    digest:
-      __metadata:
-        name: "digest"
-        label: "image digest value for audit service"
-        description: "image digest value for audit service."
-        type: "string"
-        required: true
+    # name:
+    #   __metadata:
+    #     name: "name"
+    #     label: "Image name"
+    #     description: "auditService.image.name: The audit image name"
+    #     type: "string"
+    #     immutable: false
+    #     required: true
+    # imageRegistry:
+    #   __metadata:
+    #     name: "imageRegistry"
+    #     label: "imageRegistry location for audit service"
+    #     description: "imageRegistry location for audit service."
+    #     type: "string"
+    #     required: true
+    # digest:
+    #   __metadata:
+    #     name: "digest"
+    #     label: "image digest value for audit service"
+    #     description: "image digest value for audit service."
+    #     type: "string"
+    #     required: true
     repository:
       __metadata:
         label: "Repository"
