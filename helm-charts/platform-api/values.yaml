@@ -34,7 +34,7 @@ platformApi:
     kubeApiserverSecurePort: 6443
   hostNetwork: false
   image:
-    repository: quay.io/opencloudio/icp-platform-api@sha256:643903bdf72dbae02b21199312a1ea2202595dc3d8bc176a7d10b5764f3a29f2
+    repository: quay.io/opencloudio/icp-platform-api@sha256:e6a535b448608f6ca0bb9a8b3a81159174f4c4042e15257abf529289afa1ae0d
     pullPolicy: IfNotPresent
   name: platform-api
   namespace: "ibm-common-services"
