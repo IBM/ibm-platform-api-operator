@@ -47,14 +47,6 @@ platformApi:
   image:
     label: "Docker image"
     description: "platformApi.image: Platform Api image"
-    name:
-      __metadata:
-        name: "name"
-        label: "Image name"
-        description: "platformApi.image.name: The platform api image name"
-        type: "string"
-        immutable: false
-        required: true
     repository:
       __metadata:
         label: "Repository"
@@ -202,19 +194,6 @@ platformApi:
         immutable: false
         required: true
 
-  ## NodeSelector Configuration
-  nodeSelector:
-    label: "Node Selector"
-    description: "platformApi.nodeSelector: The Node Selector"
-    master:
-      __metadata:
-        name: "master"
-        label: "master node"
-        description: "platformApi.nodeSelector.master: The master node"
-        type: "string"
-        immutable: false
-        required: true
-
   ## tolerations configuration metadata
   tolerations:
     __metadata:
@@ -235,14 +214,6 @@ auditService:
   image:
     label: "Audit image"
     description: "auditService.image: Audit image"
-    name:
-      __metadata:
-        name: "name"
-        label: "Image name"
-        description: "auditService.image.name: The audit image name"
-        type: "string"
-        immutable: false
-        required: true
     repository:
       __metadata:
         label: "Repository"
