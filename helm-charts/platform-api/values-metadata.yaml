@@ -47,34 +47,12 @@ platformApi:
   image:
     label: "Docker image"
     description: "platformApi.image: Platform Api image"
-    # name:
-    #   __metadata:
-    #     name: "name"
-    #     label: "Image name"
-    #     description: "platformApi.image.name: The platform api image name"
-    #     type: "string"
-    #     immutable: false
-    #     required: true
     repository:
       __metadata:
         label: "Repository"
         description: "Docker image location"
         type: "string"
         required: true
-    # imageRegistry:
-    #   __metadata:
-    #     name: "imageRegistry"
-    #     label: "imageRegistry location for platform api"
-    #     description: "imageRegistry location for platform api."
-    #     type: "string"
-    #     required: true
-    # digest:
-    #   __metadata:
-    #     name: "digest"
-    #     label: "image digest value for platform api"
-    #     description: "image digest value for platform api."
-    #     type: "string"
-    #     required: true
     pullPolicy:
       __metadata:
         name: "pullPolicy"
@@ -216,19 +194,6 @@ platformApi:
         immutable: false
         required: true
 
-  ## NodeSelector Configuration
-  # nodeSelector:
-  #   label: "Node Selector"
-  #   description: "platformApi.nodeSelector: The Node Selector"
-  #   master:
-  #     __metadata:
-  #       name: "master"
-  #       label: "master node"
-  #       description: "platformApi.nodeSelector.master: The master node"
-  #       type: "string"
-  #       immutable: false
-  #       required: true
-
   ## tolerations configuration metadata
   tolerations:
     __metadata:
@@ -249,28 +214,6 @@ auditService:
   image:
     label: "Audit image"
     description: "auditService.image: Audit image"
-    # name:
-    #   __metadata:
-    #     name: "name"
-    #     label: "Image name"
-    #     description: "auditService.image.name: The audit image name"
-    #     type: "string"
-    #     immutable: false
-    #     required: true
-    # imageRegistry:
-    #   __metadata:
-    #     name: "imageRegistry"
-    #     label: "imageRegistry location for audit service"
-    #     description: "imageRegistry location for audit service."
-    #     type: "string"
-    #     required: true
-    # digest:
-    #   __metadata:
-    #     name: "digest"
-    #     label: "image digest value for audit service"
-    #     description: "image digest value for audit service."
-    #     type: "string"
-    #     required: true
     repository:
       __metadata:
         label: "Repository"

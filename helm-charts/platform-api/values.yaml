@@ -12,10 +12,7 @@ auditService:
       }
     logrotateConf: include /etc/logrotate.d
   image:
-   #digest: "sha256:24a220374c39652f8b031637d852995bfaec5be2601f9e4c41eb1925531f466d"
     repository: quay.io/opencloudio/icp-audit-service@sha256:24a220374c39652f8b031637d852995bfaec5be2601f9e4c41eb1925531f466d
-    # imageRegistry: quay.io/opencloudio
-    # name: icp-audit-service
     pullPolicy: IfNotPresent
   resources:
     limits:
@@ -37,10 +34,7 @@ platformApi:
     kubeApiserverSecurePort: 6443
   hostNetwork: false
   image:
-    # digest: "sha256:643903bdf72dbae02b21199312a1ea2202595dc3d8bc176a7d10b5764f3a29f2"
     repository: quay.io/opencloudio/icp-platform-api@sha256:643903bdf72dbae02b21199312a1ea2202595dc3d8bc176a7d10b5764f3a29f2
-    # imageRegistry: quay.io/opencloudio
-    # name: icp-platform-api
     pullPolicy: IfNotPresent
   name: platform-api
   namespace: "ibm-common-services"
