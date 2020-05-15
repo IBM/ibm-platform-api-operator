@@ -84,25 +84,26 @@ spec:
         status:
           properties:
             conditions:
-              items:
-                properties:
-                  lastTransitionTime:
-                    type: string
-                  lastUpdateTime:
-                    type: string
-                  message:
-                    type: string
-                  reason:
-                    type: string
-                  status:
-                    type: string
-                  type:
-                    type: string
-                required: 
-                - status
-                - type
-                type: object
               type: array
+              properties:
+                items:
+                  properties:
+                    lastTransitionTime:
+                      type: string
+                    lastUpdateTime:
+                      type: string
+                    message:
+                      type: string
+                    reason:
+                      type: string
+                    status:
+                      type: string
+                    type:
+                      type: string
+                  required: 
+                  - status
+                  - type
+                  type: object
             deployedRelease:
               properties:
                 manifest:
@@ -110,7 +111,7 @@ spec:
                 name:
                   type: string
               type: object
-          type: object
+          # type: object
       required:
       - metadata
       - spec
