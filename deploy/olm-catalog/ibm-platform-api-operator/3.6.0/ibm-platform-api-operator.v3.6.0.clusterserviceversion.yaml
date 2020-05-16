@@ -81,11 +81,12 @@ metadata:
     capabilities: Seamless Upgrades
     categories: Developer Tools
     certified: "false"
-    containerImage: quay.io/opencloudio/ibm-platform-api-operator:latest
-    createdAt: "2020-03-25"
+    containerImage: quay.io/opencloudio/ibm-platform-api-operator@sha256:6d39ea1f5b8956bfcef7cdc0aa087427c5fa501ea5735a22f6531c4045a6b2e3
+    createdAt: "2020-05-16"
     description: The PlatformAPI operator provides a simple Kubernetes CRD-Based API
       to manage the lifecycle of PlatformAPI. With this operator, you can simply deploy
       and upgrade platform-api.
+    olm.skipRange: ">=3.5.0 <3.6.0"
     repository: https://github.com/IBM/ibm-platform-api-operator
     support: IBM
   name: ibm-platform-api-operator.v3.6.0
@@ -299,7 +300,7 @@ spec:
                   value: quay.io/opencloudio/icp-audit-service@sha256:24a220374c39652f8b031637d852995bfaec5be2601f9e4c41eb1925531f466d
                 - name: OPERAND_PLATFORM_API_IMAGE
                   value: quay.io/opencloudio/icp-platform-api@sha256:e6a535b448608f6ca0bb9a8b3a81159174f4c4042e15257abf529289afa1ae0d
-                image: quay.io/opencloudio/ibm-platform-api-operator:latest
+                image: quay.io/opencloudio/ibm-platform-api-operator:sha256:6d39ea1f5b8956bfcef7cdc0aa087427c5fa501ea5735a22f6531c4045a6b2e3
                 imagePullPolicy: Always
                 name: ibm-platform-api-operator
                 resources:
