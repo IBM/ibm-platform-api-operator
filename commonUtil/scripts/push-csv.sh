@@ -46,6 +46,9 @@ else
   BLOB=$(base64 -w0 < bundle.tar.gz)
 fi
 
+# protect csv from pushing unintented changes
+commonUtil/scripts/protect-csv.sh
+
 # Delete old release if it exists
 echo "Delete package ${QUAY_REPOSITORY}/${RELEASE} from namespace ${QUAY_NAMESPACE}"
 curl -H "Content-Type: application/json" \
