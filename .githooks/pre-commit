@@ -1,0 +1,3 @@
+#!/bin/sh
+
+commonUtil/scripts/protect-csv.sh
