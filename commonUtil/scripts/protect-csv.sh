@@ -4,6 +4,10 @@ function msg() {
     printf '%b\n' "$1"
 }
 
+function success() {
+  msg "\33[32m[✔] ${1}\33[0m"
+}
+
 function error() {
     msg "\33[31m[✘] ${1}\33[0m"
     exit 1
@@ -53,3 +57,5 @@ protect_csv "${STABLE_CSV}" "stable-v1" "${OPERATOR_NAME}"
 # protect beta channel
 BETA_CSV=$(yq r "${PACKAGE_FILE}" "channels.(name==beta).currentCSV")
 protect_csv "${BETA_CSV}" "beta" "${OPERATOR_NAME}"
+
+success "CSV check ok"
