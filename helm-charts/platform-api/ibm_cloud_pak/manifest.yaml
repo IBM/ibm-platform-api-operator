@@ -2,20 +2,20 @@
 # (C) Copyright IBM Corporation 2016, 2019. All Rights Reserved.
 # US Government Users Restricted Rights - Use, duplication or disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
 images:	
-- image: icp-platform-api@sha256:5e6f5ef48de376aefbdc354daadba3f5e16440c3f85481e5fb1f2e0500a8c08d
+- image: icp-platform-api@sha256:81e995561b74e8b2a8b54d90514f509dc86491cfbdbe972b93754dafc583de1e
   references:
-  - repository: icp-platform-api@sha256:5e6f5ef48de376aefbdc354daadba3f5e16440c3f85481e5fb1f2e0500a8c08d
-    pull-repository: quay.io/opencloudio/icp-platform-api@sha256:5e6f5ef48de376aefbdc354daadba3f5e16440c3f85481e5fb1f2e0500a8c08d
+  - repository: icp-platform-api@sha256:81e995561b74e8b2a8b54d90514f509dc86491cfbdbe972b93754dafc583de1e
+    pull-repository: quay.io/opencloudio/icp-platform-api@sha256:81e995561b74e8b2a8b54d90514f509dc86491cfbdbe972b93754dafc583de1e
     platform:
       os: linux
       arch: amd64
-  - repository: icp-platform-api@sha256:5e6f5ef48de376aefbdc354daadba3f5e16440c3f85481e5fb1f2e0500a8c08d
-    pull-repository: quay.io/opencloudio/icp-platform-api@sha256:5e6f5ef48de376aefbdc354daadba3f5e16440c3f85481e5fb1f2e0500a8c08d
+  - repository: icp-platform-api@sha256:81e995561b74e8b2a8b54d90514f509dc86491cfbdbe972b93754dafc583de1e
+    pull-repository: quay.io/opencloudio/icp-platform-api@sha256:81e995561b74e8b2a8b54d90514f509dc86491cfbdbe972b93754dafc583de1e
     platform:
       os: linux
       arch: ppc64le
-  - repository: icp-platform-api@sha256:5e6f5ef48de376aefbdc354daadba3f5e16440c3f85481e5fb1f2e0500a8c08d
-    pull-repository: quay.io/opencloudio/icp-platform-api@sha256:5e6f5ef48de376aefbdc354daadba3f5e16440c3f85481e5fb1f2e0500a8c08d
+  - repository: icp-platform-api@sha256:81e995561b74e8b2a8b54d90514f509dc86491cfbdbe972b93754dafc583de1e
+    pull-repository: quay.io/opencloudio/icp-platform-api@sha256:81e995561b74e8b2a8b54d90514f509dc86491cfbdbe972b93754dafc583de1e
     platform:
       os: linux
       arch: s390x
