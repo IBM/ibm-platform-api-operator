@@ -28,3 +28,5 @@ spec:
         cpu: 500m
         memory: 512Mi
   replicaCount: 1
+  replicas: 1
+  size: small

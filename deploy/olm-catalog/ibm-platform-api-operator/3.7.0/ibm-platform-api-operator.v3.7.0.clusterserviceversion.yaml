@@ -46,7 +46,9 @@ metadata:
                 }
               }
             },
-            "replicaCount": 1
+            "replicaCount": 1,
+            "replicas": 1,
+            "size": "small"
           }
         },
         {
@@ -136,9 +138,15 @@ spec:
       - description: Platform API Chart configuration
         displayName: Platform API parameters
         path: platformApi
-      - description: Number of deployment replicas to deploy
+      - description: Number of deployment replicas to deploy (Deprecated)
         displayName: Deployment replica count
         path: replicaCount
+      - description: Number of deployment replicas to deploy
+        displayName: Deployment replica count
+        path: replicas
+      - description: Preset resource requests/limits
+        displayName: Deployment size
+        path: size
       statusDescriptors:
       - description: Conditions contains the observed states of the Helm release
         displayName: Conditions

@@ -19,7 +19,25 @@ replicaCount:
       description: "replicaCount: Number of replica pods"
       type: "number"
       immutable: false
-      required: true 
+      required: true
+
+replicas:
+    __metadata:
+      name: "replicas"
+      label: "Replica count"
+      description: "replicas: Number of replica pods"
+      type: "number"
+      immutable: false
+      required: true
+
+size:
+    _metadata:
+      name: "size"
+      label: "Preset resource requests/limits"
+      description: "size: Configure deployment with preset resource requests/limits"
+      type: "string"
+      immutable: false
+      required: true
 
 platformApi:
   __metadata:
