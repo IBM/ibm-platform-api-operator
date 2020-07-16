@@ -170,9 +170,9 @@ The following tables lists the configurable parameters of the chart and their de
 
 Parameter                                        | Description                                               | Default
 ------------------------------------------------ | --------------------------------------------------------- | --------------------
-`platformApi.replicaCount`                       | number of deployment replicas (Deprecated)                | 1      
-`platformApi.replicas`                           | number of deployment replicas                             | 1
-`platformApi.size`                               | preset resource requests/limits                           | small
+`replicaCount`                                   | number of deployment replicas (Deprecated)                | 1      
+`replicas`                                       | number of deployment replicas                             | 1
+`size`                                           | preset resource requests/limits                           | small
 `platformApi.hostNetwork`                        | host network                                              | false               
 `platformApi.meta.namespace`                     | namespace for this chart                                  | ibm-common-services         
 `platformApi.name`                               | platformApi container name                                | platform-api        
