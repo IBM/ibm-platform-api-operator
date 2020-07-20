@@ -9,7 +9,7 @@ metadata:
           "kind": "PlatformAPI",
           "metadata": {
             "annotations": {
-              "helm.operator-sdk/upgrade-force": true
+              "helm.operator-sdk/upgrade-force": "True"
             },
             "labels": {
               "app.kubernetes.io/instance": "platform-api",
