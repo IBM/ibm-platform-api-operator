@@ -3,7 +3,7 @@ kind: PlatformAPI
 metadata:
   name: platform-api
   annotations:
-    helm.operator-sdk/upgrade-force: "True"  
+    helm.operator-sdk/upgrade-force: "False"
   labels:
     app.kubernetes.io/instance: platform-api
     app.kubernetes.io/managed-by: platformapis.operator.ibm.com
@@ -27,4 +27,4 @@ spec:
       requests:
         cpu: 500m
         memory: 512Mi
-  replicaCount: 1
+  replicas: 1

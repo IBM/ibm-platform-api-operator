@@ -9,7 +9,7 @@ metadata:
           "kind": "PlatformAPI",
           "metadata": {
             "annotations": {
-              "helm.operator-sdk/upgrade-force": "True"
+              "helm.operator-sdk/upgrade-force": "False"
             },
             "labels": {
               "app.kubernetes.io/instance": "platform-api",
@@ -46,7 +46,7 @@ metadata:
                 }
               }
             },
-            "replicaCount": 1
+            "replicas": 1
           }
         },
         {
@@ -136,9 +136,12 @@ spec:
       - description: Platform API Chart configuration
         displayName: Platform API parameters
         path: platformApi
-      - description: Number of deployment replicas to deploy
+      - description: Number of deployment replicas to deploy (Deprecated)
         displayName: Deployment replica count
         path: replicaCount
+      - description: Number of deployment replicas to deploy
+        displayName: Deployment replica count
+        path: replicas
       statusDescriptors:
       - description: Conditions contains the observed states of the Helm release
         displayName: Conditions

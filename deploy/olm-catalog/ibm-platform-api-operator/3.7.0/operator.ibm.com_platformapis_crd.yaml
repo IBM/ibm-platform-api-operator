@@ -79,7 +79,9 @@ spec:
                         memory:
                           type: string
             replicaCount:
-              type: integer                          
+              type: integer
+            replicas:
+              type: integer
           type: object
         status:
           properties:

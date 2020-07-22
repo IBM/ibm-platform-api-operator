@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-FROM quay.io/operator-framework/helm-operator:v0.18.0
+FROM quay.io/operator-framework/helm-operator:v0.19.0
 
 ARG VCS_REF
 ARG VCS_URL
