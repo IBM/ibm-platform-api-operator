@@ -84,7 +84,7 @@ lint: lint-all
 ############################################################
 
 generate-csv: ## Generate CSV
-	- operator-sdk generate csv --csv-version $(CSV_VERSION)
+	- operator-sdk generate csv --csv-version=$(CSV_VERSION) --make-manifests=false
 	- cp deploy/crds/*_crd.yaml deploy/olm-catalog/$(BASE_DIR)/$(CSV_VERSION)/
 
 push-csv: ## Push CSV package to the catalog
