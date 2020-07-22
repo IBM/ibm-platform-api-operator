@@ -47,8 +47,7 @@ metadata:
               }
             },
             "replicaCount": 1,
-            "replicas": 1,
-            "size": "small"
+            "replicas": 1
           }
         },
         {
@@ -144,9 +143,6 @@ spec:
       - description: Number of deployment replicas to deploy
         displayName: Deployment replica count
         path: replicas
-      - description: Preset resource requests/limits
-        displayName: Deployment size
-        path: size
       statusDescriptors:
       - description: Conditions contains the observed states of the Helm release
         displayName: Conditions

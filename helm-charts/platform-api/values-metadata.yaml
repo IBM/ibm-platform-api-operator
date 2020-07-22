@@ -30,15 +30,6 @@ replicas:
       immutable: false
       required: true
 
-size:
-    _metadata:
-      name: "size"
-      label: "Preset resource requests/limits"
-      description: "size: Configure deployment with preset resource requests/limits"
-      type: "string"
-      immutable: false
-      required: true
-
 platformApi:
   __metadata:
     label: "Platform Api parameters"

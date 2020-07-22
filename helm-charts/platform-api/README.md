@@ -172,7 +172,6 @@ Parameter                                        | Description                  
 ------------------------------------------------ | --------------------------------------------------------- | --------------------
 `replicaCount`                                   | number of deployment replicas (Deprecated)                | 1      
 `replicas`                                       | number of deployment replicas                             | 1
-`size`                                           | preset resource requests/limits                           | small
 `platformApi.hostNetwork`                        | host network                                              | false               
 `platformApi.meta.namespace`                     | namespace for this chart                                  | ibm-common-services         
 `platformApi.name`                               | platformApi container name                                | platform-api        
