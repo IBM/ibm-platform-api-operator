@@ -10,6 +10,12 @@ metadata:
     app.kubernetes.io/name: platformapis.operator.ibm.com
 rules:
 - apiGroups:
+    - ""
+  resources:
+    - pods
+  verbs:
+    - deletecollection
+- apiGroups:
   - ""
   resources:
   - configmaps
@@ -144,6 +150,12 @@ metadata:
     app.kubernetes.io/managed-by: platformapis.operator.ibm.com
     app.kubernetes.io/name: platformapis.operator.ibm.com
 rules:
+- apiGroups:
+    - ""
+  resources:
+    - pods
+  verbs:
+    - deletecollection
 - apiGroups:
     - icp.ibm.com
   resources:
