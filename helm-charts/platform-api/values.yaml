@@ -52,6 +52,6 @@ platformApi:
   - key: CriticalAddonsOnly
     operator: Exists
 replicaCount: 1
-replicas: 1
+# replicas: 1
 runAsUser: 65534
 size: small
