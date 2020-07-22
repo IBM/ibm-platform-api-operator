@@ -184,6 +184,12 @@ spec:
       clusterPermissions:
       - rules:
         - apiGroups:
+          - ""
+          resources:
+          - pods
+          verbs:
+          - deletecollection
+        - apiGroups:
           - icp.ibm.com
           resources:
           - passwordrules
@@ -321,6 +327,12 @@ spec:
               serviceAccountName: ibm-platform-api-operator
       permissions:
       - rules:
+        - apiGroups:
+          - ""
+          resources:
+          - pods
+          verbs:
+          - deletecollection
         - apiGroups:
           - ""
           resources:
