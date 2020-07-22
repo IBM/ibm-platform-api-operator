@@ -32,7 +32,7 @@ spec:
       containers:
         - name: ibm-platform-api-operator
           # Replace this with the built image name
-          image: quay.io/opencloudio/ibm-platform-api-operator@sha256:bad886165b9640d35e2bf2c1103131fdb2b185cc96de09720e0f5e7434bfd57f
+          image: quay.io/opencloudio/ibm-platform-api-operator:latest
           imagePullPolicy: Always
           env:
             - name: WATCH_NAMESPACE
@@ -48,7 +48,7 @@ spec:
             - name: OPERAND_AUDIT_SERVICE_IMAGE
               value: "quay.io/opencloudio/icp-audit-service@sha256:24a220374c39652f8b031637d852995bfaec5be2601f9e4c41eb1925531f466d"
             - name: OPERAND_PLATFORM_API_IMAGE
-              value: "quay.io/opencloudio/icp-platform-api@sha256:81e995561b74e8b2a8b54d90514f509dc86491cfbdbe972b93754dafc583de1e"          
+              value: "quay.io/opencloudio/icp-platform-api@sha256:e064d228f07f39829127002135bec243a29beda9d513ab46b49c4c884bad1fc7"          
           resources:
             limits:
               cpu: 150m
