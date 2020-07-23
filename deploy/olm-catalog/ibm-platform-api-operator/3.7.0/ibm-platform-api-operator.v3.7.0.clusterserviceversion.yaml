@@ -306,12 +306,12 @@ spec:
                 readOnlyRootFilesystem: true
                 runAsNonRoot: true
                 resources:
-                limits:
-                  cpu: "150m"
-                  memory: 256Mi
-                requests:
-                  cpu: "150m"
-                  memory: 256Mi
+                  limits:
+                    cpu: "150m"
+                    memory: 256Mi
+                  requests:
+                    cpu: "150m"
+                    memory: 256Mi
                 command:
                 - sh
                 - -c
