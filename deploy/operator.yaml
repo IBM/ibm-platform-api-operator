@@ -48,7 +48,7 @@ spec:
             - name: OPERAND_AUDIT_SERVICE_IMAGE
               value: "quay.io/opencloudio/icp-audit-service@sha256:24a220374c39652f8b031637d852995bfaec5be2601f9e4c41eb1925531f466d"
             - name: OPERAND_PLATFORM_API_IMAGE
-              value: "quay.io/opencloudio/icp-platform-api@sha256:e064d228f07f39829127002135bec243a29beda9d513ab46b49c4c884bad1fc7"          
+              value: "quay.io/opencloudio/icp-platform-api@sha256:39aef36abb932c1f07423649f13c093063c38aa05d08b2378f986203a3299a58"          
           resources:
             limits:
               cpu: 150m
