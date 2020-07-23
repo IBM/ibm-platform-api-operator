@@ -32,7 +32,7 @@ spec:
       containers:
         - name: ibm-platform-api-operator
           # Replace this with the built image name
-          image: quay.io/opencloudio/ibm-platform-api-operator:3.6.2
+          image: quay.io/opencloudio/ibm-platform-api-operator@sha256:4931277a5998b2757d1d13cc30858241e754afe0080d52e1d22781ae3127a485
           imagePullPolicy: Always
           env:
             - name: WATCH_NAMESPACE
