@@ -295,7 +295,7 @@ spec:
             spec:
               initContainers:
               - name: helm-force-upgrade-false
-                image: quay.io/opencloudio/icp-platform-api@sha256:81e995561b74e8b2a8b54d90514f509dc86491cfbdbe972b93754dafc583de1e
+                image: quay.io/opencloudio/icp-platform-api@sha256:39aef36abb932c1f07423649f13c093063c38aa05d08b2378f986203a3299a58
                 imagePullPolicy: Always
                 securityContext:
                 allowPrivilegeEscalation: false
@@ -334,7 +334,7 @@ spec:
                 - name: OPERAND_AUDIT_SERVICE_IMAGE
                   value: quay.io/opencloudio/icp-audit-service@sha256:24a220374c39652f8b031637d852995bfaec5be2601f9e4c41eb1925531f466d
                 - name: OPERAND_PLATFORM_API_IMAGE
-                  value: quay.io/opencloudio/icp-platform-api@sha256:81e995561b74e8b2a8b54d90514f509dc86491cfbdbe972b93754dafc583de1e
+                  value: quay.io/opencloudio/icp-platform-api@sha256:39aef36abb932c1f07423649f13c093063c38aa05d08b2378f986203a3299a58
                 image: quay.io/opencloudio/ibm-platform-api-operator:latest
                 imagePullPolicy: Always
                 name: ibm-platform-api-operator
