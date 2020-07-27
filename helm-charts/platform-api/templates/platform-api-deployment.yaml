@@ -76,11 +76,11 @@ spec:
           runAsUser: {{ .Values.runAsUser }}
         resources:
           limits:
-            cpu: "1"
-            memory: 512Mi
+            cpu: "100m"
+            memory: 128Mi
           requests:
-            cpu: "0.5"
-            memory: 256Mi
+            cpu: "100m"
+            memory: 128Mi
         volumeMounts:
           - name: cluster-certs
             mountPath: /etc/cluster
