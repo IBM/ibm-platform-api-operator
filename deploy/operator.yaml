@@ -52,9 +52,7 @@ spec:
           - sh
           - -c
           - |
-            kubectl -n ibm-common-services patch platformapis platform-api \
-              --type json \
-              -p='[{"op": "replace", "path": "/metadata/annotations/helm.operator-sdk~1upgrade-force", "value": "False"}]'
+            kubectl annotate platformapis --all helm.operator-sdk/upgrade-force-
       containers:
         - name: ibm-platform-api-operator
           # Replace this with the built image name

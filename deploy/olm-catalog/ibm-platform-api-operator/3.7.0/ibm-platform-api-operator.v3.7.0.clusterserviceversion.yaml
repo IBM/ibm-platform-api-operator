@@ -8,9 +8,6 @@ metadata:
           "apiVersion": "operator.ibm.com/v1alpha1",
           "kind": "PlatformAPI",
           "metadata": {
-            "annotations": {
-              "helm.operator-sdk/upgrade-force": "False"
-            },
             "labels": {
               "app.kubernetes.io/instance": "platform-api",
               "app.kubernetes.io/managed-by": "platformapis.operator.ibm.com",
@@ -316,9 +313,7 @@ spec:
                 - sh
                 - -c
                 - |
-                  kubectl -n ibm-common-services patch platformapis platform-api \
-                    --type json \
-                    -p='[{"op": "replace", "path": "/metadata/annotations/helm.operator-sdk~1upgrade-force", "value": "False"}]'
+                  kubectl annotate platformapis --all helm.operator-sdk/upgrade-force-
               containers:
               - env:
                 - name: WATCH_NAMESPACE
