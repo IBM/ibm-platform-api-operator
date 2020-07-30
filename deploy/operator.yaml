@@ -29,6 +29,30 @@ spec:
       hostPID: false
       hostIPC: false
       serviceAccountName: ibm-platform-api-operator
+      initContainers:
+        - name: helm-force-upgrade-false
+          image: quay.io/opencloudio/icp-platform-api@sha256:39aef36abb932c1f07423649f13c093063c38aa05d08b2378f986203a3299a58
+          imagePullPolicy: Always
+          securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          privileged: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          resources:
+            limits:
+              cpu: "150m"
+              memory: 256Mi
+            requests:
+              cpu: "150m"
+              memory: 256Mi
+          command:
+          - sh
+          - -c
+          - |
+            kubectl annotate platformapis --all helm.operator-sdk/upgrade-force-
       containers:
         - name: ibm-platform-api-operator
           # Replace this with the built image name

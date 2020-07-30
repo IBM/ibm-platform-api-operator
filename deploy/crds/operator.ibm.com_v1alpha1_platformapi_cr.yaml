@@ -2,8 +2,6 @@ apiVersion: operator.ibm.com/v1alpha1
 kind: PlatformAPI
 metadata:
   name: platform-api
-  annotations:
-    helm.operator-sdk/upgrade-force: "False"
   labels:
     app.kubernetes.io/instance: platform-api
     app.kubernetes.io/managed-by: platformapis.operator.ibm.com

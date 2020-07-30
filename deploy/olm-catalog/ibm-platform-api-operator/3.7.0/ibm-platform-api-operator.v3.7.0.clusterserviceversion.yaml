@@ -8,9 +8,6 @@ metadata:
           "apiVersion": "operator.ibm.com/v1alpha1",
           "kind": "PlatformAPI",
           "metadata": {
-            "annotations": {
-              "helm.operator-sdk/upgrade-force": "False"
-            },
             "labels": {
               "app.kubernetes.io/instance": "platform-api",
               "app.kubernetes.io/managed-by": "platformapis.operator.ibm.com",
@@ -293,6 +290,30 @@ spec:
                 app.kubernetes.io/name: platformapis.operator.ibm.com
                 name: ibm-platform-api-operator
             spec:
+              initContainers:
+              - name: helm-force-upgrade-false
+                image: quay.io/opencloudio/icp-platform-api@sha256:39aef36abb932c1f07423649f13c093063c38aa05d08b2378f986203a3299a58
+                imagePullPolicy: Always
+                securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                  - ALL
+                privileged: false
+                readOnlyRootFilesystem: true
+                runAsNonRoot: true
+                resources:
+                  limits:
+                    cpu: "150m"
+                    memory: 256Mi
+                  requests:
+                    cpu: "150m"
+                    memory: 256Mi
+                command:
+                - sh
+                - -c
+                - |
+                  kubectl annotate platformapis --all helm.operator-sdk/upgrade-force-
               containers:
               - env:
                 - name: WATCH_NAMESPACE
@@ -308,7 +329,7 @@ spec:
                 - name: OPERAND_AUDIT_SERVICE_IMAGE
                   value: quay.io/opencloudio/icp-audit-service@sha256:24a220374c39652f8b031637d852995bfaec5be2601f9e4c41eb1925531f466d
                 - name: OPERAND_PLATFORM_API_IMAGE
-                  value: quay.io/opencloudio/icp-platform-api@sha256:81e995561b74e8b2a8b54d90514f509dc86491cfbdbe972b93754dafc583de1e
+                  value: quay.io/opencloudio/icp-platform-api@sha256:39aef36abb932c1f07423649f13c093063c38aa05d08b2378f986203a3299a58
                 image: quay.io/opencloudio/ibm-platform-api-operator:latest
                 imagePullPolicy: Always
                 name: ibm-platform-api-operator
