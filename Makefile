@@ -45,7 +45,7 @@ BASE_DIR := ibm-platform-api-operator
 TESTARGS_DEFAULT := "-v"
 export TESTARGS ?= $(TESTARGS_DEFAULT)
 DEST := $(GIT_HOST)/$(BASE_DIR)
-VERSION ?= $(shell cat ./helm-charts/CHART_NAME/Chart.yaml | grep "^version" | awk '{print $$2}')
+VERSION ?= $(shell cat ./helm-charts/platform-api/Chart.yaml | grep "^version" | awk '{print $$2}')
 
 LOCAL_OS := $(shell uname)
 LOCAL_ARCH := $(shell uname -m)
