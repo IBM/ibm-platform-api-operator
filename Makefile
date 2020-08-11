@@ -156,9 +156,9 @@ ifeq ($(TARGET_OS),$(filter $(TARGET_OS),linux darwin))
 	@curl -L -o /tmp/manifest-tool https://github.com/estesp/manifest-tool/releases/download/v0.7.0/manifest-tool-$(TARGET_OS)-amd64
 	@chmod +x /tmp/manifest-tool
 	@echo "Merging and push multi-arch image $(REGISTRY)/$(IMG):latest"
-	@/tmp/manifest-tool --username $(QUAY_USERNAME) --password $(QUAY_PASSWORD) push from-args --platforms linux/amd64,linux/ppc64le,linux/s390x --template $(REGISTRY)/$(IMG)-ARCH:$(VERSION) --target $(REGISTRY)/$(IMG):latest --ignore-missing
+	@/tmp/manifest-tool push from-args --platforms linux/amd64,linux/ppc64le,linux/s390x --template $(REGISTRY)/$(IMG)-ARCH:$(VERSION) --target $(REGISTRY)/$(IMG):latest --ignore-missing
 	@echo "Merging and push multi-arch image $(REGISTRY)/$(IMG):v$(VERSION)"
-	@/tmp/manifest-tool --username $(QUAY_USERNAME) --password $(QUAY_PASSWORD) push from-args --platforms linux/amd64,linux/ppc64le,linux/s390x --template $(REGISTRY)/$(IMG)-ARCH:$(VERSION) --target $(REGISTRY)/$(IMG):$(VERSION) --ignore-missing
+	@/tmp/manifest-tool push from-args --platforms linux/amd64,linux/ppc64le,linux/s390x --template $(REGISTRY)/$(IMG)-ARCH:$(VERSION) --target $(REGISTRY)/$(IMG):$(VERSION) --ignore-missing
 endif
 
 ############################################################
