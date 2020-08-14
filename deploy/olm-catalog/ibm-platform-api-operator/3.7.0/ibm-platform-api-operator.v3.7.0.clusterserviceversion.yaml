@@ -34,12 +34,12 @@ metadata:
             "platformApi": {
               "resources": {
                 "limits": {
-                  "cpu": "500m",
-                  "memory": "512Mi"
+                  "cpu": "100m",
+                  "memory": "128Mi"
                 },
                 "requests": {
-                  "cpu": "500m",
-                  "memory": "512Mi"
+                  "cpu": "100m",
+                  "memory": "128Mi"
                 }
               }
             },
@@ -83,7 +83,7 @@ metadata:
     description: The PlatformAPI operator provides a simple Kubernetes CRD-Based API
       to manage the lifecycle of PlatformAPI. With this operator, you can simply deploy
       and upgrade platform-api.
-    olm.skipRange: ">=3.5.0 <3.7.0"
+    olm.skipRange: '>=3.5.0 <3.7.0'
     repository: https://github.com/IBM/ibm-platform-api-operator
     support: IBM
   name: ibm-platform-api-operator.v3.7.0
@@ -289,30 +289,6 @@ spec:
                 app.kubernetes.io/name: platformapis.operator.ibm.com
                 name: ibm-platform-api-operator
             spec:
-              initContainers:
-              - name: helm-force-upgrade-false
-                image: quay.io/opencloudio/icp-platform-api@sha256:39aef36abb932c1f07423649f13c093063c38aa05d08b2378f986203a3299a58
-                imagePullPolicy: Always
-                securityContext:
-                allowPrivilegeEscalation: false
-                capabilities:
-                  drop:
-                  - ALL
-                privileged: false
-                readOnlyRootFilesystem: true
-                runAsNonRoot: true
-                resources:
-                  limits:
-                    cpu: "150m"
-                    memory: 256Mi
-                  requests:
-                    cpu: "150m"
-                    memory: 256Mi
-                command:
-                - sh
-                - -c
-                - |
-                  kubectl annotate platformapis --all helm.operator-sdk/upgrade-force-
               containers:
               - env:
                 - name: WATCH_NAMESPACE
@@ -326,9 +302,9 @@ spec:
                 - name: OPERATOR_NAME
                   value: ibm-platform-api-operator
                 - name: OPERAND_AUDIT_SERVICE_IMAGE
-                  value: quay.io/opencloudio/icp-audit-service@sha256:24a220374c39652f8b031637d852995bfaec5be2601f9e4c41eb1925531f466d
+                  value: quay.io/opencloudio/icp-audit-service@sha256:a649814564039ee923cb503720e9c5e87c20b3c340f06c48660490aeaed04d5a
                 - name: OPERAND_PLATFORM_API_IMAGE
-                  value: quay.io/opencloudio/icp-platform-api@sha256:39aef36abb932c1f07423649f13c093063c38aa05d08b2378f986203a3299a58
+                  value: quay.io/opencloudio/icp-platform-api@sha256:a764156e13addddb69d2ca9e3e2213bc518a71b8a32f1f76746e0bce932dff0b
                 image: quay.io/opencloudio/ibm-platform-api-operator:latest
                 imagePullPolicy: Always
                 name: ibm-platform-api-operator
@@ -347,6 +323,22 @@ spec:
                   privileged: false
                   readOnlyRootFilesystem: true
                   runAsNonRoot: true
+              initContainers:
+              - command:
+                - sh
+                - -c
+                - |
+                  kubectl annotate platformapis --all helm.operator-sdk/upgrade-force-
+                image: quay.io/opencloudio/kubectl@sha256:deeb798aaa12142c95ba37bd90ae99ed112afda1170be321db8b1476c7ac9fdd
+                imagePullPolicy: IfNotPresent
+                name: preinstall
+                resources:
+                  limits:
+                    cpu: 150m
+                    memory: 128Mi
+                  requests:
+                    cpu: 150m
+                    memory: 128Mi
               serviceAccountName: ibm-platform-api-operator
       permissions:
       - rules:

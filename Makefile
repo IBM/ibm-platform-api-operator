@@ -168,8 +168,8 @@ endif
 dev-image: clean build-amd64 push-amd64-dev ## Release development amd64 operator image 
 
 push-amd64-dev:
-	@docker tag $(REGISTRY)/$(IMG)-amd64:$(VERSION) $(REGISTRY)/$(IMG):dev
-	@docker push $(REGISTRY)/$(IMG):dev
+	@docker tag $(REGISTRY)/$(IMG)-amd64:$(VERSION) quay.io/opencloudio/$(IMG):dev
+	@docker push quay.io/opencloudio/$(IMG):dev
 
 ############################################################
 # application section
@@ -202,6 +202,17 @@ uninstall: ## Uninstall all that all performed in the $ make install
 	- kubectl delete -f deploy/role_binding.yaml -n ${NAMESPACE}
 	- kubectl delete -f deploy/service_account.yaml -n ${NAMESPACE}
 	- kubectl delete -f deploy/role.yaml -n ${NAMESPACE}
+
+clean-cluster: ## Clean up all the artifacts left in cluster
+	@echo ....... Cleaning up .......
+	- kubectl -n ${NAMESPACE} get platformapis -o name | xargs kubectl -n ${NAMESPACE} delete
+	- kubectl -n ${NAMESPACE} get csv -o name | grep platform-api | xargs kubectl -n ${NAMESPACE} delete
+	- kubectl -n ${NAMESPACE} get sub -o name | grep platform-api | xargs kubectl -n ${NAMESPACE} delete
+	- kubectl -n ${NAMESPACE} get installplans | grep platform-api | awk '{print $$1}' | xargs kubectl -n ${NAMESPACE} delete installplan
+	- kubectl -n ${NAMESPACE} get serviceaccounts -o name | grep platform-api | xargs kubectl -n ${NAMESPACE} delete
+	- kubectl get clusterrole -o name | grep platform-api | xargs kubectl delete
+	- kubectl get clusterrolebinding -o name | grep platform-api | xargs kubectl delete	
+	- kubectl get crd -o name | grep platformapi | xargs kubectl delete
 
 ############################################################
 # operator source section
