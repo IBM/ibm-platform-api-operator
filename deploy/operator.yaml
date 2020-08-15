@@ -22,7 +22,6 @@ spec:
       annotations:
         productName: IBM Cloud Platform Common Services
         productID: "068a62892a1e4db39641342e592daa25"
-        productVersion: "3.4.0"
         productMetric: FREE
     spec:
       hostNetwork: false
@@ -30,9 +29,9 @@ spec:
       hostIPC: false
       serviceAccountName: ibm-platform-api-operator
       initContainers:
-        - name: helm-force-upgrade-false
-          image: quay.io/opencloudio/icp-platform-api@sha256:39aef36abb932c1f07423649f13c093063c38aa05d08b2378f986203a3299a58
-          imagePullPolicy: Always
+        - name: pre-install
+          image: quay.io/opencloudio/kubectl@sha256:deeb798aaa12142c95ba37bd90ae99ed112afda1170be321db8b1476c7ac9fdd
+          imagePullPolicy: IfNotPresent
           securityContext:
           allowPrivilegeEscalation: false
           capabilities:
@@ -44,10 +43,10 @@ spec:
           resources:
             limits:
               cpu: "150m"
-              memory: 256Mi
+              memory: 128Mi
             requests:
               cpu: "150m"
-              memory: 256Mi
+              memory: 128Mi
           command:
           - sh
           - -c
@@ -70,9 +69,9 @@ spec:
             - name: OPERATOR_NAME
               value: "ibm-platform-api-operator"
             - name: OPERAND_AUDIT_SERVICE_IMAGE
-              value: "quay.io/opencloudio/icp-audit-service@sha256:24a220374c39652f8b031637d852995bfaec5be2601f9e4c41eb1925531f466d"
+              value: "quay.io/opencloudio/icp-audit-service@sha256:a649814564039ee923cb503720e9c5e87c20b3c340f06c48660490aeaed04d5a"
             - name: OPERAND_PLATFORM_API_IMAGE
-              value: "quay.io/opencloudio/icp-platform-api@sha256:39aef36abb932c1f07423649f13c093063c38aa05d08b2378f986203a3299a58"          
+              value: "quay.io/opencloudio/icp-platform-api@sha256:a764156e13addddb69d2ca9e3e2213bc518a71b8a32f1f76746e0bce932dff0b"          
           resources:
             limits:
               cpu: 150m
