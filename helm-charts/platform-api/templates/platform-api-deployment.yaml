@@ -101,15 +101,19 @@ spec:
             command:
             - cat
             - /opt/ibm/icp-audit/VERSION
-          initialDelaySeconds: 3
-          periodSeconds: 3
+          failureThreshold: 3
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          timeoutSeconds: 5
         livenessProbe:
           exec:
             command:
             - cat
             - /opt/ibm/icp-audit/VERSION
-          initialDelaySeconds: 3
-          periodSeconds: 3
+          failureThreshold: 3
+          initialDelaySeconds: 15
+          periodSeconds: 20
+          timeoutSeconds: 5
         securityContext:
           allowPrivilegeEscalation: false
           capabilities:
@@ -163,11 +167,19 @@ spec:
             path: "/v1/config"
             scheme: HTTP
             port: 6969
+          failureThreshold: 3
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          timeoutSeconds: 5
         livenessProbe:
           httpGet:
             path: "/v1/config"
             scheme: HTTP
             port: 6969
+          failureThreshold: 3
+          initialDelaySeconds: 15
+          periodSeconds: 20
+          timeoutSeconds: 5
         env:
           - name: SERVICE_NAME
             value: {{ .Values.platformApi.name }}
