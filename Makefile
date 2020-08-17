@@ -186,7 +186,7 @@ install: ## Install all resources (CR/CRD's, RBCA and Operator)
 	- kubectl apply -f deploy/role.yaml -n ${NAMESPACE}
 	- kubectl apply -f deploy/role_binding.yaml -n ${NAMESPACE}
 	@echo ....... Applying Operator .......
-	- kubectl apply -f deploy/olm-catalog/${BASE_DIR}/${CSV_VERSION}/${BASE_DIR}.v${CSV_VERSION}.clusterserviceversion.yaml -n ${NAMESPACE}
+	- cat deploy/olm-catalog/${BASE_DIR}/${CSV_VERSION}/${BASE_DIR}.v${CSV_VERSION}.clusterserviceversion.yaml | sed -f hack/csv_images.sed | kubectl -n ${NAMESPACE} apply -f -
 	@echo ....... Creating the Instance .......
 	- for cr in $(shell ls deploy/crds/*_cr.yaml); do kubectl apply -f $${cr} -n ${NAMESPACE}; done
 
