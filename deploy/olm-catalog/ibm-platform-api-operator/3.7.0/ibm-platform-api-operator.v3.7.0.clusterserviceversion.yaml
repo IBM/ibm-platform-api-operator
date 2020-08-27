@@ -304,7 +304,7 @@ spec:
                 - name: OPERAND_AUDIT_SERVICE_IMAGE
                   value: quay.io/opencloudio/icp-audit-service@sha256:3cfb9f3cc99379758f73f1cd2e6ad4dd4bc61e13cc55d7c34b0d0e280cb47421
                 - name: OPERAND_PLATFORM_API_IMAGE
-                  value: quay.io/opencloudio/icp-platform-api@sha256:81511597871f98014e9dceaac3ae62ad2febe3bd780b2fefd47aa5cb97964c37
+                  value: quay.io/opencloudio/icp-platform-api@sha256:5a872f18ceaaceaf54188cc1927421ab2278de95606271593baabee136dd6b58
                 image: quay.io/opencloudio/ibm-platform-api-operator:latest
                 imagePullPolicy: Always
                 name: ibm-platform-api-operator
