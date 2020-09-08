@@ -83,12 +83,7 @@ spec:
           runAsNonRoot: true
           runAsUser: {{ .Values.runAsUser }}
         resources:
-          limits:
-            cpu: "100m"
-            memory: 128Mi
-          requests:
-            cpu: "100m"
-            memory: 128Mi
+{{ toYaml .Values.platformApi.resources | indent 10 }}
         volumeMounts:
           - name: cluster-certs
             mountPath: /etc/cluster
