@@ -50,10 +50,10 @@ spec:
               value: "quay.io/opencloudio/icp-platform-api@sha256:5a872f18ceaaceaf54188cc1927421ab2278de95606271593baabee136dd6b58"          
           resources:
             limits:
-              cpu: 150m
+              cpu: 50m
               memory: 256Mi
             requests:
-              cpu: 150m
+              cpu: 20m
               memory: 256Mi
           securityContext:
             allowPrivilegeEscalation: false
