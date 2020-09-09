@@ -237,7 +237,7 @@ configure-githooks: ## Configure githooks
 # clean section
 ############################################################
 clean: ## Clean build binary
-	@docker images | grep "${REGISTRY}/${IMG}" | tr -s ' ' | awk -F' ' '{print $$1 ":" $$2;}' | xargs -I {}  docker rmi {}
+	@docker images | grep "${REGISTRY}/${IMG}" | tr -s ' ' | awk -F' ' '{print $$3}' | xargs -I {} docker rmi {}
 	@rm -f build/_output/bin/$(IMG)
 
 ############################################################
