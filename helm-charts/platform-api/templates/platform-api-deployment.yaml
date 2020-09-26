@@ -51,22 +51,24 @@ spec:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
-              - matchExpressions:
-                - key: beta.kubernetes.io/arch
-                  operator: In
-                  values:
-                  - amd64
-                  - ppc64le
-                  - s390x
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchExpressions:
-              - key: app
+            - matchExpressions:
+              - key: beta.kubernetes.io/arch
                 operator: In
                 values:
-                - {{ .Values.platformApi.name }}
-            topologyKey: "kubernetes.io/hostname"
+                - amd64
+                - ppc64le
+                - s390x
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - {{ .Values.platformApi.name }}
+              topologyKey: "kubernetes.io/hostname"
+            weight: 100
       terminationGracePeriodSeconds: 60
       hostNetwork: {{ .Values.platformApi.hostNetwork }}
       initContainers:
