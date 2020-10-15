@@ -45,6 +45,34 @@ metadata:
             },
             "replicas": 1
           }
+        },
+        {
+          "apiVersion":"operator.ibm.com/v1alpha1",
+          "kind":"OperandRequest",
+          "metadata":{
+            "name":"platform-api-request"
+          },
+          "spec":{
+            "requests":[
+              {
+                "operands":[
+                  {
+                    "name":"ibm-cert-manager-operator"
+                  },
+                  {
+                    "name":"ibm-mongodb-operator"
+                  },
+                  {
+                    "name":"ibm-iam-operator"
+                  },                                    
+                  {
+                    "name":"ibm-management-ingress-operator"
+                  }
+                ],
+                "registry":"common-service"
+              }
+            ]
+          }
         }
       ]
     capabilities: Seamless Upgrades
@@ -271,12 +299,6 @@ spec:
         - apiGroups:
           - ""
           resources:
-          - pods
-          verbs:
-          - deletecollection
-        - apiGroups:
-          - ""
-          resources:
           - configmaps
           - endpoints
           - events
@@ -299,25 +321,18 @@ spec:
           resources:
           - namespaces
           verbs:
-          - '*'
+          - get
         - apiGroups:
           - ""
           resources:
-          - configmaps
-          - secrets
+          - pods
           verbs:
-          - '*'
-        - apiGroups:
-          - ""
-          resources:
-          - events
-          verbs:
-          - create
+          - deletecollection
         - apiGroups:
           - apps
           resources:
-          - deployments
           - daemonsets
+          - deployments
           - replicasets
           - statefulsets
           verbs:
@@ -330,43 +345,12 @@ spec:
           - watch
         - apiGroups:
           - apps
-          resources:
-          - replicasets
-          - deployments
-          verbs:
-          - get
-        - apiGroups:
-          - apps
           resourceNames:
           - ibm-platform-api-operator
           resources:
           - deployments/finalizers
           verbs:
           - update
-        - apiGroups:
-          - certmanager.k8s.io
-          resources:
-          - certificates
-          verbs:
-          - create
-          - delete
-          - get
-          - list
-          - patch
-          - update
-          - watch
-        - apiGroups:
-          - batch
-          resources:
-          - jobs
-          verbs:
-          - create
-          - delete
-          - get
-          - list
-          - patch
-          - update
-          - watch
         - apiGroups:
           - extensions
           resources:
@@ -386,16 +370,10 @@ spec:
           verbs:
           - list
         - apiGroups:
-          - monitoring.coreos.com
+          - rbac.authorization.k8s.io
           resources:
-          - servicemonitors
-          verbs:
-          - get
-          - create
-        - apiGroups:
-          - operator.ibm.com
-          resources:
-          - '*'
+          - roles
+          - rolebindings
           verbs:
           - create
           - delete
@@ -405,10 +383,11 @@ spec:
           - update
           - watch
         - apiGroups:
-          - rbac.authorization.k8s.io
+          - operator.ibm.com
           resources:
-          - roles
-          - rolebindings
+          - platformapis
+          - platformapis/finalizers
+          - platformapis/status
           verbs:
           - create
           - delete

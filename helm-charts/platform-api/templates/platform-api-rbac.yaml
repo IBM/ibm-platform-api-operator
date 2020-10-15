@@ -7,7 +7,7 @@ metadata:
     name: ibm-platform-api-operand
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
-    app.kubernetes.io/name:  {{ .Values.platformApi.name }}
+    app.kubernetes.io/name: {{ .Values.platformApi.name }}
     helm.sh/chart: {{ .Release.Name }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -18,29 +18,69 @@ metadata:
     name: ibm-platform-api-operand
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
-    app.kubernetes.io/name:  {{ .Values.platformApi.name }}
+    app.kubernetes.io/name: {{ .Values.platformApi.name }}
     helm.sh/chart: {{ .Release.Name }}
 rules:
-- apiGroups:
-  - ""
-  resources:
-  - configmaps
-  - endpoints
-  - events
-  - persistentvolumeclaims
-  - pods
-  - secrets
-  - serviceaccounts
-  - services
-  - services/finalizers
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
+  - apiGroups:
+      - ''
+    resources:
+      - configmaps
+      - endpoints
+      - events
+      - persistentvolumeclaims
+      - pods
+      - secrets
+      - serviceaccounts
+      - services
+      - services/finalizers
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - ''
+    resources:
+      - namespaces
+    verbs:
+      - get
+  - apiGroups:
+      - ''
+    resources:
+      - pods
+    verbs:
+      - deletecollection
+  - apiGroups:
+      - apps
+    resources:
+      - daemonsets
+      - deployments
+      - statefulsets
+    verbs:
+      - get
+      - list
+  - apiGroups:
+      - icp.ibm.com
+    resources:
+      - passwordrules
+    verbs:
+      - list
+  - apiGroups:
+      - rbac.authorization.k8s.io
+    resources:
+      - roles
+      - rolebindings
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -50,90 +90,47 @@ metadata:
     name: ibm-platform-api-operand
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
-    app.kubernetes.io/name:  {{ .Values.platformApi.name }}
+    app.kubernetes.io/name: {{ .Values.platformApi.name }}
     helm.sh/chart: {{ .Release.Name }}
 rules:
-- apiGroups:
-    - ""
-  resources:
-    - pods
-  verbs:
-    - deletecollection
-- apiGroups:
-    - icp.ibm.com
-  resources:
-    - passwordrules
-  verbs:
-    - list
-- apiGroups:
-    - apps
-  resources:
-    - deployments
-    - daemonsets
-    - replicasets
-    - statefulsets
-  verbs:
-    - get
-    - list
-    - update
-    - patch
-- apiGroups:
-    - ''
-  resources:
-    - namespaces
-  verbs:
-    - get
-- apiGroups:
-    - ''
-  resources:
-    - secrets
-  verbs:
-    - get
-    - update
-- apiGroups:
-  - ''
-  resources:
-  - configmaps
-  - serviceaccounts 
-  verbs:
-  - '*'
-- apiGroups:
-  - policy
-  resources:
-  - podsecuritypolicies 
-  verbs:
-  - '*'
-- apiGroups:
-  - rbac.authorization.k8s.io
-  resources:
-  - clusterroles
-  - clusterrolebindings
-  - roles
-  - rolebindings
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - security.openshift.io
-  resources:
-  - securitycontextconstraints
-  resourceNames:
-  - privileged
-  verbs:
-  - use
-- apiGroups:
-  - security.openshift.io
-  resources:
-  - securitycontextconstraints
-  resourceNames:
-  - privileged
-  verbs:
-  - use
+  - apiGroups:
+      - apiextensions.k8s.io
+    resources:
+      - customresourcedefinitions
+    resourceNames:
+      - platformapis.operator.ibm.com
+      - passwordrules.icp.ibm.com
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - rbac.authorization.k8s.io
+    resources:
+      - clusterroles
+      - clusterrolebindings
+    resourceNames:
+      - ibm-platform-api-operand
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - security.openshift.io
+    resourceNames:
+      - privileged
+    resources:
+      - securitycontextconstraints
+    verbs:
+      - use
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -143,11 +140,11 @@ metadata:
     name: ibm-platform-api-operand
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
-    app.kubernetes.io/name:  {{ .Values.platformApi.name }}
+    app.kubernetes.io/name: {{ .Values.platformApi.name }}
     helm.sh/chart: {{ .Release.Name }}
 subjects:
-- kind: ServiceAccount
-  name: ibm-platform-api-operand
+  - kind: ServiceAccount
+    name: ibm-platform-api-operand
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -161,12 +158,12 @@ metadata:
     name: ibm-platform-api-operand
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
-    app.kubernetes.io/name:  {{ .Values.platformApi.name }}
+    app.kubernetes.io/name: {{ .Values.platformApi.name }}
     helm.sh/chart: {{ .Release.Name }}
 subjects:
-- kind: ServiceAccount
-  name: ibm-platform-api-operand
-  namespace: {{ .Release.Namespace }}
+  - kind: ServiceAccount
+    name: ibm-platform-api-operand
+    namespace: {{ .Release.Namespace }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
