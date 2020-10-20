@@ -78,15 +78,6 @@ platformApi:
         - label: "Never"
           value: "Never"
 
-  namespace:
-    __metadata:
-      name: "namespace"
-      label: "Namespace"
-      description: "platformApi.meta.namespace: Cluster resource namespace"
-      type: "string"
-      immutable: false
-      required: true
-
   ## Resource requests and limits configuration metadata
   resources:
     label: "Resources"

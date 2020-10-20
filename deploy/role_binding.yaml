@@ -27,7 +27,7 @@ metadata:
 subjects:
 - kind: ServiceAccount
   name: ibm-platform-api-operator
-  namespace: ibm-common-services
+  namespace: REPLACE_NAMESPACE
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
