@@ -45,9 +45,9 @@ spec:
             - name: OPERATOR_NAME
               value: "ibm-platform-api-operator"
             - name: OPERAND_AUDIT_SERVICE_IMAGE
-              value: "quay.io/opencloudio/icp-audit-service@sha256:3cfb9f3cc99379758f73f1cd2e6ad4dd4bc61e13cc55d7c34b0d0e280cb47421"
+              value: "quay.io/opencloudio/audit-syslog-service@sha256:8ba519b21a386347990f0c57682aefaa3c3c97cf44d6fdba3d5d4b730c78dad5"
             - name: OPERAND_PLATFORM_API_IMAGE
-              value: "quay.io/opencloudio/icp-platform-api@sha256:a7cb08c4bf808a4f3877c35d50ccb4a2052f77952bc0794dd8a83df63f981385"          
+              value: "quay.io/opencloudio/icp-platform-api@sha256:76c5c9d257bcc87130eaeb7251a1f2d724297d9cb01e2684eff4b60dbedcc416"
           resources:
             limits:
               cpu: 50m

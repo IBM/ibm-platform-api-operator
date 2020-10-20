@@ -45,6 +45,34 @@ metadata:
             },
             "replicas": 1
           }
+        },
+        {
+          "apiVersion":"operator.ibm.com/v1alpha1",
+          "kind":"OperandRequest",
+          "metadata":{
+            "name":"platform-api-request"
+          },
+          "spec":{
+            "requests":[
+              {
+                "operands":[
+                  {
+                    "name":"ibm-cert-manager-operator"
+                  },
+                  {
+                    "name":"ibm-mongodb-operator"
+                  },
+                  {
+                    "name":"ibm-iam-operator"
+                  },                                    
+                  {
+                    "name":"ibm-management-ingress-operator"
+                  }
+                ],
+                "registry":"common-service"
+              }
+            ]
+          }
         }
       ]
     capabilities: Seamless Upgrades
@@ -173,43 +201,12 @@ spec:
           - apiextensions.k8s.io
           resourceNames:
           - passwordrules.icp.ibm.com
-          - platformapis.operator.ibm.com
           resources:
           - customresourcedefinitions
           verbs:
           - delete
           - patch
           - update
-        - apiGroups:
-          - rbac.authorization.k8s.io
-          resources:
-          - clusterroles
-          - clusterrolebindings
-          verbs:
-          - create
-          - get
-          - list
-          - watch
-        - apiGroups:
-          - rbac.authorization.k8s.io
-          resourceNames:
-          - ibm-platform-api-operator
-          - ibm-platform-api-operand
-          resources:
-          - clusterroles
-          - clusterrolebindings
-          verbs:
-          - delete
-          - patch
-          - update
-        - apiGroups:
-          - security.openshift.io
-          resourceNames:
-          - privileged
-          resources:
-          - securitycontextconstraints
-          verbs:
-          - use
         serviceAccountName: ibm-platform-api-operator
       deployments:
       - name: ibm-platform-api-operator
@@ -244,9 +241,9 @@ spec:
                 - name: OPERATOR_NAME
                   value: ibm-platform-api-operator
                 - name: OPERAND_AUDIT_SERVICE_IMAGE
-                  value: quay.io/opencloudio/icp-audit-service@sha256:3cfb9f3cc99379758f73f1cd2e6ad4dd4bc61e13cc55d7c34b0d0e280cb47421
+                  value: quay.io/opencloudio/audit-syslog-service@sha256:8ba519b21a386347990f0c57682aefaa3c3c97cf44d6fdba3d5d4b730c78dad5
                 - name: OPERAND_PLATFORM_API_IMAGE
-                  value: quay.io/opencloudio/icp-platform-api@sha256:a7cb08c4bf808a4f3877c35d50ccb4a2052f77952bc0794dd8a83df63f981385
+                  value: quay.io/opencloudio/icp-platform-api@sha256:76c5c9d257bcc87130eaeb7251a1f2d724297d9cb01e2684eff4b60dbedcc416
                 image: quay.io/opencloudio/ibm-platform-api-operator:latest
                 imagePullPolicy: Always
                 name: ibm-platform-api-operator
@@ -268,12 +265,6 @@ spec:
               serviceAccountName: ibm-platform-api-operator
       permissions:
       - rules:
-        - apiGroups:
-          - ""
-          resources:
-          - pods
-          verbs:
-          - deletecollection
         - apiGroups:
           - ""
           resources:
@@ -299,20 +290,27 @@ spec:
           resources:
           - namespaces
           verbs:
-          - '*'
+          - get
         - apiGroups:
           - ""
           resources:
-          - configmaps
-          - secrets
+          - pods
           verbs:
-          - '*'
+          - deletecollection
         - apiGroups:
-          - ""
+          - apiextensions.k8s.io
+          resourceNames:
+          - passwordrules.icp.ibm.com
           resources:
-          - events
+          - customresourcedefinitions
           verbs:
           - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
         - apiGroups:
           - apps
           resources:
@@ -330,43 +328,12 @@ spec:
           - watch
         - apiGroups:
           - apps
-          resources:
-          - replicasets
-          - deployments
-          verbs:
-          - get
-        - apiGroups:
-          - apps
           resourceNames:
           - ibm-platform-api-operator
           resources:
           - deployments/finalizers
           verbs:
           - update
-        - apiGroups:
-          - certmanager.k8s.io
-          resources:
-          - certificates
-          verbs:
-          - create
-          - delete
-          - get
-          - list
-          - patch
-          - update
-          - watch
-        - apiGroups:
-          - batch
-          resources:
-          - jobs
-          verbs:
-          - create
-          - delete
-          - get
-          - list
-          - patch
-          - update
-          - watch
         - apiGroups:
           - extensions
           resources:
@@ -384,7 +351,13 @@ spec:
           resources:
           - passwordrules
           verbs:
+          - create
+          - delete
+          - get
           - list
+          - patch
+          - update
+          - watch
         - apiGroups:
           - monitoring.coreos.com
           resources:
@@ -395,7 +368,9 @@ spec:
         - apiGroups:
           - operator.ibm.com
           resources:
-          - '*'
+          - platformapis
+          - platformapis/finalizers
+          - platformapis/status
           verbs:
           - create
           - delete
