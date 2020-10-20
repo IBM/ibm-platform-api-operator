@@ -173,7 +173,6 @@ Parameter                                        | Description                  
 `replicaCount`                                   | number of deployment replicas (Deprecated)                | 1      
 `replicas`                                       | number of deployment replicas                             | 1
 `platformApi.hostNetwork`                        | host network                                              | false               
-`platformApi.meta.namespace`                     | namespace for this chart                                  | ibm-common-services         
 `platformApi.name`                               | platformApi container name                                | platform-api        
 `platformApi.image.repository`                   | platformApi image path                                    | quay.io/opencloudio/icp-platform-api   
 `platformApi.image.tag`                          | platformApi image tag                                     | latest              

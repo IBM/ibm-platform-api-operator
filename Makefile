@@ -184,7 +184,7 @@ install: ## Install all resources (CR/CRD's, RBCA and Operator)
 	@echo ....... Applying RBAC .......
 	- kubectl apply -f deploy/service_account.yaml -n ${NAMESPACE}
 	- kubectl apply -f deploy/role.yaml -n ${NAMESPACE}
-	- kubectl apply -f deploy/role_binding.yaml -n ${NAMESPACE}
+	- cat deploy/role_binding.yaml | sed -e "s|REPLACE_NAMESPACE|${NAMESPACE}|g" | kubectl -n ${NAMESPACE} apply -f -
 	@echo ....... Applying Operator .......
 	- cat deploy/olm-catalog/${BASE_DIR}/${CSV_VERSION}/${BASE_DIR}.v${CSV_VERSION}.clusterserviceversion.yaml | sed -f hack/csv_images.sed | kubectl -n ${NAMESPACE} apply -f -
 	@echo ....... Creating the Instance .......
@@ -199,7 +199,7 @@ uninstall: ## Uninstall all that all performed in the $ make install
 	@echo ....... Deleting CRDs.......
 	- for crd in $(shell ls deploy/crds/*_crd.yaml); do kubectl delete -f $${crd}; done
 	@echo ....... Deleting Rules and Service Account .......
-	- kubectl delete -f deploy/role_binding.yaml -n ${NAMESPACE}
+	- cat deploy/role_binding.yaml | sed -e "s|REPLACE_NAMESPACE|${NAMESPACE}|g" | kubectl -n ${NAMESPACE} delete -f -
 	- kubectl delete -f deploy/service_account.yaml -n ${NAMESPACE}
 	- kubectl delete -f deploy/role.yaml -n ${NAMESPACE}
 
