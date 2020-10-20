@@ -2,7 +2,51 @@ apiVersion: operators.coreos.com/v1alpha1
 kind: ClusterServiceVersion
 metadata:
   annotations:
-    alm-examples: '[]'
+    alm-examples: |-
+      [
+        {
+          "apiVersion": "operator.ibm.com/v1alpha1",
+          "kind": "PlatformAPI",
+          "metadata": {
+            "labels": {
+              "app.kubernetes.io/instance": "platform-api",
+              "app.kubernetes.io/managed-by": "platformapis.operator.ibm.com",
+              "app.kubernetes.io/name": "platform-api"
+            },
+            "name": "platform-api"
+          },
+          "spec": {
+            "auditService": {
+              "config": {
+                "enabled": true
+              },
+              "resources": {
+                "limits": {
+                  "cpu": "200m",
+                  "memory": "250Mi"
+                },
+                "requests": {
+                  "cpu": "200m",
+                  "memory": "250Mi"
+                }
+              }
+            },
+            "platformApi": {
+              "resources": {
+                "limits": {
+                  "cpu": "100m",
+                  "memory": "128Mi"
+                },
+                "requests": {
+                  "cpu": "100m",
+                  "memory": "128Mi"
+                }
+              }
+            },
+            "replicas": 1
+          }
+        }
+      ]
     capabilities: Seamless Upgrades
     categories: Developer Tools
     certified: "false"
@@ -23,7 +67,61 @@ metadata:
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
-  customresourcedefinitions: {}
+  customresourcedefinitions:
+    owned:
+    - description: Platform API is a REST API service for managing cluster and providing access to command line tools, such as cloudctl and kubectl.
+      displayName: PlatformAPI
+      kind: PlatformAPI
+      name: platformapis.operator.ibm.com
+      resources:
+      - kind: ConfigMap
+        name: ConfigMap
+        version: v1
+      - kind: Deployment
+        name: Deployment
+        version: v1
+      - kind: Ingress
+        name: Ingress
+        version: extensions/v1beta1
+      - kind: Pod
+        name: Pod
+        version: v1
+      - kind: ReplicaSet
+        name: ReplicaSet
+        version: v1
+      - kind: Role
+        name: Role
+        version: rbac.authorization.k8s.io/v1
+      - kind: RoleBinding
+        name: RoleBinding
+        version: rbac.authorization.k8s.io/v1
+      - kind: Service
+        name: Service
+        version: v1
+      - kind: ServiceAccount
+        name: ServiceAccount
+        version: v1
+      specDescriptors:
+      - description: Configuration for the Audit Service sidecar in platform api chart configuration
+        displayName: Audit Service Parameters
+        path: auditService
+      - description: Platform API Chart configuration
+        displayName: Platform API parameters
+        path: platformApi
+      - description: Number of deployment replicas to deploy (Deprecated)
+        displayName: Deployment replica count
+        path: replicaCount
+      - description: Number of deployment replicas to deploy
+        displayName: Deployment replica count
+        path: replicas
+      statusDescriptors:
+      - description: Conditions contains the observed states of the Helm release
+        displayName: Conditions
+        path: conditions
+      - description: Deployed Release shows the manifest of the deployed Helm release
+        displayName: Deployed Release
+        path: deployedRelease
+      version: v1alpha1
   description: |-
     **Important:** Do not install this operator directly. Only install this operator using the IBM Common Services Operator. For more information about installing this operator and other Common Services operators, see [Installer documentation](http://ibm.biz/cpcs_opinstall). Additionally, you can exit this panel and navigate to the IBM Common Services tile in OperatorHub to learn more about the operator. If you are using this operator as part of an IBM Cloud Pak, see the documentation for that IBM Cloud Pak to learn more about how to install and use the operator service. For more information about IBM Cloud Paks, see [IBM Cloud Paks that use Common Services](http://ibm.biz/cpcs_cloudpaks).
 
@@ -58,7 +156,238 @@ spec:
     mediatype: image/png
   install:
     spec:
-      deployments: []
+      clusterPermissions:
+      - rules:
+        - apiGroups:
+          - ""
+          resources:
+          - namespaces
+          verbs:
+          - get
+        - apiGroups:
+          - ""
+          resources:
+          - secrets
+          verbs:
+          - '*'
+        - apiGroups:
+          - ""
+          resources:
+          - events
+          verbs:
+          - create
+        - apiGroups:
+          - operator.ibm.com
+          resources:
+          - platformapis
+          - platformapis/status
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - ""
+          resources:
+          - pods
+          - services
+          - services/finalizers
+          - endpoints
+          - persistentvolumeclaims
+          - events
+          - configmaps
+          - secrets
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - apps
+          resources:
+          - deployments
+          - daemonsets
+          - replicasets
+          - statefulsets
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - ""
+          resources:
+          - pods
+          verbs:
+          - deletecollection
+        - apiGroups:
+          - icp.ibm.com
+          resources:
+          - passwordrules
+          verbs:
+          - list
+        - apiGroups:
+          - apps
+          resources:
+          - deployments
+          - daemonsets
+          - replicasets
+          - statefulsets
+          verbs:
+          - get
+          - list
+          - update
+          - patch
+        - apiGroups:
+          - ""
+          resources:
+          - namespaces
+          verbs:
+          - get
+        - apiGroups:
+          - ""
+          resources:
+          - secrets
+          verbs:
+          - get
+          - update
+        - apiGroups:
+          - ""
+          resources:
+          - configmaps
+          - serviceaccounts
+          verbs:
+          - '*'
+        - apiGroups:
+          - apiextensions.k8s.io
+          resources:
+          - customresourcedefinitions
+          verbs:
+          - '*'
+        - apiGroups:
+          - certmanager.k8s.io
+          resources:
+          - clusterissuers
+          verbs:
+          - use
+        - apiGroups:
+          - rbac.authorization.k8s.io
+          resources:
+          - clusterroles
+          - clusterrolebindings
+          - roles
+          - rolebindings
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - policy
+          resources:
+          - podsecuritypolicies
+          verbs:
+          - '*'
+        - apiGroups:
+          - security.openshift.io
+          resourceNames:
+          - privileged
+          resources:
+          - securitycontextconstraints
+          verbs:
+          - use
+        serviceAccountName: default
+      deployments:
+      - name: ibm-platform-api-operator-controller-manager
+        spec:
+          replicas: 1
+          selector:
+            matchLabels:
+              control-plane: controller-manager
+          strategy: {}
+          template:
+            metadata:
+              labels:
+                control-plane: controller-manager
+            spec:
+              containers:
+              - args:
+                - --secure-listen-address=0.0.0.0:8443
+                - --upstream=http://127.0.0.1:8080/
+                - --logtostderr=true
+                - --v=10
+                image: gcr.io/kubebuilder/kube-rbac-proxy:v0.5.0
+                name: kube-rbac-proxy
+                ports:
+                - containerPort: 8443
+                  name: https
+                resources: {}
+              - args:
+                - --metrics-addr=127.0.0.1:8080
+                - --enable-leader-election
+                - --leader-election-id=ibm-platform-api-operator
+                name: manager
+                resources: {}
+              - args:
+                - --enable-leader-election
+                - --leader-election-id=ibm-platform-api-operator
+                env:
+                - name: WATCH_NAMESPACE
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.annotations['olm.targetNamespaces']
+                image: quay.io/opencloudio/ibm-platform-api-operator:latest
+                imagePullPolicy: Always
+                name: ibm-platform-api-operator
+                resources:
+                  limits:
+                    cpu: 50m
+                    memory: 256Mi
+                  requests:
+                    cpu: 20m
+                    memory: 256Mi
+                securityContext:
+                  allowPrivilegeEscalation: false
+                  capabilities:
+                    drop:
+                    - ALL
+                  privileged: false
+                  readOnlyRootFilesystem: true
+                  runAsNonRoot: true
+      permissions:
+      - rules:
+        - apiGroups:
+          - ""
+          resources:
+          - configmaps
+          verbs:
+          - get
+          - list
+          - watch
+          - create
+          - update
+          - patch
+          - delete
+        - apiGroups:
+          - ""
+          resources:
+          - events
+          verbs:
+          - create
+          - patch
+        serviceAccountName: default
     strategy: deployment
   installModes:
   - supported: true
