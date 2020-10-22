@@ -240,7 +240,7 @@ spec:
                 - name: OPERATOR_NAME
                   value: ibm-platform-api-operator
                 - name: OPERAND_AUDIT_SERVICE_IMAGE
-                  value: quay.io/opencloudio/audit-syslog-service@sha256:8ba519b21a386347990f0c57682aefaa3c3c97cf44d6fdba3d5d4b730c78dad5
+                  value: quay.io/opencloudio/audit-syslog-service@sha256:1466c23e64e2dddf68374c6997dec8bb1d3054d1a620e059ed5ff168887e95cc
                 - name: OPERAND_PLATFORM_API_IMAGE
                   value: quay.io/opencloudio/icp-platform-api@sha256:76c5c9d257bcc87130eaeb7251a1f2d724297d9cb01e2684eff4b60dbedcc416
                 image: quay.io/opencloudio/ibm-platform-api-operator:latest
