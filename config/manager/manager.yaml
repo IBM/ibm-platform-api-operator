@@ -23,13 +23,17 @@ spec:
         control-plane: controller-manager
     spec:
       containers:
-      - image: quay.io/opencloudio/ibm-platform-api-operator:latest
+      - image: quay.io/opencloudio/ibm-platform-api-operator:3.7.2
         imagePullPolicy: Always
         env:
           - name: WATCH_NAMESPACE
             valueFrom:
               fieldRef:
                 fieldPath: metadata.namespace
+          - name: OPERAND_AUDIT_SERVICE_IMAGE
+            value: "quay.io/opencloudio/icp-audit-service@sha256:3cfb9f3cc99379758f73f1cd2e6ad4dd4bc61e13cc55d7c34b0d0e280cb47421"
+          - name: OPERAND_PLATFORM_API_IMAGE
+            value: "quay.io/opencloudio/icp-platform-api@sha256:a7cb08c4bf808a4f3877c35d50ccb4a2052f77952bc0794dd8a83df63f981385"           
         args:
         - "--enable-leader-election"
         - "--leader-election-id=ibm-platform-api-operator"

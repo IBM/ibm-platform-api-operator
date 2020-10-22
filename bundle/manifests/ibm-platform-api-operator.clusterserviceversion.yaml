@@ -50,7 +50,7 @@ metadata:
     capabilities: Seamless Upgrades
     categories: Developer Tools
     certified: "false"
-    containerImage: quay.io/opencloudio/ibm-platform-api-operator:latest
+    containerImage: quay.io/opencloudio/ibm-platform-api-operator:3.7.2
     createdAt: "2020-05-16"
     description: The PlatformAPI operator provides a simple Kubernetes CRD-Based API to manage the lifecycle of PlatformAPI. With this operator, you can simply deploy and upgrade platform-api.
     olm.skipRange: '>=3.5.0 <3.7.2'
@@ -324,23 +324,6 @@ spec:
             spec:
               containers:
               - args:
-                - --secure-listen-address=0.0.0.0:8443
-                - --upstream=http://127.0.0.1:8080/
-                - --logtostderr=true
-                - --v=10
-                image: gcr.io/kubebuilder/kube-rbac-proxy:v0.5.0
-                name: kube-rbac-proxy
-                ports:
-                - containerPort: 8443
-                  name: https
-                resources: {}
-              - args:
-                - --metrics-addr=127.0.0.1:8080
-                - --enable-leader-election
-                - --leader-election-id=ibm-platform-api-operator
-                name: manager
-                resources: {}
-              - args:
                 - --enable-leader-election
                 - --leader-election-id=ibm-platform-api-operator
                 env:
@@ -348,7 +331,11 @@ spec:
                   valueFrom:
                     fieldRef:
                       fieldPath: metadata.annotations['olm.targetNamespaces']
-                image: quay.io/opencloudio/ibm-platform-api-operator:latest
+                - name: OPERAND_AUDIT_SERVICE_IMAGE
+                  value: quay.io/opencloudio/icp-audit-service@sha256:3cfb9f3cc99379758f73f1cd2e6ad4dd4bc61e13cc55d7c34b0d0e280cb47421
+                - name: OPERAND_PLATFORM_API_IMAGE
+                  value: quay.io/opencloudio/icp-platform-api@sha256:a7cb08c4bf808a4f3877c35d50ccb4a2052f77952bc0794dd8a83df63f981385
+                image: quay.io/opencloudio/ibm-platform-api-operator:3.7.2
                 imagePullPolicy: Always
                 name: ibm-platform-api-operator
                 resources:
