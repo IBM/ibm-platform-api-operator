@@ -225,6 +225,40 @@ rules:
 ## Rules copied from previous deploy/role.yaml
 ##
 - apiGroups:
+  - extensions
+  resources:
+  - ingresses
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - apps
+  resourceNames:
+  - ibm-platform-api-operator-controller-manager
+  resources:
+  - deployments/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - operator.ibm.com
+  resources:
+  - platformapis
+  - platformapis/finalizers
+  - platformapis/status
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
   - ""
   resources:
   - pods
