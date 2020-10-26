@@ -96,6 +96,12 @@ spec:
   apiservicedefinitions: {}
   customresourcedefinitions:
     owned:
+    - description: PasswordRule is a regular expression used to validate a password
+        is conformed to the rule.
+      displayName: PlatformAPI
+      kind: PasswordRule
+      name: passwordrules.operator.ibm.com
+      version: v1
     - description: Platform API is a REST API service for managing cluster and providing
         access to command line tools, such as cloudctl and kubectl.
       displayName: PlatformAPI
@@ -189,23 +195,21 @@ spec:
       - rules:
         - apiGroups:
           - apiextensions.k8s.io
-          resources:
-          - customresourcedefinitions
-          verbs:
-          - create
-          - get
-          - list
-          - watch
-        - apiGroups:
-          - apiextensions.k8s.io
           resourceNames:
           - passwordrules.icp.ibm.com
           resources:
           - customresourcedefinitions
           verbs:
           - delete
-          - patch
-          - update
+        - apiGroups:
+          - rbac.authorization.k8s.io
+          resourceNames:
+          - ibm-platform-api-operand
+          resources:
+          - clusterrolebindings
+          - clusterroles
+          verbs:
+          - delete
         serviceAccountName: ibm-platform-api-operator
       deployments:
       - name: ibm-platform-api-operator
@@ -242,8 +246,8 @@ spec:
                 - name: OPERAND_AUDIT_SERVICE_IMAGE
                   value: quay.io/opencloudio/audit-syslog-service@sha256:1466c23e64e2dddf68374c6997dec8bb1d3054d1a620e059ed5ff168887e95cc
                 - name: OPERAND_PLATFORM_API_IMAGE
-                  value: quay.io/opencloudio/icp-platform-api@sha256:76c5c9d257bcc87130eaeb7251a1f2d724297d9cb01e2684eff4b60dbedcc416
-                image: quay.io/opencloudio/ibm-platform-api-operator:latest
+                  value: hyc-cloud-private-scratch-docker-local.artifactory.swg-devops.com/ibmcom/icp-platform-api-amd64@sha256:f3c6fa2929cd2f81f2ab46b99166fe46e7dfb8ca062be04cc7470182f3090312
+                image: quay.io/opencloudio/ibm-platform-api-operator:dev
                 imagePullPolicy: Always
                 name: ibm-platform-api-operator
                 resources:
@@ -346,7 +350,7 @@ spec:
           - update
           - watch
         - apiGroups:
-          - icp.ibm.com
+          - operator.ibm.com
           resources:
           - passwordrules
           verbs:
@@ -398,7 +402,7 @@ spec:
     type: OwnNamespace
   - supported: true
     type: SingleNamespace
-  - supported: false
+  - supported: true
     type: MultiNamespace
   - supported: true
     type: AllNamespaces
