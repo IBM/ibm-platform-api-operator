@@ -3,7 +3,6 @@ kind: ConfigMap
 apiVersion: v1
 metadata:
   name: platform-api
-  namespace: {{ .Values.platformApi.namespace }}
   labels:
     app: {{ .Values.platformApi.name }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
