@@ -187,6 +187,16 @@ spec:
           periodSeconds: 20
           timeoutSeconds: 5
         env:
+          - name: WLP_CLIENT_ID
+            valueFrom:
+              secretKeyRef:
+                name: platform-oidc-credentials
+                key: WLP_CLIENT_ID
+          - name: WLP_CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: platform-oidc-credentials
+                key: WLP_CLIENT_SECRET
           - name: SERVICE_NAME
             value: {{ .Values.platformApi.name }}
           - name: LOG_LEVEL
