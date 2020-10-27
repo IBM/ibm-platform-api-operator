@@ -54,20 +54,6 @@ rules:
     verbs:
       - deletecollection
   - apiGroups:
-      - apiextensions.k8s.io
-    resourceNames:
-      - passwordrules.icp.ibm.com
-    resources:
-      - customresourcedefinitions
-    verbs:
-      - create
-      - delete
-      - get
-      - list
-      - patch
-      - update
-      - watch
-  - apiGroups:
       - apps
     resources:
       - deployments
@@ -95,7 +81,7 @@ rules:
       - update
       - watch
   - apiGroups:
-      - icp.ibm.com
+      - operator.ibm.com
     resources:
       - passwordrules
     verbs:
