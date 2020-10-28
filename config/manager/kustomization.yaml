@@ -5,4 +5,4 @@ kind: Kustomization
 images:
 - name: controller
   newName: quay.io/bitscuit/ibm-platform-api-operator
-  newTag: 3.7.2
+  newTag: 3.8.0
