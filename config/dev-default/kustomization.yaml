@@ -15,7 +15,7 @@ namePrefix: ibm-platform-api-operator-
 bases:
 - ../crd
 - ../rbac
-- ../manager
+- ../dev-manager
 # [PROMETHEUS] To enable prometheus monitor, uncomment all sections with 'PROMETHEUS'.
 #- ../prometheus
 

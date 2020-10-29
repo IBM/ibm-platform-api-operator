@@ -83,7 +83,6 @@ spec:
           privileged: false
           readOnlyRootFilesystem: true
           runAsNonRoot: true
-          runAsUser: {{ .Values.runAsUser }}
         resources:
 {{ toYaml .Values.platformApi.resources | indent 10 }}
         volumeMounts:
@@ -128,25 +127,13 @@ spec:
           privileged: false
           readOnlyRootFilesystem: true
           runAsNonRoot: true
-          runAsUser: {{ .Values.runAsUser }}
-          seLinuxOptions:
-            type: spc_t
-        env:
-          - name: LOGROTATE
-            valueFrom:
-              configMapKeyRef:
-                name: platform-api
-                key: LOGROTATE
-          - name: LOGROTATE_CONF
-            valueFrom:
-              configMapKeyRef:
-                name: platform-api
-                key: LOGROTATE_CONF
         resources:
 {{ toYaml .Values.auditService.resources | indent 10 }}
         volumeMounts:
-        - name: journal
-          mountPath: "/run/systemd/journal"        
+        - mountPath: /etc/audit-ingest
+          name: audit-ingest
+        - mountPath: /etc/audit-tls
+          name: audit-server-certs     
         - name: shared
           mountPath: {{ .Values.auditService.config.auditLogPath }}
         - name: logrotate
@@ -164,7 +151,6 @@ spec:
           privileged: false
           readOnlyRootFilesystem: true
           runAsNonRoot: true
-          runAsUser: {{ .Values.runAsUser }}
           capabilities:
             drop:
             - ALL
@@ -283,9 +269,17 @@ spec:
             - key: tls.key
               path: key.pem
         {{ if .Values.auditService.config.enabled }}
-        - name: journal
-          hostPath:
-            path: /run/systemd/journal        
+        - name: audit-ingest
+          configMap:
+            name: audit-logging-fluentd-ds-http-ingesturl
+            optional: true
+            items:
+              - key: AuditLoggingSyslogIngestURL
+                path: auditurl
+        - name: audit-server-certs
+          secret:
+            secretName: audit-server-certs
+            optional: true 
         - name: shared
           emptyDir: {}
         - configMap:
