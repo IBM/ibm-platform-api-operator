@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ibm-platform-api-operator
+  labels:
+    name: ibm-platform-api-operator
+    app.kubernetes.io/instance: platform-api
+    app.kubernetes.io/managed-by: platformapis.operator.ibm.com
+    app.kubernetes.io/name: platformapis.operator.ibm.com
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: ibm-platform-api-operator
+  template:
+    metadata:
+      labels:
+        name: ibm-platform-api-operator
+        app.kubernetes.io/instance: platform-api
+        app.kubernetes.io/managed-by: platformapis.operator.ibm.com
+        app.kubernetes.io/name: platformapis.operator.ibm.com
+      annotations:
+        productName: IBM Cloud Platform Common Services
+        productID: "068a62892a1e4db39641342e592daa25"
+        productMetric: FREE
+    spec:
+      hostNetwork: false
+      hostPID: false
+      hostIPC: false
+      serviceAccountName: ibm-platform-api-operator
+      containers:
+        - name: ibm-platform-api-operator
+          # Replace this with the built image name
+          image: quay.io/opencloudio/ibm-platform-api-operator:latest
+          imagePullPolicy: Always
+          env:
+            - name: WATCH_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: OPERATOR_NAME
+              value: "ibm-platform-api-operator"
+            - name: OPERAND_AUDIT_SERVICE_IMAGE
+              value: "quay.io/opencloudio/audit-syslog-service@sha256:1466c23e64e2dddf68374c6997dec8bb1d3054d1a620e059ed5ff168887e95cc"
+            - name: OPERAND_PLATFORM_API_IMAGE
+              value: "quay.io/opencloudio/icp-platform-api@sha256:a95aa0fc5afc7a436f412ad6fa8c993d2d5a31844000ec24604d5345965e3cb9"
+          resources:
+            limits:
+              cpu: 50m
+              memory: 256Mi
+            requests:
+              cpu: 20m
+              memory: 256Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
