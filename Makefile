@@ -110,6 +110,11 @@ test-e2e:
 # build section
 ############################################################
 
+ifeq ($(BUILD_LOCALLY),0)
+    export CONFIG_DOCKER_TARGET = config-docker
+config-docker:
+endif
+
 build: build-bundle-image build-image build-image-ppc64le build-image-s390x
 
 build-image: $(CONFIG_DOCKER_TARGET)
