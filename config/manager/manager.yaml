@@ -22,6 +22,7 @@ spec:
       labels:
         control-plane: controller-manager
     spec:
+      serviceAccountName: ibm-platform-api-operator
       containers:
       - image: quay.io/opencloudio/ibm-platform-api-operator:3.7.2
         imagePullPolicy: Always

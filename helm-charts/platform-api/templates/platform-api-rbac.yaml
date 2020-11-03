@@ -7,7 +7,7 @@ metadata:
     name: ibm-platform-api-operand
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
-    app.kubernetes.io/name:  {{ .Values.platformApi.name }}
+    app.kubernetes.io/name: {{ .Values.platformApi.name }}
     helm.sh/chart: {{ .Release.Name }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -18,65 +18,29 @@ metadata:
     name: ibm-platform-api-operand
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
-    app.kubernetes.io/name:  {{ .Values.platformApi.name }}
+    app.kubernetes.io/name: {{ .Values.platformApi.name }}
     helm.sh/chart: {{ .Release.Name }}
 rules:
 - apiGroups:
-  - ""
+    - ''
   resources:
-  - configmaps
-  - endpoints
-  - events
-  - persistentvolumeclaims
-  - pods
-  - secrets
-  - serviceaccounts
-  - services
-  - services/finalizers
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  name: ibm-platform-api-operand
-  labels:
-    name: ibm-platform-api-operand
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
-    app.kubernetes.io/name:  {{ .Values.platformApi.name }}
-    helm.sh/chart: {{ .Release.Name }}
-rules:
-- apiGroups:
-    - ""
-  resources:
+    - configmaps
+    - endpoints
+    - events
+    - persistentvolumeclaims
     - pods
+    - secrets
+    - serviceaccounts
+    - services
+    - services/finalizers
   verbs:
-    - deletecollection
-- apiGroups:
-    - icp.ibm.com
-  resources:
-    - passwordrules
-  verbs:
-    - list
-- apiGroups:
-    - apps
-  resources:
-    - deployments
-    - daemonsets
-    - replicasets
-    - statefulsets
-  verbs:
+    - create
+    - delete
     - get
     - list
-    - update
     - patch
+    - update
+    - watch
 - apiGroups:
     - ''
   resources:
@@ -86,54 +50,49 @@ rules:
 - apiGroups:
     - ''
   resources:
-    - secrets
+    - pods
   verbs:
+    - deletecollection
+- apiGroups:
+    - apps
+  resources:
+    - deployments
+    - daemonsets
+    - replicasets
+    - statefulsets
+  verbs:
+    - create
+    - delete
     - get
+    - list
+    - patch
     - update
+    - watch
 - apiGroups:
-  - ''
+    - extensions
   resources:
-  - configmaps
-  - serviceaccounts 
+    - ingresses
   verbs:
-  - '*'
+    - create
+    - delete
+    - get
+    - list
+    - patch
+    - update
+    - watch
 - apiGroups:
-  - policy
+    - rbac.authorization.k8s.io
   resources:
-  - podsecuritypolicies 
+    - roles
+    - rolebindings
   verbs:
-  - '*'
-- apiGroups:
-  - rbac.authorization.k8s.io
-  resources:
-  - clusterroles
-  - clusterrolebindings
-  - roles
-  - rolebindings
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - security.openshift.io
-  resources:
-  - securitycontextconstraints
-  resourceNames:
-  - privileged
-  verbs:
-  - use
-- apiGroups:
-  - security.openshift.io
-  resources:
-  - securitycontextconstraints
-  resourceNames:
-  - privileged
-  verbs:
-  - use
+    - create
+    - delete
+    - get
+    - list
+    - patch
+    - update
+    - watch
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -143,31 +102,12 @@ metadata:
     name: ibm-platform-api-operand
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
-    app.kubernetes.io/name:  {{ .Values.platformApi.name }}
+    app.kubernetes.io/name: {{ .Values.platformApi.name }}
     helm.sh/chart: {{ .Release.Name }}
 subjects:
-- kind: ServiceAccount
-  name: ibm-platform-api-operand
+  - kind: ServiceAccount
+    name: ibm-platform-api-operand
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: ibm-platform-api-operand
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: ibm-platform-api-operand
-  labels:
-    name: ibm-platform-api-operand
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
-    app.kubernetes.io/name:  {{ .Values.platformApi.name }}
-    helm.sh/chart: {{ .Release.Name }}
-subjects:
-- kind: ServiceAccount
-  name: ibm-platform-api-operand
-  namespace: {{ .Release.Namespace }}
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
   name: ibm-platform-api-operand

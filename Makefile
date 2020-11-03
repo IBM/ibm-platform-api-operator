@@ -172,12 +172,14 @@ uninstall: kustomize
 
 # Deploy controller in the configured Kubernetes cluster in ~/.kube/config
 deploy: kustomize
+	kubectl apply -f config/dev-manager/service_account.yaml
 	cd config/dev-manager && $(KUSTOMIZE) edit set image controller=$(REGISTRY)/$(IMG):$(CSV_VERSION)
 	$(KUSTOMIZE) build config/dev-default | kubectl apply -f -
 
 # Undeploy controller in the configured Kubernetes cluster in ~/.kube/config
 undeploy: kustomize
 	$(KUSTOMIZE) build config/dev-default | kubectl delete -f -
+	kubectl delete -f config/dev-manager/service_account.yaml
 
 # Build the docker image
 docker-build:
