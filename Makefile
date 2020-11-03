@@ -69,7 +69,7 @@ else
     $(error "This system's OS $(LOCAL_OS) isn't recognized/supported")
 endif
 
-all: check test images
+all: check test build images
 
 
 include commonUtil/Makefile.common.mk
@@ -97,6 +97,8 @@ push-csv: ## Push CSV package to the catalog
 # test section
 ############################################################
 
+test: test-e2e ## Run integration e2e tests with different options
+
 test-e2e: 
 	@echo ... Running the same e2e tests with different args ...
 	@echo ... Running locally ...
@@ -105,8 +107,10 @@ test-e2e:
 	# - operator-sdk test local ./test/e2e --namespace=${NAMESPACE}
 
 ############################################################
-# images section
+# build section
 ############################################################
+
+build: build-bundle-image build-image build-image-ppc64le build-image-s390x
 
 build-image: $(CONFIG_DOCKER_TARGET)
 	$(eval ARCH := $(shell uname -m|sed 's/x86_64/amd64/'))
