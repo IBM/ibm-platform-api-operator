@@ -2,79 +2,7 @@ apiVersion: operators.coreos.com/v1alpha1
 kind: ClusterServiceVersion
 metadata:
   annotations:
-    alm-examples: |-
-      [
-        {
-          "apiVersion": "operator.ibm.com/v1alpha1",
-          "kind": "PlatformAPI",
-          "metadata": {
-            "labels": {
-              "app.kubernetes.io/instance": "platform-api",
-              "app.kubernetes.io/managed-by": "platformapis.operator.ibm.com",
-              "app.kubernetes.io/name": "platform-api"
-            },
-            "name": "platform-api"
-          },
-          "spec": {
-            "auditService": {
-              "config": {
-                "enabled": true
-              },
-              "resources": {
-                "limits": {
-                  "cpu": "200m",
-                  "memory": "250Mi"
-                },
-                "requests": {
-                  "cpu": "200m",
-                  "memory": "250Mi"
-                }
-              }
-            },
-            "platformApi": {
-              "resources": {
-                "limits": {
-                  "cpu": "100m",
-                  "memory": "128Mi"
-                },
-                "requests": {
-                  "cpu": "100m",
-                  "memory": "128Mi"
-                }
-              }
-            },
-            "replicas": 1
-          }
-        },
-        {
-          "apiVersion":"operator.ibm.com/v1alpha1",
-          "kind":"OperandRequest",
-          "metadata":{
-            "name":"platform-api-request"
-          },
-          "spec":{
-            "requests":[
-              {
-                "operands":[
-                  {
-                    "name":"ibm-cert-manager-operator"
-                  },
-                  {
-                    "name":"ibm-mongodb-operator"
-                  },
-                  {
-                    "name":"ibm-iam-operator"
-                  },                                    
-                  {
-                    "name":"ibm-management-ingress-operator"
-                  }
-                ],
-                "registry":"common-service"
-              }
-            ]
-          }
-        }
-      ]
+    alm-examples: "[\n  {\n    \"apiVersion\": \"operator.ibm.com/v1alpha1\",\n    \"kind\": \"PlatformAPI\",\n    \"metadata\": {\n      \"labels\": {\n        \"app.kubernetes.io/instance\": \"platform-api\",\n        \"app.kubernetes.io/managed-by\": \"platformapis.operator.ibm.com\",\n        \"app.kubernetes.io/name\": \"platform-api\"\n      },\n      \"name\": \"platform-api\"\n    },\n    \"spec\": {\n      \"auditService\": {\n        \"config\": {\n          \"enabled\": true\n        },\n        \"resources\": {\n          \"limits\": {\n            \"cpu\": \"200m\",\n            \"memory\": \"250Mi\"\n          },\n          \"requests\": {\n            \"cpu\": \"200m\",\n            \"memory\": \"250Mi\"\n          }\n        }\n      },\n      \"platformApi\": {\n        \"resources\": {\n          \"limits\": {\n            \"cpu\": \"100m\",\n            \"memory\": \"128Mi\"\n          },\n          \"requests\": {\n            \"cpu\": \"100m\",\n            \"memory\": \"128Mi\"\n          }\n        }\n      },\n      \"replicas\": 1\n    }\n  },\n  {\n    \"apiVersion\":\"operator.ibm.com/v1alpha1\",\n    \"kind\":\"OperandRequest\",\n    \"metadata\":{\n      \"name\":\"platform-api-request\"\n    },\n    \"spec\":{\n      \"requests\":[\n        {\n          \"operands\":[\n            {\n              \"name\":\"ibm-cert-manager-operator\"\n            },\n            {\n              \"name\":\"ibm-mongodb-operator\"\n            },\n            {\n              \"name\":\"ibm-iam-operator\"\n            },                                    \n            {\n              \"name\":\"ibm-management-ingress-operator\"\n            }\n          ],\n          \"registry\":\"common-service\"\n        }\n      ]\n    }\n  }\n]"
     capabilities: Seamless Upgrades
     categories: Developer Tools
     certified: "false"
@@ -307,7 +235,7 @@ spec:
                 - name: OPERAND_AUDIT_SERVICE_IMAGE
                   value: quay.io/opencloudio/audit-syslog-service@sha256:1466c23e64e2dddf68374c6997dec8bb1d3054d1a620e059ed5ff168887e95cc
                 - name: OPERAND_PLATFORM_API_IMAGE
-                  value: quay.io/opencloudio/icp-platform-api@sha256:a7cb08c4bf808a4f3877c35d50ccb4a2052f77952bc0794dd8a83df63f981385
+                  value: quay.io/opencloudio/icp-platform-api@sha256:a95aa0fc5afc7a436f412ad6fa8c993d2d5a31844000ec24604d5345965e3cb9
                 image: quay.io/opencloudio/ibm-platform-api-operator:3.7.2
                 imagePullPolicy: Always
                 name: ibm-platform-api-operator

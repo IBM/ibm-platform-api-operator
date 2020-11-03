@@ -9,7 +9,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: controller-manager
-  namespace: system
   labels:
     control-plane: controller-manager
 spec:
@@ -34,7 +33,7 @@ spec:
           - name: OPERAND_AUDIT_SERVICE_IMAGE
             value: "quay.io/opencloudio/audit-syslog-service@sha256:1466c23e64e2dddf68374c6997dec8bb1d3054d1a620e059ed5ff168887e95cc"
           - name: OPERAND_PLATFORM_API_IMAGE
-            value: "quay.io/opencloudio/icp-platform-api@sha256:a7cb08c4bf808a4f3877c35d50ccb4a2052f77952bc0794dd8a83df63f981385"           
+            value: "quay.io/opencloudio/icp-platform-api@sha256:a95aa0fc5afc7a436f412ad6fa8c993d2d5a31844000ec24604d5345965e3cb9"           
         args:
         - "--enable-leader-election"
         - "--leader-election-id=ibm-platform-api-operator"

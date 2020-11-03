@@ -157,8 +157,25 @@ spec:
   install:
     spec:
       clusterPermissions:
-      - rules: null
-        serviceAccountName: default
+      - rules:
+        - apiGroups:
+          - apiextensions.k8s.io
+          resourceNames:
+          - passwordrules.icp.ibm.com
+          resources:
+          - customresourcedefinitions
+          verbs:
+          - delete
+        - apiGroups:
+          - rbac.authorization.k8s.io
+          resourceNames:
+          - ibm-platform-api-operand
+          resources:
+          - clusterroles
+          - clusterrolebindings
+          verbs:
+          - delete
+        serviceAccountName: ibm-platform-api-operator
       deployments:
       - name: ibm-platform-api-operator-controller-manager
         spec:
@@ -184,7 +201,7 @@ spec:
                 - name: OPERAND_AUDIT_SERVICE_IMAGE
                   value: quay.io/opencloudio/audit-syslog-service@sha256:1466c23e64e2dddf68374c6997dec8bb1d3054d1a620e059ed5ff168887e95cc
                 - name: OPERAND_PLATFORM_API_IMAGE
-                  value: quay.io/opencloudio/icp-platform-api@sha256:a7cb08c4bf808a4f3877c35d50ccb4a2052f77952bc0794dd8a83df63f981385
+                  value: quay.io/opencloudio/icp-platform-api@sha256:a95aa0fc5afc7a436f412ad6fa8c993d2d5a31844000ec24604d5345965e3cb9
                 image: quay.io/opencloudio/ibm-platform-api-operator:3.7.2
                 imagePullPolicy: Always
                 name: ibm-platform-api-operator
@@ -203,28 +220,176 @@ spec:
                   privileged: false
                   readOnlyRootFilesystem: true
                   runAsNonRoot: true
+              serviceAccountName: ibm-platform-api-operator
       permissions:
       - rules:
         - apiGroups:
           - ""
           resources:
           - configmaps
+          - endpoints
+          - events
+          - persistentvolumeclaims
+          - pods
+          - secrets
+          - serviceaccounts
+          - services
+          - services/finalizers
           verbs:
+          - create
+          - delete
           - get
           - list
-          - watch
-          - create
-          - update
           - patch
+          - update
+          - watch
+        - apiGroups:
+          - ""
+          resources:
+          - namespaces
+          verbs:
+          - get
+        - apiGroups:
+          - ""
+          resources:
+          - pods
+          verbs:
+          - deletecollection
+        - apiGroups:
+          - apps
+          resources:
+          - deployments
+          - daemonsets
+          - replicasets
+          - statefulsets
+          verbs:
+          - create
           - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - apps
+          resourceNames:
+          - ibm-platform-api-operator
+          resources:
+          - deployments/finalizers
+          verbs:
+          - update
+        - apiGroups:
+          - extensions
+          resources:
+          - ingresses
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - monitoring.coreos.com
+          resources:
+          - servicemonitors
+          verbs:
+          - get
+          - create
+        - apiGroups:
+          - operator.ibm.com
+          resources:
+          - platformapis
+          - platformapis/finalizers
+          - platformapis/status
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - rbac.authorization.k8s.io
+          resources:
+          - roles
+          - rolebindings
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - ""
+          resources:
+          - namespaces
+          verbs:
+          - get
+        - apiGroups:
+          - ""
+          resources:
+          - secrets
+          verbs:
+          - '*'
         - apiGroups:
           - ""
           resources:
           - events
           verbs:
           - create
+        - apiGroups:
+          - operator.ibm.com
+          resources:
+          - platformapis
+          - platformapis/status
+          verbs:
+          - create
+          - delete
+          - get
+          - list
           - patch
-        serviceAccountName: default
+          - update
+          - watch
+        - apiGroups:
+          - ""
+          resources:
+          - pods
+          - services
+          - services/finalizers
+          - endpoints
+          - persistentvolumeclaims
+          - events
+          - configmaps
+          - secrets
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - apps
+          resources:
+          - deployments
+          - daemonsets
+          - replicasets
+          - statefulsets
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        serviceAccountName: ibm-platform-api-operator
     strategy: deployment
   installModes:
   - supported: true
