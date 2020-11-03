@@ -69,7 +69,7 @@ else
     $(error "This system's OS $(LOCAL_OS) isn't recognized/supported")
 endif
 
-all: check test build images
+all: check test images
 
 
 include commonUtil/Makefile.common.mk
