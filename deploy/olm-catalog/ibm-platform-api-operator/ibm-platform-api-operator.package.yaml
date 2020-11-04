@@ -1,8 +1,8 @@
 channels:
-- currentCSV: ibm-platform-api-operator.v3.8.0
-  name: dev
 - currentCSV: ibm-platform-api-operator.v3.7.2
   name: beta
+- currentCSV: ibm-platform-api-operator.v3.8.0
+  name: dev
 - currentCSV: ibm-platform-api-operator.v3.7.2
   name: stable-v1
 defaultChannel: stable-v1

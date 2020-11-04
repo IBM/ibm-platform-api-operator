@@ -96,12 +96,6 @@ spec:
   apiservicedefinitions: {}
   customresourcedefinitions:
     owned:
-    - description: PasswordRule is a regular expression used to validate a password
-        is conformed to the rule.
-      displayName: PlatformAPI
-      kind: PasswordRule
-      name: passwordrules.operator.ibm.com
-      version: v1
     - description: Platform API is a REST API service for managing cluster and providing
         access to command line tools, such as cloudctl and kubectl.
       displayName: PlatformAPI
@@ -341,18 +335,6 @@ spec:
           - extensions
           resources:
           - ingresses
-          verbs:
-          - create
-          - delete
-          - get
-          - list
-          - patch
-          - update
-          - watch
-        - apiGroups:
-          - operator.ibm.com
-          resources:
-          - passwordrules
           verbs:
           - create
           - delete
