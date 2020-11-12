@@ -23,7 +23,7 @@ spec:
     spec:
       serviceAccountName: ibm-platform-api-operator
       containers:
-      - image: quay.io/opencloudio/ibm-platform-api-operator:3.7.2
+      - image: quay.io/opencloudio/ibm-platform-api-operator:3.8.0
         imagePullPolicy: Always
         env:
           - name: WATCH_NAMESPACE
