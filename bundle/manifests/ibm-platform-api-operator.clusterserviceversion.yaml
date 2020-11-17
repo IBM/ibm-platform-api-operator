@@ -45,16 +45,44 @@ metadata:
             },
             "replicas": 1
           }
+        },
+        {
+          "apiVersion":"operator.ibm.com/v1alpha1",
+          "kind":"OperandRequest",
+          "metadata":{
+            "name":"platform-api-request"
+          },
+          "spec":{
+            "requests":[
+              {
+                "operands":[
+                  {
+                    "name":"ibm-cert-manager-operator"
+                  },
+                  {
+                    "name":"ibm-mongodb-operator"
+                  },
+                  {
+                    "name":"ibm-iam-operator"
+                  },                                    
+                  {
+                    "name":"ibm-management-ingress-operator"
+                  }
+                ],
+                "registry":"common-service"
+              }
+            ]
+          }
         }
       ]
     capabilities: Seamless Upgrades
     categories: Developer Tools
     certified: "false"
-    containerImage: quay.io/opencloudio/ibm-platform-api-operator:3.8.0
+    containerImage: quay.io/opencloudio/ibm-platform-api-operator:latest
     createdAt: "2020-05-16"
     description: The PlatformAPI operator provides a simple Kubernetes CRD-Based API to manage the lifecycle of PlatformAPI. With this operator, you can simply deploy and upgrade platform-api.
-    olm.skipRange: '>=3.5.0 <3.7.2'
-    operators.operatorframework.io/builder: operator-sdk-v1.0.1
+    olm.skipRange: '>=3.5.0 <3.8.1'
+    operators.operatorframework.io/builder: operator-sdk-v1.2.0
     operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1
     repository: https://github.com/IBM/ibm-platform-api-operator
     support: IBM
@@ -63,7 +91,7 @@ metadata:
     operatorframework.io/arch.ppc64le: supported
     operatorframework.io/arch.s390x: supported
     operatorframework.io/os.linux: supported
-  name: ibm-platform-api-operator.v3.8.0
+  name: ibm-platform-api-operator.v3.8.1
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
@@ -177,17 +205,24 @@ spec:
           - delete
         serviceAccountName: ibm-platform-api-operator
       deployments:
-      - name: ibm-platform-api-operator-controller-manager
+      - name: ibm-platform-api-operator
         spec:
           replicas: 1
           selector:
             matchLabels:
-              control-plane: controller-manager
+              name: ibm-platform-api-operator
           strategy: {}
           template:
             metadata:
+              annotations:
+                productID: 068a62892a1e4db39641342e592daa25
+                productMetric: FREE
+                productName: IBM Cloud Platform Common Services
               labels:
-                control-plane: controller-manager
+                app.kubernetes.io/instance: platform-api
+                app.kubernetes.io/managed-by: platformapis.operator.ibm.com
+                app.kubernetes.io/name: platformapis.operator.ibm.com
+                name: ibm-platform-api-operator
             spec:
               containers:
               - args:
@@ -201,8 +236,8 @@ spec:
                 - name: OPERAND_AUDIT_SERVICE_IMAGE
                   value: quay.io/opencloudio/audit-syslog-service@sha256:1466c23e64e2dddf68374c6997dec8bb1d3054d1a620e059ed5ff168887e95cc
                 - name: OPERAND_PLATFORM_API_IMAGE
-                  value: quay.io/opencloudio/icp-platform-api@sha256:a95aa0fc5afc7a436f412ad6fa8c993d2d5a31844000ec24604d5345965e3cb9
-                image: quay.io/opencloudio/ibm-platform-api-operator:3.8.0
+                  value: quay.io/opencloudio/icp-platform-api@sha256:a11df312d3c3e58ebcf1503df1c3eecaa122d706083930ba910179b6a47b30c7
+                image: quay.io/opencloudio/ibm-platform-api-operator:latest
                 imagePullPolicy: Always
                 name: ibm-platform-api-operator
                 resources:
@@ -389,6 +424,25 @@ spec:
           - patch
           - update
           - watch
+        - apiGroups:
+          - ""
+          resources:
+          - configmaps
+          verbs:
+          - get
+          - list
+          - watch
+          - create
+          - update
+          - patch
+          - delete
+        - apiGroups:
+          - ""
+          resources:
+          - events
+          verbs:
+          - create
+          - patch
         serviceAccountName: ibm-platform-api-operator
     strategy: deployment
   installModes:
@@ -413,4 +467,5 @@ spec:
   maturity: stable
   provider:
     name: IBM
-  version: 3.8.0
+  replaces: ibm-platform-api-operator.v3.8.0
+  version: 3.8.1

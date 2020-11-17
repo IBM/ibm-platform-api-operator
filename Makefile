@@ -42,7 +42,7 @@ BUNDLE_METADATA_OPTS ?= $(BUNDLE_CHANNELS) $(BUNDLE_DEFAULT_CHANNEL)
 IMG ?= ibm-platform-api-operator
 BUNDLE_IMAGE_NAME = ibm-platform-api-operator-bundle
 REGISTRY ?= "hyc-cloud-private-integration-docker-local.artifactory.swg-devops.com/ibmcom"
-CSV_VERSION ?= 3.8.0
+CSV_VERSION ?= 3.8.1
 
 QUAY_USERNAME ?=
 QUAY_PASSWORD ?=
@@ -128,6 +128,12 @@ build-image: $(CONFIG_DOCKER_TARGET)
 build-bundle-image:
 	$(eval ARCH := $(shell uname -m|sed 's/x86_64/amd64/'))
 	docker build -f bundle.Dockerfile -t $(REGISTRY)/$(BUNDLE_IMAGE_NAME)-$(ARCH):$(VERSION) .
+
+build-image-dev:
+	docker build -t quay.io/opencloudio/$(IMG):dev \
+	--build-arg VCS_REF=$(VCS_REF) --build-arg VCS_URL=$(VCS_URL) \
+	-f Dockerfile .
+	docker push quay.io/opencloudio/$(IMG):dev
 
 # runs on amd64 machine
 build-image-ppc64le: $(CONFIG_DOCKER_TARGET)

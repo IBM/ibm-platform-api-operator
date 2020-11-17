@@ -2,12 +2,11 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: role
   labels:
-    name: ibm-platform-api-operator
     app.kubernetes.io/instance: platform-api
     app.kubernetes.io/managed-by: platformapis.operator.ibm.com
     app.kubernetes.io/name: platformapis.operator.ibm.com
+  name: ibm-platform-api-operator
 rules:
 # Rules copied from legacy format (pre-v1.0 kubebuilder)
 - apiGroups:
@@ -191,7 +190,11 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: role
+  labels:
+    app.kubernetes.io/instance: platform-api
+    app.kubernetes.io/managed-by: platformapis.operator.ibm.com
+    app.kubernetes.io/name: platformapis.operator.ibm.com
+  name: ibm-platform-api-operator
 rules:
 # Rules to clean up previous release's resources
 - apiGroups:
