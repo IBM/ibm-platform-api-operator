@@ -190,7 +190,7 @@ Parameter                                        | Description                  
 `platformApi.config.clusterName`                 | Cluster name                                              | mycluster 
 `platformApi.config.clusterCAdomain`             | Cluster CA domain                                         | mycluster.icp
 `platformApi.config.acctName`                    | account name                                              | mycluster account 
-`auditService.image.repository`                  | audit service image path                                  | quay.io/opencloudio/audit-syslog-service
+`auditService.image.repository`                  | audit service image path                                  | quay.io/opencloudio/audit-syslog-service   
 `auditService.image.tag`                         | audit service image tag                                   | latest             
 `auditService.image.pullPolicy`                  | auditService pullpolicy                                   | IfNotPresent    
 `auditService.resources.limits.cpu`              | auditService cpu limits                                   | 100m

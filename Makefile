@@ -12,10 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-$(eval GIT_COMMIT := $(shell git rev-parse --short HEAD))
-$(eval VCS_REF := $(GIT_COMMIT))
-GIT_REMOTE_URL = $(shell git config --get remote.origin.url)
-$(eval DOCKER_BUILD_OPTS := --build-arg "VCS_REF=$(VCS_REF)" --build-arg "VCS_URL=$(GIT_REMOTE_URL)")
+# Docker ARGS for operator images
+VCS_REF = $(shell git rev-parse --short HEAD)
+VCS_URL = $(shell git config --get remote.origin.url)
 
 # Default goal
 .DEFAULT_GOAL:=help
@@ -27,11 +26,23 @@ BUILD_LOCALLY ?= 1
 # The namespace that the test operator will be deployed in
 NAMESPACE=ibm-common-services
 
+# Default bundle image tag
+BUNDLE_IMG ?= controller-bundle:$(VERSION)
+# Options for 'bundle-build'
+ifneq ($(origin CHANNELS), undefined)
+BUNDLE_CHANNELS := --channels=$(CHANNELS)
+endif
+ifneq ($(origin DEFAULT_CHANNEL), undefined)
+BUNDLE_DEFAULT_CHANNEL := --default-channel=$(DEFAULT_CHANNEL)
+endif
+BUNDLE_METADATA_OPTS ?= $(BUNDLE_CHANNELS) $(BUNDLE_DEFAULT_CHANNEL)
+
 # Image URL to use all building/pushing image targets;
 # Use your own docker registry and image name for dev/test by overridding the IMG and REGISTRY environment variable.
 IMG ?= ibm-platform-api-operator
+BUNDLE_IMAGE_NAME = ibm-platform-api-operator-bundle
 REGISTRY ?= "hyc-cloud-private-integration-docker-local.artifactory.swg-devops.com/ibmcom"
-CSV_VERSION ?= 3.8.0
+CSV_VERSION ?= 3.8.1
 
 QUAY_USERNAME ?=
 QUAY_PASSWORD ?=
@@ -40,11 +51,8 @@ QUAY_PASSWORD ?=
 # Override this variable ue with your own value if you're working on forked repo.
 GIT_HOST ?= github.com/IBM
 
-BASE_DIR := ibm-platform-api-operator
-
 TESTARGS_DEFAULT := "-v"
 export TESTARGS ?= $(TESTARGS_DEFAULT)
-DEST := $(GIT_HOST)/$(BASE_DIR)
 VERSION ?= $(shell cat ./helm-charts/platform-api/Chart.yaml | grep "^version" | awk '{print $$2}')
 
 LOCAL_OS := $(shell uname)
@@ -82,24 +90,12 @@ lint: lint-all
 # csv section
 ############################################################
 
-generate-csv: ## Generate CSV
-	- operator-sdk generate csv --csv-version=$(CSV_VERSION) --make-manifests=false
-	- cp deploy/crds/*_crd.yaml deploy/olm-catalog/$(BASE_DIR)/$(CSV_VERSION)/
-
 push-csv: ## Push CSV package to the catalog
 	@RELEASE=${CSV_VERSION} commonUtil/scripts/push-csv.sh
 
 ############################################################
 # test section
 ############################################################
-
-generate-scorecard: ## Generate scorecard yaml
-	@echo ... Generating .osdk-scorecard.yaml ...
-	- commonUtil/scripts/generate-scorecard.sh $(CSV_VERSION)
-
-scorecard: ## Run scorecard test
-	@echo ... Running the scorecard test
-	- operator-sdk scorecard --verbose
 
 test: test-e2e ## Run integration e2e tests with different options
 
@@ -111,7 +107,7 @@ test-e2e:
 	# - operator-sdk test local ./test/e2e --namespace=${NAMESPACE}
 
 ############################################################
-# images section
+# build section
 ############################################################
 
 ifeq ($(BUILD_LOCALLY),0)
@@ -119,134 +115,132 @@ ifeq ($(BUILD_LOCALLY),0)
 config-docker:
 endif
 
-build: install-operator-sdk $(CONFIG_DOCKER_TARGET) build-amd64 build-ppc64le build-s390x ## Build multi-arch operator images
+build: build-bundle-image build-image build-image-ppc64le build-image-s390x
 
-build-amd64:
+build-image: $(CONFIG_DOCKER_TARGET)
 	$(eval ARCH := $(shell uname -m|sed 's/x86_64/amd64/'))
-	@echo "Building the ${IMG} amd64 binary..."
-	@operator-sdk build --image-build-args "-f build/Dockerfile $(DOCKER_BUILD_OPTS)" $(REGISTRY)/$(IMG)-amd64:$(VERSION)
+	docker build -t $(REGISTRY)/$(IMG)-$(ARCH):$(VERSION) \
+	--build-arg VCS_REF=$(VCS_REF) --build-arg VCS_URL=$(VCS_URL) \
+	-f Dockerfile .
+	@if [ $(BUILD_LOCALLY) -ne 1 ] && [ "$(ARCH)" = "amd64" ]; then docker push $(REGISTRY)/$(IMG)-$(ARCH):$(VERSION); fi
 
-build-ppc64le:
-	@echo "Building the ${IMG} ppc64le binary..."
-	@operator-sdk build --image-build-args "-f build/Dockerfile.ppc64le $(DOCKER_BUILD_OPTS)" $(REGISTRY)/$(IMG)-ppc64le:$(VERSION)
+# Build the bundle image.
+build-bundle-image:
+	$(eval ARCH := $(shell uname -m|sed 's/x86_64/amd64/'))
+	docker build -f bundle.Dockerfile -t $(REGISTRY)/$(BUNDLE_IMAGE_NAME)-$(ARCH):$(VERSION) .
 
-build-s390x:
-	@echo "Building the ${IMG} s390x binary..."
-	@operator-sdk build --image-build-args "-f build/Dockerfile.s390x $(DOCKER_BUILD_OPTS)" $(REGISTRY)/$(IMG)-s390x:$(VERSION)
+build-image-dev:
+	docker build -t quay.io/opencloudio/$(IMG):dev \
+	--build-arg VCS_REF=$(VCS_REF) --build-arg VCS_URL=$(VCS_URL) \
+	-f Dockerfile .
+	docker push quay.io/opencloudio/$(IMG):dev
+
+# runs on amd64 machine
+build-image-ppc64le: $(CONFIG_DOCKER_TARGET)
+ifeq ($(LOCAL_OS),Linux)
+ifeq ($(LOCAL_ARCH),x86_64)
+	# docker run --rm --privileged multiarch/qemu-user-static:register --reset
+	docker build -t $(REGISTRY)/$(IMG)-ppc64le:$(VERSION) \
+	--build-arg VCS_REF=$(VCS_REF) --build-arg VCS_URL=$(VCS_URL) \
+	-f Dockerfile.ppc64le .
+	@if [ $(BUILD_LOCALLY) -ne 1 ]; then docker push $(REGISTRY)/$(IMG)-ppc64le:$(VERSION); fi
+endif
+endif
+
+# runs on amd64 machine
+build-image-s390x: $(CONFIG_DOCKER_TARGET)
+ifeq ($(LOCAL_OS),Linux)
+ifeq ($(LOCAL_ARCH),x86_64)
+	# docker run --rm --privileged multiarch/qemu-user-static:register --reset
+	docker build -t $(REGISTRY)/$(IMG)-s390x:$(VERSION) \
+	--build-arg VCS_REF=$(VCS_REF) --build-arg VCS_URL=$(VCS_URL) \
+	-f Dockerfile.s390x .
+	@if [ $(BUILD_LOCALLY) -ne 1 ]; then docker push $(REGISTRY)/$(IMG)-s390x:$(VERSION); fi
+endif
+endif
 
 ############################################################
 # Image section
 ############################################################
 
-images: clean build push ## Release multi-arch operator image
-
-push: push-amd64 push-ppc64le push-s390x push-multi-arch
-
-push-amd64:
-	docker push $(REGISTRY)/$(IMG)-amd64:$(VERSION)
-
-push-ppc64le:
-	docker push $(REGISTRY)/$(IMG)-ppc64le:$(VERSION)
-
-push-s390x:
-	docker push $(REGISTRY)/$(IMG)-s390x:$(VERSION)
-
-push-multi-arch:
-ifeq ($(TARGET_OS),$(filter $(TARGET_OS),linux darwin))
-	@curl -L -o /tmp/manifest-tool https://github.com/estesp/manifest-tool/releases/download/v0.7.0/manifest-tool-$(TARGET_OS)-amd64
+images: build-image build-image-ppc64le build-image-s390x
+ifeq ($(LOCAL_OS),Linux)
+ifeq ($(LOCAL_ARCH),x86_64)
+	@curl -L -o /tmp/manifest-tool https://github.com/estesp/manifest-tool/releases/download/v1.0.0/manifest-tool-linux-amd64
 	@chmod +x /tmp/manifest-tool
-	@echo "Merging and push multi-arch image $(REGISTRY)/$(IMG):latest"
-	@/tmp/manifest-tool push from-args --platforms linux/amd64,linux/ppc64le,linux/s390x --template $(REGISTRY)/$(IMG)-ARCH:$(VERSION) --target $(REGISTRY)/$(IMG):latest --ignore-missing
-	@echo "Merging and push multi-arch image $(REGISTRY)/$(IMG):v$(VERSION)"
-	@/tmp/manifest-tool push from-args --platforms linux/amd64,linux/ppc64le,linux/s390x --template $(REGISTRY)/$(IMG)-ARCH:$(VERSION) --target $(REGISTRY)/$(IMG):$(VERSION) --ignore-missing
+	/tmp/manifest-tool push from-args --platforms linux/amd64,linux/ppc64le,linux/s390x --template $(REGISTRY)/$(IMG)-ARCH:$(VERSION) --target $(REGISTRY)/$(IMG) --ignore-missing
+	/tmp/manifest-tool push from-args --platforms linux/amd64,linux/ppc64le,linux/s390x --template $(REGISTRY)/$(IMG)-ARCH:$(VERSION) --target $(REGISTRY)/$(IMG):$(VERSION) --ignore-missing
+endif
 endif
 
-############################################################
-# Dev image section
-############################################################
+# Run against the configured Kubernetes cluster in ~/.kube/config
+run: helm-operator
+	$(HELM_OPERATOR) run
 
-dev-image: clean build-amd64 push-amd64-dev ## Release development amd64 operator image 
+# Install CRDs into a cluster
+install: kustomize
+	$(KUSTOMIZE) build config/crd | kubectl apply -f -
 
-push-amd64-dev:
-	@docker tag $(REGISTRY)/$(IMG)-amd64:$(VERSION) quay.io/opencloudio/$(IMG):dev
-	@docker push quay.io/opencloudio/$(IMG):dev
+# Uninstall CRDs from a cluster
+uninstall: kustomize
+	$(KUSTOMIZE) build config/crd | kubectl delete -f -
 
-############################################################
-# application section
-############################################################
+# Deploy controller in the configured Kubernetes cluster in ~/.kube/config
+deploy: kustomize
+	kubectl apply -f config/dev-manager/service_account.yaml
+	cd config/dev-manager && $(KUSTOMIZE) edit set image controller=$(REGISTRY)/$(IMG):$(CSV_VERSION)
+	$(KUSTOMIZE) build config/dev-default | kubectl apply -f -
 
-install: ## Install all resources (CR/CRD's, RBCA and Operator)
-	@echo ....... Set environment variables ......
-	- export DEPLOY_DIR=deploy/crds
-	- export WATCH_NAMESPACE=${NAMESPACE}
-	@echo ....... Applying CRDS and Operator .......
-	- for crd in $(shell ls deploy/crds/*_crd.yaml); do kubectl apply -f $${crd}; done
-	@echo ....... Applying RBAC .......
-	- kubectl apply -f deploy/service_account.yaml -n ${NAMESPACE}
-	- kubectl apply -f deploy/role.yaml -n ${NAMESPACE}
-	- cat deploy/role_binding.yaml | sed -e "s|REPLACE_NAMESPACE|${NAMESPACE}|g" | kubectl -n ${NAMESPACE} apply -f -
-	@echo ....... Applying Operator .......
-	- cat deploy/olm-catalog/${BASE_DIR}/${CSV_VERSION}/${BASE_DIR}.v${CSV_VERSION}.clusterserviceversion.yaml | sed -f hack/csv_images.sed | kubectl -n ${NAMESPACE} apply -f -
-	@echo ....... Creating the Instance .......
-	- for cr in $(shell ls deploy/crds/*_cr.yaml); do kubectl apply -f $${cr} -n ${NAMESPACE}; done
+# Undeploy controller in the configured Kubernetes cluster in ~/.kube/config
+undeploy: kustomize
+	$(KUSTOMIZE) build config/dev-default | kubectl delete -f -
+	kubectl delete -f config/dev-manager/service_account.yaml
 
-uninstall: ## Uninstall all that all performed in the $ make install
-	@echo ....... Uninstalling .......
-	@echo ....... Deleting CR .......
-	- for cr in $(shell ls deploy/crds/*_cr.yaml); do kubectl delete -f $${cr} -n ${NAMESPACE}; done
-	@echo ....... Deleting Operator .......
-	- kubectl delete -f deploy/olm-catalog/${BASE_DIR}/${CSV_VERSION}/${BASE_DIR}.v${CSV_VERSION}.clusterserviceversion.yaml -n ${NAMESPACE}
-	@echo ....... Deleting CRDs.......
-	- for crd in $(shell ls deploy/crds/*_crd.yaml); do kubectl delete -f $${crd}; done
-	@echo ....... Deleting Rules and Service Account .......
-	- cat deploy/role_binding.yaml | sed -e "s|REPLACE_NAMESPACE|${NAMESPACE}|g" | kubectl -n ${NAMESPACE} delete -f -
-	- kubectl delete -f deploy/service_account.yaml -n ${NAMESPACE}
-	- kubectl delete -f deploy/role.yaml -n ${NAMESPACE}
+# Build the docker image
+docker-build:
+	docker build . -t ${IMG}
 
-clean-cluster: ## Clean up all the artifacts left in cluster
-	@echo ....... Cleaning up .......
-	- kubectl -n ${NAMESPACE} get platformapis -o name | xargs kubectl -n ${NAMESPACE} delete
-	- kubectl -n ${NAMESPACE} get csv -o name | grep platform-api | xargs kubectl -n ${NAMESPACE} delete
-	- kubectl -n ${NAMESPACE} get sub -o name | grep platform-api | xargs kubectl -n ${NAMESPACE} delete
-	- kubectl -n ${NAMESPACE} get installplans | grep platform-api | awk '{print $$1}' | xargs kubectl -n ${NAMESPACE} delete installplan
-	- kubectl -n ${NAMESPACE} get serviceaccounts -o name | grep platform-api | xargs kubectl -n ${NAMESPACE} delete
-	- kubectl get clusterrole -o name | grep platform-api | xargs kubectl delete
-	- kubectl get clusterrolebinding -o name | grep platform-api | xargs kubectl delete	
-	- kubectl get crd -o name | grep platformapi | xargs kubectl delete
+# Push the docker image
+docker-push:
+	docker push ${IMG}
 
-############################################################
-# operator source section
-############################################################
-operatorsource: ## Create opencloud-operators operator source
-	- kubectl delete -f commonUtil/resources/opencloud-operators.yaml
-	- kubectl apply -f commonUtil/resources/opencloud-operators.yaml
+# PATH  := $(PATH):$(PWD)/bin
+# SHELL := env PATH=$(PATH) /bin/sh
+OS    = $(shell uname -s | tr '[:upper:]' '[:lower:]')
+ARCH  = $(shell uname -m | sed 's/x86_64/amd64/')
+OSOPER   = $(shell uname -s | tr '[:upper:]' '[:lower:]' | sed 's/darwin/apple-darwin/' | sed 's/linux/linux-gnu/')
+ARCHOPER = $(shell uname -m )
 
-############################################################
-# bump up csv section
-############################################################
-bump-up-csv: ## Bump up CSV version
-	@commonUtil/scripts/bump-up-csv.sh ${BASE_DIR} $(CSV_VERSION)
+kustomize:
+ifeq (, $(shell which kustomize 2>/dev/null))
+	@{ \
+	set -e ;\
+	mkdir -p bin ;\
+	curl -sSLo - https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize/v3.5.4/kustomize_v3.5.4_$(OS)_$(ARCH).tar.gz | tar xzf - -C bin/ ;\
+	}
+KUSTOMIZE=$(realpath ./bin/kustomize)
+else
+KUSTOMIZE=$(shell which kustomize)
+endif
 
-############################################################
-# configure githooks
-############################################################
-configure-githooks: ## Configure githooks
-	- git config core.hooksPath .githooks
+helm-operator:
+ifeq (, $(shell which helm-operator 2>/dev/null))
+	@{ \
+	set -e ;\
+	mkdir -p bin ;\
+	curl -LO https://github.com/operator-framework/operator-sdk/releases/download/v1.0.1/helm-operator-v1.0.1-$(ARCHOPER)-$(OSOPER) ;\
+	mv helm-operator-v1.0.1-$(ARCHOPER)-$(OSOPER) ./bin/helm-operator ;\
+	chmod +x ./bin/helm-operator ;\
+	}
+HELM_OPERATOR=$(realpath ./bin/helm-operator)
+else
+HELM_OPERATOR=$(shell which helm-operator)
+endif
 
-############################################################
-# clean section
-############################################################
-clean: ## Clean build binary
-	@docker images | grep "${REGISTRY}/${IMG}" | tr -s ' ' | awk -F' ' '{print $$3}' | xargs -I {} docker rmi -f {}
-	@rm -f build/_output/bin/$(IMG)
-
-############################################################
-# help section
-############################################################
-help: ## Display this help
-	@echo "Usage:\n  make \033[36m<target>\033[0m"
-	@awk 'BEGIN {FS = ":.*##"}; \
-		/^[a-zA-Z0-9_-]+:.*?##/ { printf "  \033[36m%-20s\033[0m %s\n", $$1, $$2 } \
-		/^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
-
-.PHONY: all build check lint test images
+# Generate bundle manifests and metadata, then validate generated files.
+.PHONY: bundle
+bundle: kustomize
+	operator-sdk generate kustomize manifests -q
+	# cd config/manager && $(KUSTOMIZE) edit set image controller=$(IMG)
+	$(KUSTOMIZE) build config/manifests | operator-sdk generate bundle -q --overwrite --version $(CSV_VERSION) $(BUNDLE_METADATA_OPTS)
+	operator-sdk bundle validate ./bundle

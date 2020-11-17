@@ -21,78 +21,78 @@ metadata:
     app.kubernetes.io/name: {{ .Values.platformApi.name }}
     helm.sh/chart: {{ .Release.Name }}
 rules:
-  - apiGroups:
-      - ''
-    resources:
-      - configmaps
-      - endpoints
-      - events
-      - persistentvolumeclaims
-      - pods
-      - secrets
-      - serviceaccounts
-      - services
-      - services/finalizers
-    verbs:
-      - create
-      - delete
-      - get
-      - list
-      - patch
-      - update
-      - watch
-  - apiGroups:
-      - ''
-    resources:
-      - namespaces
-    verbs:
-      - get
-  - apiGroups:
-      - ''
-    resources:
-      - pods
-    verbs:
-      - deletecollection
-  - apiGroups:
-      - apps
-    resources:
-      - deployments
-      - daemonsets
-      - replicasets
-      - statefulsets
-    verbs:
-      - create
-      - delete
-      - get
-      - list
-      - patch
-      - update
-      - watch
-  - apiGroups:
-      - extensions
-    resources:
-      - ingresses
-    verbs:
-      - create
-      - delete
-      - get
-      - list
-      - patch
-      - update
-      - watch
-  - apiGroups:
-      - rbac.authorization.k8s.io
-    resources:
-      - roles
-      - rolebindings
-    verbs:
-      - create
-      - delete
-      - get
-      - list
-      - patch
-      - update
-      - watch
+- apiGroups:
+    - ''
+  resources:
+    - configmaps
+    - endpoints
+    - events
+    - persistentvolumeclaims
+    - pods
+    - secrets
+    - serviceaccounts
+    - services
+    - services/finalizers
+  verbs:
+    - create
+    - delete
+    - get
+    - list
+    - patch
+    - update
+    - watch
+- apiGroups:
+    - ''
+  resources:
+    - namespaces
+  verbs:
+    - get
+- apiGroups:
+    - ''
+  resources:
+    - pods
+  verbs:
+    - deletecollection
+- apiGroups:
+    - apps
+  resources:
+    - deployments
+    - daemonsets
+    - replicasets
+    - statefulsets
+  verbs:
+    - create
+    - delete
+    - get
+    - list
+    - patch
+    - update
+    - watch
+- apiGroups:
+    - extensions
+  resources:
+    - ingresses
+  verbs:
+    - create
+    - delete
+    - get
+    - list
+    - patch
+    - update
+    - watch
+- apiGroups:
+    - rbac.authorization.k8s.io
+  resources:
+    - roles
+    - rolebindings
+  verbs:
+    - create
+    - delete
+    - get
+    - list
+    - patch
+    - update
+    - watch
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding

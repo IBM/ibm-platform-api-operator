@@ -133,7 +133,7 @@ spec:
         - mountPath: /etc/audit-ingest
           name: audit-ingest
         - mountPath: /etc/audit-tls
-          name: audit-server-certs
+          name: audit-server-certs     
         - name: shared
           mountPath: {{ .Values.auditService.config.auditLogPath }}
         - name: logrotate
@@ -274,12 +274,12 @@ spec:
             name: audit-logging-fluentd-ds-http-ingesturl
             optional: true
             items:
-            - key: AuditLoggingSyslogIngestURL
-              path: auditurl
+              - key: AuditLoggingSyslogIngestURL
+                path: auditurl
         - name: audit-server-certs
           secret:
             secretName: audit-server-certs
-            optional: true
+            optional: true 
         - name: shared
           emptyDir: {}
         - configMap:

@@ -1,0 +1,20 @@
+# permissions for end users to view platformapis.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: platformapi-viewer-role
+rules:
+- apiGroups:
+  - operator.ibm.com
+  resources:
+  - platformapis
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - operator.ibm.com
+  resources:
+  - platformapis/status
+  verbs:
+  - get
