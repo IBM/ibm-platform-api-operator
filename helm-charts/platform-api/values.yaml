@@ -34,7 +34,7 @@ platformApi:
     kubeApiserverSecurePort: 6443
   hostNetwork: false
   image:
-    repository: quay.io/opencloudio/icp-platform-api@sha256:a95aa0fc5afc7a436f412ad6fa8c993d2d5a31844000ec24604d5345965e3cb9
+    repository: quay.io/opencloudio/icp-platform-api@sha256:a11df312d3c3e58ebcf1503df1c3eecaa122d706083930ba910179b6a47b30c7
     pullPolicy: IfNotPresent
   name: platform-api
   resources:
