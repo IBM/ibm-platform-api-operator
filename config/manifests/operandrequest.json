@@ -1,0 +1,28 @@
+{
+  "apiVersion": "operator.ibm.com/v1alpha1",
+  "kind": "OperandRequest",
+  "metadata": {
+    "name": "platform-api-request"
+  },
+  "spec": {
+    "requests": [
+      {
+        "operands": [
+          {
+            "name": "ibm-cert-manager-operator"
+          },
+          {
+            "name": "ibm-mongodb-operator"
+          },
+          {
+            "name": "ibm-iam-operator"
+          },
+          {
+            "name": "ibm-management-ingress-operator"
+          }
+        ],
+        "registry": "common-service"
+      }
+    ]
+  }
+}

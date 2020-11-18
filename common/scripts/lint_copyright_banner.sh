@@ -15,11 +15,19 @@
 # limitations under the License.
 #
 
-echo ">>> Installing Operator SDK"
+set -e
 
-# Use version 0.18.0
-RELEASE_VERSION=v0.18.0
-# Download binary
-curl -LO https://github.com/operator-framework/operator-sdk/releases/download/${RELEASE_VERSION}/operator-sdk-${RELEASE_VERSION}-x86_64-linux-gnu
-# Install binary
-chmod +x operator-sdk-${RELEASE_VERSION}-x86_64-linux-gnu && mkdir -p /usr/local/bin/ && cp operator-sdk-${RELEASE_VERSION}-x86_64-linux-gnu /usr/local/bin/operator-sdk && rm operator-sdk-${RELEASE_VERSION}-x86_64-linux-gnu
+ec=0
+for fn in "$@"; do
+  if ! grep -L -q -e "Apache License, Version 2" "${fn}"; then
+    echo "Missing license: ${fn}"
+    ec=1
+  fi
+
+  if ! grep -L -q -e "Copyright" "${fn}"; then
+    echo "Missing copyright: ${fn}"
+    ec=1
+  fi
+done
+
+exit $ec
