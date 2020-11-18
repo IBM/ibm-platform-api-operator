@@ -1,20 +1,20 @@
-apiVersion: v1
+apiVersion: v2
 appVersion: 4.1.0.0-000000
 description: ICP Platform API Service
 keywords:
-- kubernetes
-- IBM Cloud Private
-- API
-- IcpClusterResource
-- s390x
-- ppc64le
-- amd64
-- ICP
-- Development
-- Commercial
+  - kubernetes
+  - IBM Cloud Private
+  - API
+  - IcpClusterResource
+  - s390x
+  - ppc64le
+  - amd64
+  - ICP
+  - Development
+  - Commercial
 kubeVersion: '>=1.11.0-0'
 maintainers:
-- email: icpapi@us.ibm.com
-  name: IBM Cloud Private
+  - email: icpapi@us.ibm.com
+    name: IBM Cloud Private
 name: platform-api
 version: 3.8.1
