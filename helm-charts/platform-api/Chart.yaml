@@ -1,6 +1,14 @@
-apiVersion: v1
+apiVersion: v2
 appVersion: 4.1.0.0-000000
-description: ICP Platform API Service
+description: |-
+  The IBM Platform API Service provides REST services for viewing information about your cluster, manage your cluster, download CLI tools, and much more. 
+
+  Documentation
+  For more information, see the [IBM Platform API Chart README](https://github.com/IBM/ibm-platform-api-operator/blob/master/helm-charts/platform-api/README.md).
+
+  License
+  This chart is licensed under the [Apache-2.0 License](https://github.com/IBM/ibm-platform-api-operator/blob/master/LICENSE)
+home: "https://github.com/IBM/ibm-platform-api-operator"
 keywords:
 - kubernetes
 - IBM Cloud Private
@@ -9,12 +17,14 @@ keywords:
 - s390x
 - ppc64le
 - amd64
-- ICP
+- RHOCP
 - Development
 - Commercial
+
+- Middleware
 kubeVersion: '>=1.11.0-0'
 maintainers:
-- email: icpapi@us.ibm.com
-  name: IBM Cloud Private
+- email: support@ibm.com
+  name: IBM
 name: platform-api
 version: 3.8.1
