@@ -15,7 +15,7 @@
 .DEFAULT_GOAL:=help
 
 # Dependence tools
-CONTAINER_CLI ?= $(shell basename $(which docker))
+CONTAINER_CLI ?= $(shell basename $(shell which docker))
 KUBECTL ?= $(shell which kubectl)
 OPERATOR_SDK ?= $(shell which operator-sdk)
 OPM ?= $(shell which opm)
