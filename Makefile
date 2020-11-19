@@ -168,6 +168,9 @@ clean-cluster: ## Clean up all the resources left in the Kubernetes cluster
 	- kubectl get clusterrolebinding -o name | grep platform-api | xargs kubectl delete	
 	- kubectl get crd -o name | grep platformapi | xargs kubectl delete
 
+global-pull-secrets: ## Update global pull secrets to use artifactory registries
+	./common/scripts/update_global_pull_secrets.sh
+
 ############################################################
 ##@ Test
 ############################################################
