@@ -15,7 +15,7 @@
 .DEFAULT_GOAL:=help
 
 # Dependence tools
-CONTAINER_CLI ?= $(shell which docker)
+CONTAINER_CLI ?= $(shell basename $(which docker))
 KUBECTL ?= $(shell which kubectl)
 OPERATOR_SDK ?= $(shell which operator-sdk)
 OPM ?= $(shell which opm)
@@ -23,6 +23,7 @@ KUSTOMIZE ?= $(shell which kustomize)
 KUSTOMIZE_VERSION=v3.8.7
 HELM_OPERATOR_VERSION=v1.2.0
 OPM_VERSION=v1.15.2
+YQ_VERSION=3.4.1
 
 # Specify whether this repo is build locally or not, default values is '1';
 # If set to 1, then you need to also set 'DOCKER_USERNAME' and 'DOCKER_PASSWORD'
@@ -93,11 +94,14 @@ ARCH  = $(shell uname -m | sed 's/x86_64/amd64/')
 OSOPER   = $(shell uname -s | tr '[:upper:]' '[:lower:]' | sed 's/darwin/apple-darwin/' | sed 's/linux/linux-gnu/')
 ARCHOPER = $(shell uname -m )
 
+tools: kustomize helm-operator opm yq ## Install all development tools
+
 kustomize: ## Install kustomize
 ifeq (, $(shell which kustomize 2>/dev/null))
 	@{ \
 	set -e ;\
 	mkdir -p bin ;\
+	echo "Downloading kustomize ...";\
 	curl -sSLo - https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize/$(KUSTOMIZE_VERSION)/kustomize_$(KUSTOMIZE_VERSION)_$(OS)_$(ARCH).tar.gz | tar xzf - -C bin/ ;\
 	}
 KUSTOMIZE=$(realpath ./bin/kustomize)
@@ -110,6 +114,7 @@ ifeq (, $(shell which helm-operator 2>/dev/null))
 	@{ \
 	set -e ;\
 	mkdir -p bin ;\
+	echo "Downloading helm-operator ...";\
 	curl -LO https://github.com/operator-framework/operator-sdk/releases/download/$(HELM_OPERATOR_VERSION)/helm-operator-$(HELM_OPERATOR_VERSION)-$(ARCHOPER)-$(OSOPER) ;\
 	mv helm-operator-$(HELM_OPERATOR_VERSION)-$(ARCHOPER)-$(OSOPER) ./bin/helm-operator ;\
 	chmod +x ./bin/helm-operator ;\
@@ -124,6 +129,7 @@ ifeq (, $(shell which opm 2>/dev/null))
 	@{ \
 	set -e ;\
 	mkdir -p bin ;\
+	echo "Downloading opm ...";\
 	curl -LO https://github.com/operator-framework/operator-registry/releases/download/$(OPM_VERSION)/$(OS)-amd64-opm ;\
 	mv $(OS)-amd64-opm ./bin/opm ;\
 	chmod +x ./bin/opm ;\
@@ -131,6 +137,22 @@ ifeq (, $(shell which opm 2>/dev/null))
 OPM=$(realpath ./bin/opm)
 else
 OPM=$(shell which opm)
+endif
+
+yq: ## Install yq, a yaml processor
+ifeq (, $(shell which yq 2>/dev/null))
+	@{ \
+	set -e ;\
+	mkdir -p bin ;\
+	$(eval ARCH := $(shell uname -m|sed 's/x86_64/amd64/'));\
+	echo "Downloading yq ...";\
+	curl -LO https://github.com/mikefarah/yq/releases/download/$(YQ_VERSION)/yq_$(OS)_$(ARCH);\
+	mv $(YQ_VERSION)/yq_$(OS)_$(ARCH) ./bin/yq ;\
+	chmod +x ./bin/opm ;\
+	}
+YQ=$(realpath ./bin/yq)
+else
+YQ=$(shell which yq)
 endif
 
 ############################################################
@@ -150,12 +172,14 @@ uninstall: kustomize ## Uninstall CRDs from a cluster
 	$(KUSTOMIZE) build config/crd | kubectl delete -f -
 
 deploy: kustomize ## Deploy controller in the configured Kubernetes cluster in ~/.kube/config
+	- kubectl apply -f config/rbac/serviceaccount.yaml
 	$(KUSTOMIZE) build config/development | kubectl apply -f -
 	$(KUSTOMIZE) build config/samples | kubectl apply -f -
 
 undeploy: kustomize ## Undeploy controller in the configured Kubernetes cluster in ~/.kube/config
 	$(KUSTOMIZE) build config/samples | kubectl delete -f -
 	$(KUSTOMIZE) build config/development | kubectl delete -f -
+	- kubectl delete -f config/rbac/serviceaccount.yaml
 
 clean-cluster: ## Clean up all the resources left in the Kubernetes cluster
 	@echo ....... Cleaning up .......
@@ -170,6 +194,12 @@ clean-cluster: ## Clean up all the resources left in the Kubernetes cluster
 
 global-pull-secrets: ## Update global pull secrets to use artifactory registries
 	./common/scripts/update_global_pull_secrets.sh
+
+deploy-catalog: build-catalog ## Deploy the operator bundle catalogsource for testing
+	./common/scripts/update_catalogsource.sh $(OPERATOR_IMAGE_NAME) $(REGISTRY)/$(OPERATOR_IMAGE_NAME)-catalog:$(VERSION)
+
+undeploy-catalog: ## Undeploy the operator bundle catalogsource
+	- kubectl -n openshift-marketplace delete catalogsource $(OPERATOR_IMAGE_NAME)
 
 ############################################################
 ##@ Test
@@ -192,14 +222,14 @@ build-catalog: build-bundle-image build-catalog-source ## Build bundle image and
 build-bundle-image: 
 	$(eval ARCH := $(shell uname -m|sed 's/x86_64/amd64/'))
 	@cp -f bundle/manifests/ibm-platform-api-operator.clusterserviceversion.yaml /tmp/ibm-platform-api-operator.clusterserviceversion.yaml
-	@yq d -i bundle/manifests/ibm-platform-api-operator.clusterserviceversion.yaml "spec.replaces"
+	@$(YQ) d -i bundle/manifests/ibm-platform-api-operator.clusterserviceversion.yaml "spec.replaces"
 	$(CONTAINER_CLI) build -f bundle.Dockerfile -t $(REGISTRY)/$(BUNDLE_IMAGE_NAME)-$(ARCH):$(VERSION) .
 	$(CONTAINER_CLI) push $(REGISTRY)/$(BUNDLE_IMAGE_NAME)-$(ARCH):$(VERSION)
 	@mv /tmp/ibm-platform-api-operator.clusterserviceversion.yaml bundle/manifests/ibm-platform-api-operator.clusterserviceversion.yaml
 
 # Build catalog source
 build-catalog-source:
-	$(OPM) -u $(shell basename $(CONTAINER_CLI)) index add --bundles $(REGISTRY)/$(BUNDLE_IMAGE_NAME)-$(ARCH):$(VERSION) --tag $(REGISTRY)/$(OPERATOR_IMAGE_NAME)-catalog:$(VERSION)
+	$(OPM) -u $(CONTAINER_CLI) index add --bundles $(REGISTRY)/$(BUNDLE_IMAGE_NAME)-$(ARCH):$(VERSION) --tag $(REGISTRY)/$(OPERATOR_IMAGE_NAME)-catalog:$(VERSION)
 	$(CONTAINER_CLI) push $(REGISTRY)/$(OPERATOR_IMAGE_NAME)-catalog:$(VERSION)
 
 # Build image for development
@@ -248,7 +278,7 @@ bundle-manifests:
 
 images: build-image-amd64 build-image-ppc64le build-image-s390x ## Build and publish the multi-arch operator image
 ifeq ($(TARGET_OS),$(filter $(TARGET_OS),linux darwin))
-	@curl -L -o /tmp/manifest-tool https://github.com/estesp/manifest-tool/releases/download/v1.0.0/manifest-tool-$(TARGET_OS)-amd64
+	@curl -L -o /tmp/manifest-tool https://github.com/estesp/manifest-tool/releases/download/v1.0.3/manifest-tool-$(TARGET_OS)-amd64
 	@chmod +x /tmp/manifest-tool
 	@echo "Merging and push multi-arch image $(REGISTRY)/$(OPERATOR_IMAGE_NAME):latest"
 	/tmp/manifest-tool push from-args --platforms linux/amd64,linux/ppc64le,linux/s390x --template $(REGISTRY)/$(OPERATOR_IMAGE_NAME)-ARCH:$(VERSION) --target $(REGISTRY)/$(OPERATOR_IMAGE_NAME):latest --ignore-missing
@@ -256,7 +286,9 @@ ifeq ($(TARGET_OS),$(filter $(TARGET_OS),linux darwin))
 	/tmp/manifest-tool push from-args --platforms linux/amd64,linux/ppc64le,linux/s390x --template $(REGISTRY)/$(OPERATOR_IMAGE_NAME)-ARCH:$(VERSION) --target $(REGISTRY)/$(OPERATOR_IMAGE_NAME):$(VERSION) --ignore-missing
 endif
 
+############################################################
 ##@ Help
+############################################################
 help: ## Display this help
 	@echo "Usage:\n  make \033[36m<target>\033[0m"
 	@awk 'BEGIN {FS = ":.*##"}; \
