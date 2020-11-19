@@ -245,7 +245,7 @@ bundle-manifests:
 
 images: build-image-amd64 build-image-ppc64le build-image-s390x ## Build and publish the multi-arch operator image
 ifeq ($(TARGET_OS),$(filter $(TARGET_OS),linux darwin))
-	@curl -L -o /tmp/manifest-tool https://github.com/estesp/manifest-tool/releases/download/v0.7.0/manifest-tool-$(TARGET_OS)-amd64
+	@curl -L -o /tmp/manifest-tool https://github.com/estesp/manifest-tool/releases/download/v1.0.0/manifest-tool-$(TARGET_OS)-amd64
 	@chmod +x /tmp/manifest-tool
 	@echo "Merging and push multi-arch image $(REGISTRY)/$(OPERATOR_IMAGE_NAME):latest"
 	/tmp/manifest-tool push from-args --platforms linux/amd64,linux/ppc64le,linux/s390x --template $(REGISTRY)/$(OPERATOR_IMAGE_NAME)-ARCH:$(VERSION) --target $(REGISTRY)/$(OPERATOR_IMAGE_NAME):latest --ignore-missing
