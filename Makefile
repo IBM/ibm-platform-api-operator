@@ -12,51 +12,29 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Docker ARGS for operator images
-VCS_REF = $(shell git rev-parse --short HEAD)
-VCS_URL = $(shell git config --get remote.origin.url)
-
-# Default goal
 .DEFAULT_GOAL:=help
 
-# This repo is build locally for dev/test by default;
-# Override this variable in CI env.
+# Dependence tools
+CONTAINER_CLI ?= $(shell which docker)
+KUBECTL ?= $(shell which kubectl)
+OPERATOR_SDK ?= $(shell which operator-sdk)
+OPM ?= $(shell which opm)
+KUSTOMIZE ?= $(shell which kustomize)
+KUSTOMIZE_VERSION=v3.8.7
+HELM_OPERATOR_VERSION=v1.2.0
+OPM_VERSION=v1.15.2
+
+# Specify whether this repo is build locally or not, default values is '1';
+# If set to 1, then you need to also set 'DOCKER_USERNAME' and 'DOCKER_PASSWORD'
+# environment variables before build the repo.
 BUILD_LOCALLY ?= 1
 
-# The namespace that the test operator will be deployed in
-NAMESPACE=ibm-common-services
-
-# Default bundle image tag
-BUNDLE_IMG ?= controller-bundle:$(VERSION)
-# Options for 'bundle-build'
-ifneq ($(origin CHANNELS), undefined)
-BUNDLE_CHANNELS := --channels=$(CHANNELS)
-endif
-ifneq ($(origin DEFAULT_CHANNEL), undefined)
-BUNDLE_DEFAULT_CHANNEL := --default-channel=$(DEFAULT_CHANNEL)
-endif
-BUNDLE_METADATA_OPTS ?= $(BUNDLE_CHANNELS) $(BUNDLE_DEFAULT_CHANNEL)
-
-# Image URL to use all building/pushing image targets;
-# Use your own docker registry and image name for dev/test by overridding the IMG and REGISTRY environment variable.
-IMG ?= ibm-platform-api-operator
-BUNDLE_IMAGE_NAME = ibm-platform-api-operator-bundle
-REGISTRY ?= "hyc-cloud-private-integration-docker-local.artifactory.swg-devops.com/ibmcom"
-CSV_VERSION ?= 3.8.1
-
-QUAY_USERNAME ?=
-QUAY_PASSWORD ?=
-
-# Github host to use for checking the source tree;
-# Override this variable ue with your own value if you're working on forked repo.
-GIT_HOST ?= github.com/IBM
-
-TESTARGS_DEFAULT := "-v"
-export TESTARGS ?= $(TESTARGS_DEFAULT)
-VERSION ?= $(shell cat ./helm-charts/platform-api/Chart.yaml | grep "^version" | awk '{print $$2}')
+VCS_URL = $(shell git config --get remote.origin.url)
+VCS_REF ?= $(shell git rev-parse HEAD)
+VERSION ?= $(shell cat RELEASE_VERSION)
+PREVIOUS_VERSION ?= $(shell cat PREVIOUS_VERSION)
 
 LOCAL_OS := $(shell uname)
-LOCAL_ARCH := $(shell uname -m)
 ifeq ($(LOCAL_OS),Linux)
     TARGET_OS ?= linux
     XARGS_FLAGS="-r"
@@ -69,167 +47,74 @@ else
     $(error "This system's OS $(LOCAL_OS) isn't recognized/supported")
 endif
 
-all: check test build images
+ARCH := $(shell uname -m)
+LOCAL_ARCH := "amd64"
+ifeq ($(ARCH),x86_64)
+    LOCAL_ARCH="amd64"
+else ifeq ($(ARCH),ppc64le)
+    LOCAL_ARCH="ppc64le"
+else ifeq ($(ARCH),s390x)
+    LOCAL_ARCH="s390x"
+else
+    $(error "This system's ARCH $(ARCH) isn't recognized/supported")
+endif
 
+# Default image repo
+REGISTRY ?= hyc-cloud-private-integration-docker-local.artifactory.swg-devops.com/ibmcom
 
-include commonUtil/Makefile.common.mk
+# Current Operator image name
+OPERATOR_IMAGE_NAME ?= ibm-platform-api-operator
+# Current Operator bundle image name
+BUNDLE_IMAGE_NAME ?= ibm-platform-api-operator-bundle
 
+# Options for 'bundle-build'
+ifneq ($(origin CHANNELS), undefined)
+BUNDLE_CHANNELS := --channels=$(CHANNELS)
+endif
+ifneq ($(origin DEFAULT_CHANNEL), undefined)
+BUNDLE_DEFAULT_CHANNEL := --default-channel=$(DEFAULT_CHANNEL)
+endif
+BUNDLE_METADATA_OPTS ?= $(BUNDLE_CHANNELS) $(BUNDLE_DEFAULT_CHANNEL)
 
-############################################################
-# check section
-############################################################
-
-check: lint ## Check all files lint error
-
-# All available linters: lint-dockerfiles lint-scripts lint-yaml lint-copyright-banner lint-go lint-python lint-helm lint-markdown lint-sass lint-typescript lint-protos
-# Default value will run all linters, override these make target with your requirements:
-#    eg: lint: lint-go lint-yaml
-lint: lint-all
-
-############################################################
-# csv section
-############################################################
-
-push-csv: ## Push CSV package to the catalog
-	@RELEASE=${CSV_VERSION} commonUtil/scripts/push-csv.sh
-
-############################################################
-# test section
-############################################################
-
-test: test-e2e ## Run integration e2e tests with different options
-
-test-e2e: 
-	@echo ... Running the same e2e tests with different args ...
-	@echo ... Running locally ...
-	- operator-sdk test local ./test/e2e --verbose --up-local --namespace=${NAMESPACE}
-	# @echo ... Running with the param ...
-	# - operator-sdk test local ./test/e2e --namespace=${NAMESPACE}
-
-############################################################
-# build section
-############################################################
+# Produce CRDs that work back to Kubernetes 1.11 (no version conversion)
+CRD_OPTIONS ?= "crd:trivialVersions=true"
 
 ifeq ($(BUILD_LOCALLY),0)
     export CONFIG_DOCKER_TARGET = config-docker
-config-docker:
+else
+REGISTRY=hyc-cloud-private-scratch-docker-local.artifactory.swg-devops.com/ibmcom
 endif
 
-build: build-bundle-image build-image build-image-ppc64le build-image-s390x
-
-build-image: $(CONFIG_DOCKER_TARGET)
-	$(eval ARCH := $(shell uname -m|sed 's/x86_64/amd64/'))
-	docker build -t $(REGISTRY)/$(IMG)-$(ARCH):$(VERSION) \
-	--build-arg VCS_REF=$(VCS_REF) --build-arg VCS_URL=$(VCS_URL) \
-	-f Dockerfile .
-	@if [ $(BUILD_LOCALLY) -ne 1 ] && [ "$(ARCH)" = "amd64" ]; then docker push $(REGISTRY)/$(IMG)-$(ARCH):$(VERSION); fi
-
-# Build the bundle image.
-build-bundle-image:
-	$(eval ARCH := $(shell uname -m|sed 's/x86_64/amd64/'))
-	docker build -f bundle.Dockerfile -t $(REGISTRY)/$(BUNDLE_IMAGE_NAME)-$(ARCH):$(VERSION) .
-
-build-image-dev:
-	docker build -t quay.io/opencloudio/$(IMG):dev \
-	--build-arg VCS_REF=$(VCS_REF) --build-arg VCS_URL=$(VCS_URL) \
-	-f Dockerfile .
-	docker push quay.io/opencloudio/$(IMG):dev
-
-# runs on amd64 machine
-build-image-ppc64le: $(CONFIG_DOCKER_TARGET)
-ifeq ($(LOCAL_OS),Linux)
-ifeq ($(LOCAL_ARCH),x86_64)
-	# docker run --rm --privileged multiarch/qemu-user-static:register --reset
-	docker build -t $(REGISTRY)/$(IMG)-ppc64le:$(VERSION) \
-	--build-arg VCS_REF=$(VCS_REF) --build-arg VCS_URL=$(VCS_URL) \
-	-f Dockerfile.ppc64le .
-	@if [ $(BUILD_LOCALLY) -ne 1 ]; then docker push $(REGISTRY)/$(IMG)-ppc64le:$(VERSION); fi
-endif
-endif
-
-# runs on amd64 machine
-build-image-s390x: $(CONFIG_DOCKER_TARGET)
-ifeq ($(LOCAL_OS),Linux)
-ifeq ($(LOCAL_ARCH),x86_64)
-	# docker run --rm --privileged multiarch/qemu-user-static:register --reset
-	docker build -t $(REGISTRY)/$(IMG)-s390x:$(VERSION) \
-	--build-arg VCS_REF=$(VCS_REF) --build-arg VCS_URL=$(VCS_URL) \
-	-f Dockerfile.s390x .
-	@if [ $(BUILD_LOCALLY) -ne 1 ]; then docker push $(REGISTRY)/$(IMG)-s390x:$(VERSION); fi
-endif
-endif
+include common/Makefile.common.mk
 
 ############################################################
-# Image section
+##@ Develement tools
 ############################################################
 
-images: build-image build-image-ppc64le build-image-s390x
-ifeq ($(LOCAL_OS),Linux)
-ifeq ($(LOCAL_ARCH),x86_64)
-	@curl -L -o /tmp/manifest-tool https://github.com/estesp/manifest-tool/releases/download/v1.0.0/manifest-tool-linux-amd64
-	@chmod +x /tmp/manifest-tool
-	/tmp/manifest-tool push from-args --platforms linux/amd64,linux/ppc64le,linux/s390x --template $(REGISTRY)/$(IMG)-ARCH:$(VERSION) --target $(REGISTRY)/$(IMG) --ignore-missing
-	/tmp/manifest-tool push from-args --platforms linux/amd64,linux/ppc64le,linux/s390x --template $(REGISTRY)/$(IMG)-ARCH:$(VERSION) --target $(REGISTRY)/$(IMG):$(VERSION) --ignore-missing
-endif
-endif
-
-# Run against the configured Kubernetes cluster in ~/.kube/config
-run: helm-operator
-	$(HELM_OPERATOR) run
-
-# Install CRDs into a cluster
-install: kustomize
-	$(KUSTOMIZE) build config/crd | kubectl apply -f -
-
-# Uninstall CRDs from a cluster
-uninstall: kustomize
-	$(KUSTOMIZE) build config/crd | kubectl delete -f -
-
-# Deploy controller in the configured Kubernetes cluster in ~/.kube/config
-deploy: kustomize
-	kubectl apply -f config/dev-manager/service_account.yaml
-	cd config/dev-manager && $(KUSTOMIZE) edit set image controller=$(REGISTRY)/$(IMG):$(CSV_VERSION)
-	$(KUSTOMIZE) build config/dev-default | kubectl apply -f -
-
-# Undeploy controller in the configured Kubernetes cluster in ~/.kube/config
-undeploy: kustomize
-	$(KUSTOMIZE) build config/dev-default | kubectl delete -f -
-	kubectl delete -f config/dev-manager/service_account.yaml
-
-# Build the docker image
-docker-build:
-	docker build . -t ${IMG}
-
-# Push the docker image
-docker-push:
-	docker push ${IMG}
-
-# PATH  := $(PATH):$(PWD)/bin
-# SHELL := env PATH=$(PATH) /bin/sh
 OS    = $(shell uname -s | tr '[:upper:]' '[:lower:]')
 ARCH  = $(shell uname -m | sed 's/x86_64/amd64/')
 OSOPER   = $(shell uname -s | tr '[:upper:]' '[:lower:]' | sed 's/darwin/apple-darwin/' | sed 's/linux/linux-gnu/')
 ARCHOPER = $(shell uname -m )
 
-kustomize:
+kustomize: ## Install kustomize
 ifeq (, $(shell which kustomize 2>/dev/null))
 	@{ \
 	set -e ;\
 	mkdir -p bin ;\
-	curl -sSLo - https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize/v3.5.4/kustomize_v3.5.4_$(OS)_$(ARCH).tar.gz | tar xzf - -C bin/ ;\
+	curl -sSLo - https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize/$(KUSTOMIZE_VERSION)/kustomize_$(KUSTOMIZE_VERSION)_$(OS)_$(ARCH).tar.gz | tar xzf - -C bin/ ;\
 	}
 KUSTOMIZE=$(realpath ./bin/kustomize)
 else
 KUSTOMIZE=$(shell which kustomize)
 endif
 
-helm-operator:
+helm-operator: ## Install helm-operator
 ifeq (, $(shell which helm-operator 2>/dev/null))
 	@{ \
 	set -e ;\
 	mkdir -p bin ;\
-	curl -LO https://github.com/operator-framework/operator-sdk/releases/download/v1.0.1/helm-operator-v1.0.1-$(ARCHOPER)-$(OSOPER) ;\
-	mv helm-operator-v1.0.1-$(ARCHOPER)-$(OSOPER) ./bin/helm-operator ;\
+	curl -LO https://github.com/operator-framework/operator-sdk/releases/download/$(HELM_OPERATOR_VERSION)/helm-operator-$(HELM_OPERATOR_VERSION)-$(ARCHOPER)-$(OSOPER) ;\
+	mv helm-operator-$(HELM_OPERATOR_VERSION)-$(ARCHOPER)-$(OSOPER) ./bin/helm-operator ;\
 	chmod +x ./bin/helm-operator ;\
 	}
 HELM_OPERATOR=$(realpath ./bin/helm-operator)
@@ -237,10 +122,140 @@ else
 HELM_OPERATOR=$(shell which helm-operator)
 endif
 
-# Generate bundle manifests and metadata, then validate generated files.
-.PHONY: bundle
-bundle: kustomize
-	operator-sdk generate kustomize manifests -q
-	# cd config/manager && $(KUSTOMIZE) edit set image controller=$(IMG)
-	$(KUSTOMIZE) build config/manifests | operator-sdk generate bundle -q --overwrite --version $(CSV_VERSION) $(BUNDLE_METADATA_OPTS)
-	operator-sdk bundle validate ./bundle
+opm: ## Install operator registry opm
+ifeq (, $(shell which opm 2>/dev/null))
+	@{ \
+	set -e ;\
+	mkdir -p bin ;\
+	curl -LO https://github.com/operator-framework/operator-registry/releases/download/$(OPM_VERSION)/$(OS)-amd64-opm ;\
+	mv $(OS)-amd64-opm ./bin/opm ;\
+	chmod +x ./bin/opm ;\
+	}
+OPM=$(realpath ./bin/opm)
+else
+OPM=$(shell which opm)
+endif
+
+############################################################
+##@ Development
+############################################################
+
+check: lint-all ## Check all files lint error
+	./common/scripts/lint-csv.sh
+
+run: helm-operator ## Run against the configured Kubernetes cluster in ~/.kube/config
+	$(HELM_OPERATOR) run
+
+install: kustomize ## Install CRDs into a cluster
+	$(KUSTOMIZE) build config/crd | kubectl apply -f -
+
+uninstall: kustomize ## Uninstall CRDs from a cluster
+	$(KUSTOMIZE) build config/crd | kubectl delete -f -
+
+deploy: kustomize ## Deploy controller in the configured Kubernetes cluster in ~/.kube/config
+	$(KUSTOMIZE) build config/development | kubectl apply -f -
+	$(KUSTOMIZE) build config/samples | kubectl apply -f -
+
+undeploy: kustomize ## Undeploy controller in the configured Kubernetes cluster in ~/.kube/config
+	$(KUSTOMIZE) build config/samples | kubectl delete -f -
+	$(KUSTOMIZE) build config/development | kubectl delete -f -
+
+clean-cluster: ## Clean up all the resources left in the Kubernetes cluster
+	@echo ....... Cleaning up .......
+	- kubectl get platformapis -o name | xargs kubectl delete
+	- kubectl get csv -o name | grep platform-api | xargs kubectl delete
+	- kubectl get sub -o name | grep platform-api | xargs kubectl delete
+	- kubectl get installplans | grep platform-api | awk '{print $$1}' | xargs kubectl delete installplan
+	- kubectl get serviceaccounts -o name | grep platform-api | xargs kubectl delete
+	- kubectl get clusterrole -o name | grep platform-api | xargs kubectl delete
+	- kubectl get clusterrolebinding -o name | grep platform-api | xargs kubectl delete	
+	- kubectl get crd -o name | grep platformapi | xargs kubectl delete
+
+############################################################
+##@ Test
+############################################################
+
+test: ## Run unit test on prow
+	@echo good
+
+############################################################
+##@ Build
+############################################################
+
+build: build-image-amd64 build-image-ppc64le build-image-s390x ## Build multi-arch operator image
+
+build-dev: build-image-dev ## Build operator image for development
+
+build-catalog: build-bundle-image build-catalog-source ## Build bundle image and catalog source image for development
+
+# Build bundle image
+build-bundle-image: 
+	$(eval ARCH := $(shell uname -m|sed 's/x86_64/amd64/'))
+	$(CONTAINER_CLI) build -f bundle.Dockerfile -t $(REGISTRY)/$(BUNDLE_IMAGE_NAME)-$(ARCH):$(VERSION) .
+	$(CONTAINER_CLI) push $(REGISTRY)/$(BUNDLE_IMAGE_NAME)-$(ARCH):$(VERSION)
+
+# Build catalog source
+build-catalog-source:
+	$(OPM) index add --bundles $(REGISTRY)/$(BUNDLE_IMAGE_NAME)-$(ARCH):$(VERSION) --tag $(REGISTRY)/$(OPERATOR_IMAGE_NAME)-catalog:$(VERSION)
+	$(CONTAINER_CLI) push $(REGISTRY)/$(OPERATOR_IMAGE_NAME)-catalog:$(VERSION)
+
+# Build image for development
+build-image-dev:
+	$(eval ARCH := $(shell uname -m|sed 's/x86_64/amd64/'))
+	$(CONTAINER_CLI) build -t $(REGISTRY)/$(OPERATOR_IMAGE_NAME)-$(ARCH):dev \
+	--build-arg VCS_REF=$(VCS_REF) --build-arg VCS_URL=$(VCS_URL) \
+	-f Dockerfile .
+	$(CONTAINER_CLI) push $(REGISTRY)/$(OPERATOR_IMAGE_NAME)-$(ARCH):dev
+
+# Build image for amd64
+build-image-amd64: $(CONFIG_DOCKER_TARGET)
+	$(eval ARCH := $(shell uname -m|sed 's/x86_64/amd64/'))
+	$(CONTAINER_CLI) build -t $(REGISTRY)/$(OPERATOR_IMAGE_NAME)-$(ARCH):$(VERSION) \
+	--build-arg VCS_REF=$(VCS_REF) --build-arg VCS_URL=$(VCS_URL) \
+	-f Dockerfile .
+	@if [ $(BUILD_LOCALLY) -ne 1 ]; then $(CONTAINER_CLI) push $(REGISTRY)/$(OPERATOR_IMAGE_NAME)-amd64:$(VERSION); fi
+
+# Build image for ppc64le
+build-image-ppc64le: $(CONFIG_DOCKER_TARGET)
+	$(CONTAINER_CLI) build -t $(REGISTRY)/$(OPERATOR_IMAGE_NAME)-ppc64le:$(VERSION) \
+	--build-arg VCS_REF=$(VCS_REF) --build-arg VCS_URL=$(VCS_URL) \
+	-f Dockerfile.ppc64le .
+	@if [ $(BUILD_LOCALLY) -ne 1 ]; then $(CONTAINER_CLI) push $(REGISTRY)/$(OPERATOR_IMAGE_NAME)-ppc64le:$(VERSION); fi
+
+# Build image for s390x
+build-image-s390x: $(CONFIG_DOCKER_TARGET)
+	$(CONTAINER_CLI) build -t $(REGISTRY)/$(OPERATOR_IMAGE_NAME)-s390x:$(VERSION) \
+	--build-arg VCS_REF=$(VCS_REF) --build-arg VCS_URL=$(VCS_URL) \
+	-f Dockerfile.s390x .
+	@if [ $(BUILD_LOCALLY) -ne 1 ]; then $(CONTAINER_CLI) push $(REGISTRY)/$(OPERATOR_IMAGE_NAME)-s390x:$(VERSION); fi
+
+############################################################
+##@ Release
+############################################################
+
+bundle: kustomize ## Generate bundle manifests and metadata, then validate the generated files
+	$(OPERATOR_SDK) generate kustomize manifests -q
+	- make bundle-manifests CHANNELS=beta,stable-v1 DEFAULT_CHANNEL=stable-v1
+
+bundle-manifests:
+	$(KUSTOMIZE) build config/manifests | $(OPERATOR_SDK) generate bundle \
+	-q --overwrite --version $(VERSION) $(BUNDLE_METADATA_OPTS)
+	$(OPERATOR_SDK) bundle validate ./bundle
+	@./common/scripts/adjust_manifests.sh $(VERSION) $(PREVIOUS_VERSION)
+
+images: build-image-amd64 build-image-ppc64le build-image-s390x ## Build and publish the multi-arch operator image
+ifeq ($(LOCAL_OS),Linux)
+ifeq ($(LOCAL_ARCH),x86_64)
+	@curl -L -o /tmp/manifest-tool https://github.com/estesp/manifest-tool/releases/download/v1.0.0/manifest-tool-linux-amd64
+	@chmod +x /tmp/manifest-tool
+	/tmp/manifest-tool push from-args --platforms linux/amd64,linux/ppc64le,linux/s390x --template $(REGISTRY)/$(OPERATOR_IMAGE_NAME)-ARCH:$(VERSION) --target $(REGISTRY)/$(OPERATOR_IMAGE_NAME):latest --ignore-missing
+	/tmp/manifest-tool push from-args --platforms linux/amd64,linux/ppc64le,linux/s390x --template $(REGISTRY)/$(OPERATOR_IMAGE_NAME)-ARCH:$(VERSION) --target $(REGISTRY)/$(OPERATOR_IMAGE_NAME):$(VERSION) --ignore-missing
+endif
+endif
+
+##@ Help
+help: ## Display this help
+	@echo "Usage:\n  make \033[36m<target>\033[0m"
+	@awk 'BEGIN {FS = ":.*##"}; \
+		/^[a-zA-Z0-9_-]+:.*?##/ { printf "  \033[36m%-20s\033[0m %s\n", $$1, $$2 } \
+		/^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
