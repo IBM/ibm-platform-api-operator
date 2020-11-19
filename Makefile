@@ -191,12 +191,15 @@ build-catalog: build-bundle-image build-catalog-source ## Build bundle image and
 # Build bundle image
 build-bundle-image: 
 	$(eval ARCH := $(shell uname -m|sed 's/x86_64/amd64/'))
+	@cp -f bundle/manifests/ibm-platform-api-operator.clusterserviceversion.yaml /tmp/ibm-platform-api-operator.clusterserviceversion.yaml
+	@yq d -i bundle/manifests/ibm-platform-api-operator.clusterserviceversion.yaml "spec.replaces"
 	$(CONTAINER_CLI) build -f bundle.Dockerfile -t $(REGISTRY)/$(BUNDLE_IMAGE_NAME)-$(ARCH):$(VERSION) .
 	$(CONTAINER_CLI) push $(REGISTRY)/$(BUNDLE_IMAGE_NAME)-$(ARCH):$(VERSION)
+	@mv /tmp/ibm-platform-api-operator.clusterserviceversion.yaml bundle/manifests/ibm-platform-api-operator.clusterserviceversion.yaml
 
 # Build catalog source
 build-catalog-source:
-	$(OPM) index add --bundles $(REGISTRY)/$(BUNDLE_IMAGE_NAME)-$(ARCH):$(VERSION) --tag $(REGISTRY)/$(OPERATOR_IMAGE_NAME)-catalog:$(VERSION)
+	$(OPM) -u $(shell basename $(CONTAINER_CLI)) index add --bundles $(REGISTRY)/$(BUNDLE_IMAGE_NAME)-$(ARCH):$(VERSION) --tag $(REGISTRY)/$(OPERATOR_IMAGE_NAME)-catalog:$(VERSION)
 	$(CONTAINER_CLI) push $(REGISTRY)/$(OPERATOR_IMAGE_NAME)-catalog:$(VERSION)
 
 # Build image for development
@@ -244,13 +247,13 @@ bundle-manifests:
 	@./common/scripts/adjust_manifests.sh $(VERSION) $(PREVIOUS_VERSION)
 
 images: build-image-amd64 build-image-ppc64le build-image-s390x ## Build and publish the multi-arch operator image
-ifeq ($(LOCAL_OS),Linux)
-ifeq ($(LOCAL_ARCH),x86_64)
-	@curl -L -o /tmp/manifest-tool https://github.com/estesp/manifest-tool/releases/download/v1.0.0/manifest-tool-linux-amd64
+ifeq ($(TARGET_OS),$(filter $(TARGET_OS),linux darwin))
+	@curl -L -o /tmp/manifest-tool https://github.com/estesp/manifest-tool/releases/download/v1.0.0/manifest-tool-$(TARGET_OS)-amd64
 	@chmod +x /tmp/manifest-tool
+	@echo "Merging and push multi-arch image $(REGISTRY)/$(OPERATOR_IMAGE_NAME):latest"
 	/tmp/manifest-tool push from-args --platforms linux/amd64,linux/ppc64le,linux/s390x --template $(REGISTRY)/$(OPERATOR_IMAGE_NAME)-ARCH:$(VERSION) --target $(REGISTRY)/$(OPERATOR_IMAGE_NAME):latest --ignore-missing
+	@echo "Merging and push multi-arch image $(REGISTRY)/$(OPERATOR_IMAGE_NAME):$(VERSION)"
 	/tmp/manifest-tool push from-args --platforms linux/amd64,linux/ppc64le,linux/s390x --template $(REGISTRY)/$(OPERATOR_IMAGE_NAME)-ARCH:$(VERSION) --target $(REGISTRY)/$(OPERATOR_IMAGE_NAME):$(VERSION) --ignore-missing
-endif
 endif
 
 ##@ Help
