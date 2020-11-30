@@ -4,3 +4,4 @@ bases:
 - ../default/
 patchesStrategicMerge:
 - manager_patch.yaml
+- role_binding_patch.yaml

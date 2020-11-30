@@ -97,7 +97,9 @@ ARCHOPER = $(shell uname -m )
 tools: kustomize helm-operator opm yq ## Install all development tools
 
 kustomize: ## Install kustomize
-ifeq (, $(shell which kustomize 2>/dev/null))
+ifneq ("$(wildcard ./bin/kustomize)","")
+KUSTOMIZE=$(realpath ./bin/kustomize)
+else ifeq (, $(shell which kustomize 2>/dev/null))
 	@{ \
 	set -e ;\
 	mkdir -p bin ;\
@@ -110,7 +112,9 @@ KUSTOMIZE=$(shell which kustomize)
 endif
 
 helm-operator: ## Install helm-operator
-ifeq (, $(shell which helm-operator 2>/dev/null))
+ifneq ("$(wildcard ./bin/helm-operator)","")
+HELM_OPERATOR=$(realpath ./bin/helm-operator)
+else ifeq (, $(shell which helm-operator 2>/dev/null))
 	@{ \
 	set -e ;\
 	mkdir -p bin ;\
@@ -125,7 +129,9 @@ HELM_OPERATOR=$(shell which helm-operator)
 endif
 
 opm: ## Install operator registry opm
-ifeq (, $(shell which opm 2>/dev/null))
+ifneq ("$(wildcard ./bin/opm)","")
+OPM=$(realpath ./bin/opm)
+else ifeq (, $(shell which opm 2>/dev/null))
 	@{ \
 	set -e ;\
 	mkdir -p bin ;\
@@ -140,7 +146,9 @@ OPM=$(shell which opm)
 endif
 
 yq: ## Install yq, a yaml processor
-ifeq (, $(shell which yq 2>/dev/null))
+ifneq ("$(wildcard ./bin/yq)","")
+YQ=$(realpath ./bin/yq)
+else ifeq (, $(shell which yq 2>/dev/null))
 	@{ \
 	set -e ;\
 	mkdir -p bin ;\

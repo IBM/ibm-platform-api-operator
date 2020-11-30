@@ -214,5 +214,40 @@ rules:
   - clusterrolebindings
   verbs:
   - delete
+# Rules to support legacy target namespace dropdown in legacy catalog-ui
+- apiGroups:
+  - ''
+  resources:
+  - serviceaccounts 
+  verbs:
+  - impersonate
+- apiGroups:
+  - policy
+  resources:
+  - podsecuritypolicies
+  verbs:
+  - list
+- apiGroups:
+  - rbac.authorization.k8s.io
+  resources:
+  - clusterroles
+  - clusterrolebindings
+  resourceNames:
+  verbs:
+  - create
+  - list
+  - watch
+- apiGroups:
+  - rbac.authorization.k8s.io
+  resources:
+  - clusterroles
+  - clusterrolebindings
+  resourceNames:
+  - ibm-platform-api-operand
+  verbs:
+  - delete
+  - get
+  - patch
+  - update
 
 # +kubebuilder:scaffold:rules

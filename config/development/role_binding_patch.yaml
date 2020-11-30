@@ -1,0 +1,8 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: ibm-platform-api-operator
+subjects:
+- kind: ServiceAccount
+  name: ibm-platform-api-operator
+  namespace: ibm-common-services

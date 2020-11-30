@@ -203,6 +203,39 @@ spec:
                 - clusterrolebindings
               verbs:
                 - delete
+            - apiGroups:
+                - ""
+              resources:
+                - serviceaccounts
+              verbs:
+                - impersonate
+            - apiGroups:
+                - policy
+              resources:
+                - podsecuritypolicies
+              verbs:
+                - list
+            - apiGroups:
+                - rbac.authorization.k8s.io
+              resources:
+                - clusterroles
+                - clusterrolebindings
+              verbs:
+                - create
+                - list
+                - watch
+            - apiGroups:
+                - rbac.authorization.k8s.io
+              resourceNames:
+                - ibm-platform-api-operand
+              resources:
+                - clusterroles
+                - clusterrolebindings
+              verbs:
+                - delete
+                - get
+                - patch
+                - update
           serviceAccountName: ibm-platform-api-operator
       deployments:
         - name: ibm-platform-api-operator
