@@ -269,7 +269,7 @@ spec:
                       - name: OPERAND_AUDIT_SERVICE_IMAGE
                         value: quay.io/opencloudio/audit-syslog-service@sha256:4d68ee3e14b74e117b54e1c49686de847008d5e453b267168f6e52af9c9e9d4d
                       - name: OPERAND_PLATFORM_API_IMAGE
-                        value: quay.io/opencloudio/icp-platform-api@sha256:c9982a635b10882aae669009c3241df681335bdbd8115935ea83dbc7e875876b
+                        value: quay.io/opencloudio/icp-platform-api@sha256:e9e9ccedeca8c8aee2f39b92cb1c4aa65573a1cbce3fe8088538144edf050208
                     image: quay.io/opencloudio/ibm-platform-api-operator:latest
                     imagePullPolicy: Always
                     name: ibm-platform-api-operator
