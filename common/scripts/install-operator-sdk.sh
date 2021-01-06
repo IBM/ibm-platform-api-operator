@@ -18,7 +18,7 @@
 echo ">>> Installing Operator SDK"
 
 # Use version 0.10.0
-RELEASE_VERSION=v1.2.0
+RELEASE_VERSION=v1.3.0
 # Download binary
 curl -LO https://github.com/operator-framework/operator-sdk/releases/download/${RELEASE_VERSION}/operator-sdk-${RELEASE_VERSION}-x86_64-linux-gnu
 # Install binary
