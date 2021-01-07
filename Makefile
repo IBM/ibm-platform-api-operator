@@ -60,9 +60,6 @@ else
     $(error "This system's ARCH $(ARCH) isn't recognized/supported")
 endif
 
-# Default image repo
-REGISTRY ?= hyc-cloud-private-integration-docker-local.artifactory.swg-devops.com/ibmcom
-
 # Current Operator image name
 OPERATOR_IMAGE_NAME ?= ibm-platform-api-operator
 # Current Operator bundle image name
@@ -79,8 +76,10 @@ BUNDLE_METADATA_OPTS ?= $(BUNDLE_CHANNELS) $(BUNDLE_DEFAULT_CHANNEL)
 
 ifeq ($(BUILD_LOCALLY),0)
     export CONFIG_DOCKER_TARGET = config-docker
+	# Default image repo
+	REGISTRY ?= hyc-cloud-private-integration-docker-local.artifactory.swg-devops.com/ibmcom
 else
-REGISTRY=hyc-cloud-private-scratch-docker-local.artifactory.swg-devops.com/ibmcom
+	REGISTRY ?= hyc-cloud-private-scratch-docker-local.artifactory.swg-devops.com/ibmcom
 endif
 
 include common/Makefile.common.mk
