@@ -69,6 +69,21 @@ spec:
                   - {{ .Values.platformApi.name }}
               topologyKey: "kubernetes.io/hostname"
             weight: 100
+      topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: topology.kubernetes.io/zone
+        whenUnsatisfiable: ScheduleAnyway
+        labelSelector:
+          matchLabels:
+            key: app
+            values: {{ .Values.platformApi.name }}
+      - maxSkew: 1
+        topologyKey: topology.kubernetes.io/region
+        whenUnsatisfiable: ScheduleAnyway
+        labelSelector:
+          matchLabels:
+            key: app
+            values: {{ .Values.platformApi.name }}
       terminationGracePeriodSeconds: 60
       hostNetwork: {{ .Values.platformApi.hostNetwork }}
       initContainers:
