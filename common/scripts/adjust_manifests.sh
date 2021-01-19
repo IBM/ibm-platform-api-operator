@@ -53,7 +53,8 @@ if [[ -f "${CSV_PATH}" ]]; then
     yq w ${CSV_PATH} "metadata.annotations[olm.skipRange]" ">=3.5.0 <${OPERATOR_VERSION}" 1<>${CSV_PATH}
 
     # replaces
-    yq w ${CSV_PATH} "spec.replaces" "${OPERATOR_NAME}.v${PREVIOUS_VERSION}" 1<>${CSV_PATH}
+    # yq w ${CSV_PATH} "spec.replaces" "${OPERATOR_NAME}.v${PREVIOUS_VERSION}" 1<>${CSV_PATH}
+    yq d -i ${CSV_PATH} "spec.replaces" # temporary adjustment for moving to v3 channel
 fi
 
 # adjust Chart.yaml
