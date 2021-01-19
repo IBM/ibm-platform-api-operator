@@ -143,11 +143,11 @@ ifeq (, $(shell which yq 2>/dev/null))
 	@{ \
 	set -e ;\
 	mkdir -p bin ;\
-	$(eval ARCH := $(shell uname -m|sed 's/x86_64/amd64/'));\
+	$(eval ARCH := $(shell uname -m|sed 's/x86_64/amd64/')) \
 	echo "Downloading yq ...";\
 	curl -LO https://github.com/mikefarah/yq/releases/download/$(YQ_VERSION)/yq_$(OS)_$(ARCH);\
-	mv $(YQ_VERSION)/yq_$(OS)_$(ARCH) ./bin/yq ;\
-	chmod +x ./bin/opm ;\
+	mv yq_$(OS)_$(ARCH) ./bin/yq ;\
+	chmod +x ./bin/yq ;\
 	}
 YQ=$(realpath ./bin/yq)
 else
