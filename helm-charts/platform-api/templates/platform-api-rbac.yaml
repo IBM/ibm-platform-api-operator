@@ -159,4 +159,4 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: ibm-platform-api-operand
-  namespace: ibm-common-services
+  namespace: {{ .Release.Namespace }}
