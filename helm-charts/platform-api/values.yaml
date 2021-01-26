@@ -24,7 +24,7 @@ auditService:
 platformApi:
   config:
     acctName: mycluster Account
-    clusterCASecret: cs-ca-certificate-secret
+    clusterCASecret: platform-api-secret
     clusterCAdomain: mycluster.icp
     clusterExternalAddress: 127.0.0.1
     clusterInternalAddress: 127.0.0.1
