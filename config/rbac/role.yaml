@@ -186,6 +186,29 @@ rules:
   - patch
   - update
   - watch
+
+##
+## Rules for creating certificate
+##
+- apiGroups:
+  - certmanager.k8s.io
+  resources:
+  - issuers
+  verbs:
+  - use
+- apiGroups:
+  - certmanager.k8s.io
+  resources:
+  - certificates
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
