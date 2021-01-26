@@ -458,6 +458,24 @@ spec:
                 - update
                 - watch
             - apiGroups:
+                - certmanager.k8s.io
+              resources:
+                - issuers
+              verbs:
+                - use
+            - apiGroups:
+                - certmanager.k8s.io
+              resources:
+                - certificates
+              verbs:
+                - create
+                - delete
+                - get
+                - list
+                - patch
+                - update
+                - watch
+            - apiGroups:
                 - ""
               resources:
                 - configmaps
