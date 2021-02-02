@@ -4,6 +4,6 @@
   kind: PlatformAPI
   chart: helm-charts/platform-api
   overrideValues:
-    auditService.image.repository: ${OPERAND_AUDIT_SERVICE_IMAGE}
-    platformApi.image.repository: ${OPERAND_PLATFORM_API_IMAGE}
+    auditService.image.repository: ${AUDIT_SYSLOG_SERVICE_IMAGE}
+    platformApi.image.repository: ${ICP_PLATFORM_API_IMAGE}
 # +kubebuilder:scaffold:watch

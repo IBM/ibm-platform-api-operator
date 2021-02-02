@@ -30,10 +30,10 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-        - name: OPERAND_AUDIT_SERVICE_IMAGE
-          value: "quay.io/opencloudio/audit-syslog-service@sha256:4d68ee3e14b74e117b54e1c49686de847008d5e453b267168f6e52af9c9e9d4d"
-        - name: OPERAND_PLATFORM_API_IMAGE
-          value: "quay.io/opencloudio/icp-platform-api@sha256:a6dc50307355c8299844f7ba62f6b255a47d1fe29052d76e1ebc01b95086893f"
+        - name: AUDIT_SYSLOG_SERVICE_IMAGE
+          value: "quay.io/opencloudio/audit-syslog-service:1.0.4"
+        - name: ICP_PLATFORM_API_IMAGE
+          value: "quay.io/opencloudio/icp-platform-api:3.7.0"
         image: "quay.io/opencloudio/ibm-platform-api-operator:latest"
         imagePullPolicy: Always
         name: ibm-platform-api-operator
