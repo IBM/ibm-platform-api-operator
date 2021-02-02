@@ -266,10 +266,10 @@ spec:
                         valueFrom:
                           fieldRef:
                             fieldPath: metadata.annotations['olm.targetNamespaces']
-                      - name: OPERAND_AUDIT_SERVICE_IMAGE
-                        value: quay.io/opencloudio/audit-syslog-service@sha256:4d68ee3e14b74e117b54e1c49686de847008d5e453b267168f6e52af9c9e9d4d
-                      - name: OPERAND_PLATFORM_API_IMAGE
-                        value: quay.io/opencloudio/icp-platform-api@sha256:ea4e96b8f623f31071a222e02585e89aae52108da8e69b29e3d1183462b94eb6
+                      - name: AUDIT_SYSLOG_SERVICE_IMAGE
+                        value: quay.io/opencloudio/audit-syslog-service:1.0.4
+                      - name: ICP_PLATFORM_API_IMAGE
+                        value: quay.io/opencloudio/icp-platform-api:3.6.1
                     image: quay.io/opencloudio/ibm-platform-api-operator:latest
                     imagePullPolicy: Always
                     name: ibm-platform-api-operator

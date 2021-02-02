@@ -7,9 +7,9 @@ spec:
     spec:
       containers:
       - env:
-        - name: OPERAND_AUDIT_SERVICE_IMAGE
+        - name: AUDIT_SYSLOG_SERVICE_IMAGE
           value: "hyc-cloud-private-integration-docker-local.artifactory.swg-devops.com/ibmcom/audit-syslog-service:1.0.4"
-        - name: OPERAND_PLATFORM_API_IMAGE
+        - name: ICP_PLATFORM_API_IMAGE
           value: "hyc-cloud-private-integration-docker-local.artifactory.swg-devops.com/ibmcom/icp-platform-api:3.6.1"
         name: ibm-platform-api-operator
         image: "hyc-cloud-private-scratch-docker-local.artifactory.swg-devops.com/ibmcom/ibm-platform-api-operator-amd64:dev"
