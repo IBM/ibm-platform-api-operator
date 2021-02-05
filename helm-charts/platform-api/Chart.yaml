@@ -12,7 +12,7 @@ keywords:
   - ICP
   - Development
   - Commercial
-kubeVersion: '>=1.11.0-0'
+kubeVersion: '>=1.16.0-0'
 maintainers:
   - email: icpapi@us.ibm.com
     name: IBM Cloud Private
