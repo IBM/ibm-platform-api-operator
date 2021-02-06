@@ -68,8 +68,18 @@ rules:
     - patch
     - update
     - watch
+# keeping the following ingress permission so that old resource can be deleted during upgrade
 - apiGroups:
     - extensions
+  resources:
+    - ingresses
+  verbs:
+    - delete
+    - get
+    - list
+    - watch
+- apiGroups:
+    - networking.k8s.io
   resources:
     - ingresses
   verbs:
