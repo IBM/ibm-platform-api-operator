@@ -351,6 +351,15 @@ spec:
               resources:
                 - ingresses
               verbs:
+                - delete
+                - get
+                - list
+                - watch
+            - apiGroups:
+                - networking.k8s.io
+              resources:
+                - ingresses
+              verbs:
                 - create
                 - delete
                 - get
