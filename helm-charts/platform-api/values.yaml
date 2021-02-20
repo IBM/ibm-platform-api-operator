@@ -12,7 +12,7 @@ auditService:
       }
     logrotateConf: include /etc/logrotate.d
   image:
-    repository: quay.io/opencloudio/audit-syslog-service:1.0.4
+    repository: quay.io/opencloudio/audit-syslog-service:1.0.5
     pullPolicy: IfNotPresent
   resources:
     limits:
