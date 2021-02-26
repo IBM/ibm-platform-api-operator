@@ -49,9 +49,81 @@ To install the operator with the IBM Common Services Operator follow the the ins
 
 ## SecurityContextConstraints Requirements
 
-The Platform API service requires running with the OpenShift Container Platform 4.3 default privileged Security Context Constraints (SCCs).
+The Platform API service requires running with the OpenShift Container Platform 4.x default restricted Security Context Constraints (SCCs).
 
-For more information about the OpenShift Container Platform Security Context Constraints, see [Managing Security Context Constraints](https://docs.openshift.com/container-platform/4.3/authentication/managing-security-context-constraints.html).
+To use a custom SCC
+
+1. Create and customize the following `platform-api-scc` SCC
+
+```
+apiVersion: security.openshift.io/v1
+kind: SecurityContextConstraints
+metadata:
+  annotations:
+    kubernetes.io/description: "This policy is the most restrictive for platform-api, 
+      requiring pods to run with a non-root UID, and preventing pods from accessing the host.
+      The UID and GID will be bound by ranges specified at the Namespace level." 
+    cloudpak.ibm.com/version: "1.1.0"
+  name: platform-api-scc
+allowHostDirVolumePlugin: false
+allowHostIPC: false
+allowHostNetwork: false
+allowHostPID: false
+allowHostPorts: false
+allowPrivilegeEscalation: true
+allowPrivilegedContainer: false
+allowedCapabilities: null
+defaultAddCapabilities: null
+fsGroup:
+  type: MustRunAs
+groups:
+- system:authenticated
+priority: null
+readOnlyRootFilesystem: false
+requiredDropCapabilities:
+- KILL
+- MKNOD
+- SETUID
+- SETGID
+runAsUser:
+  type: MustRunAsRange
+seLinuxContext:
+  type: MustRunAs
+supplementalGroups:
+  type: RunAsAny
+users: []
+volumes:
+- configMap
+- downwardAPI
+- emptyDir
+- persistentVolumeClaim
+- projected
+- secret
+```
+
+2. Add the `platform-api-scc` SCC to `ibm-platform-api-operand` service account
+   
+```
+# oc adm policy add-scc-to-user platform-api-scc -z ibm-platform-api-operand
+```
+
+3. Restart the platform-api pods
+
+```
+# oc delete po -l app=platform-api
+```
+
+4. Verify the SCC is applied
+
+```
+# oc describe po -l app=platform-api | grep scc
+```
+
+For more information about the OpenShift Container Platform Security Context Constraints, see [Managing Security Context Constraints](https://docs.openshift.com/container-platform/4.6/authentication/managing-security-context-constraints.html).
+
+## Backup and recovery
+
+This operator does not persist any data. There is no backup and recovery procedure needed.
 
 ## Developer guide
 
