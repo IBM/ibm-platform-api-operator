@@ -267,7 +267,7 @@ spec:
                           fieldRef:
                             fieldPath: metadata.annotations['olm.targetNamespaces']
                       - name: AUDIT_SYSLOG_SERVICE_IMAGE
-                        value: quay.io/opencloudio/audit-syslog-service:1.0.5
+                        value: quay.io/opencloudio/audit-syslog-service:1.0.6
                       - name: ICP_PLATFORM_API_IMAGE
                         value: quay.io/opencloudio/icp-platform-api:3.7.1
                     image: quay.io/opencloudio/ibm-platform-api-operator:latest
