@@ -21,7 +21,7 @@ OPERATOR_SDK ?= $(shell which operator-sdk)
 OPM ?= $(shell which opm)
 KUSTOMIZE ?= $(shell which kustomize)
 KUSTOMIZE_VERSION=v3.8.7
-HELM_OPERATOR_VERSION=v1.3.0
+HELM_OPERATOR_VERSION=v1.3.2
 OPM_VERSION=v1.15.2
 YQ_VERSION=3.4.1
 
