@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 # Build the manager binary
-FROM quay.io/operator-framework/helm-operator-s390x:v1.3.0
+FROM quay.io/operator-framework/helm-operator@sha256:8d42cf12f958ad04082354b640ee4d4626c40a5789dda8b614e3df9c42d44421
 
 ARG VCS_REF
 ARG VCS_URL
