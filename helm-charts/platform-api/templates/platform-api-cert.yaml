@@ -23,20 +23,3 @@ spec:
   organization:
   - IBM
   secretName: "{{ .Values.platformApi.config.clusterCASecret }}"
-
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: "{{ .Values.platformApi.config.clusterCASecret }}"
-  annotations:
-    helm.sh/resource-policy: "delete"
-  labels:
-    app: "platform-api"
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
-    app.kubernetes.io/instance: "{{ .Release.Name }}"
-    app.kubernetes.io/managed-by: "{{ .Release.Service }}"
-    app.kubernetes.io/name: "platform-api"
-    helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
