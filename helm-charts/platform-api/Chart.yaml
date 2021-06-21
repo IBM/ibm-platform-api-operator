@@ -26,4 +26,4 @@ maintainers:
   - email: support@ibm.com
     name: IBM
 name: platform-api
-version: 3.10.0
+version: 3.11.0
