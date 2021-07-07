@@ -201,7 +201,7 @@ undeploy-catalog: ## Undeploy the operator bundle catalogsource
 	- kubectl -n openshift-marketplace delete catalogsource $(OPERATOR_IMAGE_NAME)
 
 run-bundle:
-	$(OPERATOR_SDK) run bundle $(REGISTRY)/$(BUNDLE_IMAGE_NAME)-$(ARCH):$(VERSION)
+	$(OPERATOR_SDK) run bundle $(REGISTRY)/$(BUNDLE_IMAGE_NAME)-$(ARCH):$(VERSION) --pull-secret-name pull-secret-copy
 	$(KUBECTL) apply -f config/samples/operator_v1alpha1_platformapi.yaml
 
 upgrade-bundle:
