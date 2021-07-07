@@ -110,7 +110,7 @@ spec:
             version: v1
           - kind: Ingress
             name: Ingress
-            version: extensions/v1beta1
+            version: networking.k8s.io/v1
           - kind: Pod
             name: Pod
             version: v1
@@ -525,6 +525,7 @@ spec:
     - email: support@ibm.com
       name: IBM Support
   maturity: stable
+  minKubeVersion: 1.19.0
   provider:
     name: IBM
   replaces: ibm-platform-api-operator.v3.10.0

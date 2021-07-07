@@ -1,4 +1,4 @@
-apiVersion: apiextensions.k8s.io/v1beta1
+apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   name: platformapis.operator.ibm.com
@@ -10,118 +10,125 @@ metadata:
 spec:
   group: operator.ibm.com
   names:
-    kind: PlatformAPI
-    listKind: PlatformAPIList
     plural: platformapis
     singular: platformapi
+    kind: PlatformAPI
+    listKind: PlatformAPIList
   scope: Namespaced
-  subresources:
-    status: {}
-  validation:
-    openAPIV3Schema:
-      description: PlatformAPI is the Schema for the platformapis API. Using original CRD format
-      properties:
-        apiVersion:
-          description: 'APIVersion defines the versioned schema of this representation
-            of an object. Servers should convert recognized schemas to the latest
-            internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
-          type: string
-        kind:
-          description: 'Kind is a string value representing the REST resource this
-            object represents. Servers may infer this from the endpoint the client
-            submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
-          type: string
-        spec:
-          properties:
-            auditService:
-              type: object
-              properties:
-                config:
-                  type: object
-                  properties:
-                    enabled:
-                      type: boolean
-                resources:
-                  type: object
-                  properties:
-                    limits:
-                      type: object
-                      properties:
-                        cpu:
-                          type: string
-                        memory: 
-                          type: string
-                    requests:
-                      type: object
-                      properties:
-                        cpu:
-                          type: string
-                        memory:
-                          type: string
-            platformApi:
-              type: object
-              properties:
-                resources:
-                  type: object
-                  properties:
-                    limits:
-                      type: object
-                      properties:
-                        cpu:
-                          type: string
-                        memory: 
-                          type: string
-                    requests:
-                      type: object
-                      properties:
-                        cpu:
-                          type: string
-                        memory:
-                          type: string
-            replicaCount:
-              type: integer
-            replicas:
-              type: integer
-          type: object
-        status:
-          properties:
-            conditions:
-              items:
-                properties:
-                  lastTransitionTime:
-                    type: string
-                  lastUpdateTime:
-                    type: string
-                  message:
-                    type: string
-                  reason:
-                    type: string
-                  status:
-                    type: string
-                  type:
-                    type: string
-                required: 
-                - status
-                - type
-                type: object
-              type: array
-            deployedRelease:
-              properties:
-                manifest:
-                  type: string
-                name:
-                  type: string
-              type: object
-          type: object
-      required:
-      - metadata
-      - spec
-      type: object
-  version: v1alpha1
   versions:
-  - name: v1alpha1
-    served: true
-    storage: true
+    - name: v1alpha1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          description: >-
+            PlatformAPI is the Schema for the platformapis API. Using original
+            CRD format
+          type: object
+          required:
+            - metadata
+            - spec
+          properties:
+            apiVersion:
+              description: >-
+                APIVersion defines the versioned schema of this representation
+                of an object. Servers should convert recognized schemas to the
+                latest internal value, and may reject unrecognized values. More
+                info:
+                https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+              type: string
+            kind:
+              description: >-
+                Kind is a string value representing the REST resource this
+                object represents. Servers may infer this from the endpoint the
+                client submits requests to. Cannot be updated. In CamelCase.
+                More info:
+                https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+              type: string
+            spec:
+              type: object
+              properties:
+                auditService:
+                  type: object
+                  properties:
+                    config:
+                      type: object
+                      properties:
+                        enabled:
+                          type: boolean
+                    resources:
+                      type: object
+                      properties:
+                        limits:
+                          type: object
+                          properties:
+                            cpu:
+                              type: string
+                            memory:
+                              type: string
+                        requests:
+                          type: object
+                          properties:
+                            cpu:
+                              type: string
+                            memory:
+                              type: string
+                platformApi:
+                  type: object
+                  properties:
+                    resources:
+                      type: object
+                      properties:
+                        limits:
+                          type: object
+                          properties:
+                            cpu:
+                              type: string
+                            memory:
+                              type: string
+                        requests:
+                          type: object
+                          properties:
+                            cpu:
+                              type: string
+                            memory:
+                              type: string
+                replicaCount:
+                  type: integer
+                replicas:
+                  type: integer
+            status:
+              type: object
+              properties:
+                conditions:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - status
+                      - type
+                    properties:
+                      lastTransitionTime:
+                        type: string
+                      lastUpdateTime:
+                        type: string
+                      message:
+                        type: string
+                      reason:
+                        type: string
+                      status:
+                        type: string
+                      type:
+                        type: string
+                deployedRelease:
+                  type: object
+                  properties:
+                    manifest:
+                      type: string
+                    name:
+                      type: string
+      subresources:
+        status: {}
 status:
   acceptedNames:
     kind: ""
