@@ -39,11 +39,11 @@ spec:
         name: ibm-platform-api-operator
         resources:
           limits:
-            cpu: 50m
-            memory: 256Mi
+            cpu: 100m
+            memory: 800Mi
           requests:
-            cpu: 20m
-            memory: 256Mi
+            cpu: 25m
+            memory: 300Mi
         securityContext:
           allowPrivilegeEscalation: false
           capabilities:
