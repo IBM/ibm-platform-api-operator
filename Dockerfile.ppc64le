@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 # Build the manager binary
-FROM quay.io/operator-framework/helm-operator@sha256:e621e7443d4c3a10c90747e833aa53fdd072eec511ac7270cc4dd2ad692462ea
+FROM quay.io/operator-framework/helm-operator@sha256:a02ad6cda1b19e83928b432c86de48e5793c3d052663c0a9ee13cb481ada4965
 
 ARG VCS_REF
 ARG VCS_URL
