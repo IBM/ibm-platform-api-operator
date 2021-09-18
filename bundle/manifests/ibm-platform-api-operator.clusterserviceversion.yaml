@@ -97,7 +97,7 @@ spec:
   apiservicedefinitions: {}
   customresourcedefinitions:
     owned:
-      - description: Platform API is a REST API service for managing cluster and providing access to command line tools, such as cloudctl and kubectl.
+      - description: 'Platform API is a REST API service for managing cluster and providing access to command line tools, such as cloudctl and kubectl. Documentation For additional details regarding install parameters check: https://ibm.biz/icpfs39install. License By installing this product you accept the license terms https://ibm.biz/icpfs39license.'
         displayName: PlatformAPI
         kind: PlatformAPI
         name: platformapis.operator.ibm.com
@@ -528,5 +528,5 @@ spec:
   minKubeVersion: 1.19.0
   provider:
     name: IBM
-  replaces: ibm-platform-api-operator.v3.13.0
+  replaces: ibm-platform-api-operator.v3.12.0
   version: 3.14.0
