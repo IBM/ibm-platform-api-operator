@@ -81,7 +81,7 @@ metadata:
     containerImage: quay.io/opencloudio/ibm-platform-api-operator:latest
     createdAt: "2020-05-16"
     description: The PlatformAPI operator provides a simple Kubernetes CRD-Based API to manage the lifecycle of PlatformAPI. With this operator, you can simply deploy and upgrade platform-api.
-    olm.skipRange: '>=3.5.0 <3.14.0'
+    olm.skipRange: '>=3.5.0 <3.15.0'
     operators.operatorframework.io/builder: operator-sdk-v1.8.0+git
     operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1
     repository: https://github.com/IBM/ibm-platform-api-operator
@@ -91,7 +91,7 @@ metadata:
     operatorframework.io/arch.ppc64le: supported
     operatorframework.io/arch.s390x: supported
     operatorframework.io/os.linux: supported
-  name: ibm-platform-api-operator.v3.14.0
+  name: ibm-platform-api-operator.v3.15.0
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
@@ -528,5 +528,5 @@ spec:
   minKubeVersion: 1.19.0
   provider:
     name: IBM
-  replaces: ibm-platform-api-operator.v3.12.0
-  version: 3.14.0
+  replaces: ibm-platform-api-operator.v3.14.0
+  version: 3.15.0
