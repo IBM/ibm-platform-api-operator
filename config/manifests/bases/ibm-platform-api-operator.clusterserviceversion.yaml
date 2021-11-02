@@ -8,7 +8,9 @@ metadata:
     certified: "false"
     containerImage: quay.io/opencloudio/ibm-platform-api-operator:latest
     createdAt: "2020-05-16"
-    description: The PlatformAPI operator provides a simple Kubernetes CRD-Based API to manage the lifecycle of PlatformAPI. With this operator, you can simply deploy and upgrade platform-api.
+    description: The PlatformAPI operator provides a simple Kubernetes CRD-Based API
+      to manage the lifecycle of PlatformAPI. With this operator, you can simply deploy
+      and upgrade platform-api.
     olm.skipRange: ""
     operators.operatorframework.io/builder: operator-sdk-v1.3.2
     operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1
@@ -25,7 +27,8 @@ spec:
   apiservicedefinitions: {}
   customresourcedefinitions:
     owned:
-    - description: Platform API is a REST API service for managing cluster and providing access to command line tools, such as cloudctl and kubectl.
+    - description: Platform API is a REST API service for managing cluster and providing
+        access to command line tools, such as cloudctl and kubectl.
       displayName: PlatformAPI
       kind: PlatformAPI
       name: platformapis.operator.ibm.com
@@ -58,7 +61,8 @@ spec:
         name: ServiceAccount
         version: v1
       specDescriptors:
-      - description: Configuration for the Audit Service sidecar in platform api chart configuration
+      - description: Configuration for the Audit Service sidecar in platform api chart
+          configuration
         displayName: Audit Service Parameters
         path: auditService
       - description: Platform API Chart configuration
