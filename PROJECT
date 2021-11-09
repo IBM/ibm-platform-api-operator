@@ -2,7 +2,8 @@ domain: ibm.com
 layout: helm.sdk.operatorframework.io/v1
 projectName: ibm-platform-api-operator
 resources:
-- group: operator
+- domain: ibm.com
+  group: operator
   kind: PlatformAPI
   version: v1alpha1
-version: 3-alpha
+version: "3"
