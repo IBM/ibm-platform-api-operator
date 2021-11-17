@@ -32,8 +32,12 @@ LABEL org.label-schema.vendor="IBM" \
     summary="IBM Platform API Operator" \
     release=$VCS_REF
 
-ENV HOME=/opt/helm
+ENV HOME=/opt/helm \
+    USER_UID=1001
 COPY watches.yaml ${HOME}/watches.yaml
 COPY helm-charts ${HOME}/helm-charts
 COPY LICENSE /licenses/
+
+USER ${USER_UID}
+
 WORKDIR ${HOME}
