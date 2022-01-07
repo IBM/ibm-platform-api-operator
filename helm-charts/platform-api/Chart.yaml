@@ -20,6 +20,8 @@ keywords:
   - Development
   - Commercial
   - Middleware
+  - RHOCP
+  - ROKS
 home: https://github.com/IBM/ibm-platform-api-operator
 kubeVersion: '>=1.16.0-0'
 maintainers:
