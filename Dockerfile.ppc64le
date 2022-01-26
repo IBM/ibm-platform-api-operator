@@ -1,5 +1,5 @@
 #
-# Copyright 2020 IBM Corporation
+# Copyright 2022 IBM Corporation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 # Build the manager binary
-FROM quay.io/operator-framework/helm-operator@sha256:7b24c144d1b94686e55994796ea9d8e84cc4fc86a571f7363473fea718ef1f29
+FROM quay.io/operator-framework/helm-operator@sha256:9f7d81b2d6e6c840303594b7cbac98641c0bc0d8a27bee2dea5f43b5229e4ecf
 
 ARG VCS_REF
 ARG VCS_URL
