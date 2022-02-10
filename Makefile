@@ -221,8 +221,6 @@ test: ## Run unit test on prow
 ##@ Build
 ############################################################
 
-build: build-image-amd64 build-image-ppc64le build-image-s390x ## Build multi-arch operator image
-
 build-dev: build-image-dev ## Build operator image for development
 
 build-catalog: build-bundle-image build-catalog-source ## Build bundle image and catalog source image for development
@@ -249,27 +247,18 @@ build-image-dev:
 	-f Dockerfile .
 	$(CONTAINER_CLI) push $(REGISTRY)/$(OPERATOR_IMAGE_NAME)-$(ARCH):dev
 
-# Build image for amd64
-build-image-amd64: $(CONFIG_DOCKER_TARGET)
-	$(eval ARCH := $(shell uname -m|sed 's/x86_64/amd64/'))
-	$(CONTAINER_CLI) build -t $(REGISTRY)/$(OPERATOR_IMAGE_NAME)-$(ARCH):$(VERSION) \
+# Build image
+build-operator-image: $(CONFIG_DOCKER_TARGET) ## Build the operator image.
+	@echo "Building the $(OPERATOR_IMAGE_NAME) docker image for $(LOCAL_ARCH)..."
+	$(CONTAINER_CLI) build -t $(REGISTRY)/$(OPERATOR_IMAGE_NAME)-$(LOCAL_ARCH):$(VERSION) \
 	--build-arg VCS_REF=$(VCS_REF) --build-arg VCS_URL=$(VCS_URL) \
 	-f Dockerfile .
-	@if [ $(BUILD_LOCALLY) -ne 1 ]; then $(CONTAINER_CLI) push $(REGISTRY)/$(OPERATOR_IMAGE_NAME)-amd64:$(VERSION); fi
 
-# Build image for ppc64le
-build-image-ppc64le: $(CONFIG_DOCKER_TARGET)
-	$(CONTAINER_CLI) build -t $(REGISTRY)/$(OPERATOR_IMAGE_NAME)-ppc64le:$(VERSION) \
-	--build-arg VCS_REF=$(VCS_REF) --build-arg VCS_URL=$(VCS_URL) \
-	-f Dockerfile.ppc64le .
-	@if [ $(BUILD_LOCALLY) -ne 1 ]; then $(CONTAINER_CLI) push $(REGISTRY)/$(OPERATOR_IMAGE_NAME)-ppc64le:$(VERSION); fi
-
-# Build image for s390x
-build-image-s390x: $(CONFIG_DOCKER_TARGET)
-	$(CONTAINER_CLI) build -t $(REGISTRY)/$(OPERATOR_IMAGE_NAME)-s390x:$(VERSION) \
-	--build-arg VCS_REF=$(VCS_REF) --build-arg VCS_URL=$(VCS_URL) \
-	-f Dockerfile.s390x .
-	@if [ $(BUILD_LOCALLY) -ne 1 ]; then $(CONTAINER_CLI) push $(REGISTRY)/$(OPERATOR_IMAGE_NAME)-s390x:$(VERSION); fi
+# Build and Push image
+build-push-image: $(CONFIG_DOCKER_TARGET) build-operator-image  ## Build and push the operator images.
+	@echo "Pushing the $(OPERATOR_IMAGE_NAME) docker image for $(LOCAL_ARCH)..."
+	@docker tag $(OPERATOR_IMAGE_NAME)-$(LOCAL_ARCH):$(VERSION) $(REGISTRY)/$(OPERATOR_IMAGE_NAME)-$(LOCAL_ARCH):$(VERSION)
+	@docker push $(REGISTRY)/$(OPERATOR_IMAGE_NAME)-$(LOCAL_ARCH):$(VERSION)
 
 ############################################################
 ##@ Release
@@ -285,15 +274,8 @@ bundle-manifests:
 	$(OPERATOR_SDK) bundle validate ./bundle
 	@./common/scripts/adjust_manifests.sh $(VERSION) $(PREVIOUS_VERSION)
 
-images: build-image-amd64 build-image-ppc64le build-image-s390x ## Build and publish the multi-arch operator image
-ifeq ($(TARGET_OS),$(filter $(TARGET_OS),linux darwin))
-	@curl -L -o /tmp/manifest-tool https://github.com/estesp/manifest-tool/releases/download/v1.0.3/manifest-tool-$(TARGET_OS)-amd64
-	@chmod +x /tmp/manifest-tool
-	@echo "Merging and push multi-arch image $(REGISTRY)/$(OPERATOR_IMAGE_NAME):latest"
-	/tmp/manifest-tool push from-args --platforms linux/amd64,linux/ppc64le,linux/s390x --template $(REGISTRY)/$(OPERATOR_IMAGE_NAME)-ARCH:$(VERSION) --target $(REGISTRY)/$(OPERATOR_IMAGE_NAME):latest
-	@echo "Merging and push multi-arch image $(REGISTRY)/$(OPERATOR_IMAGE_NAME):$(VERSION)"
-	/tmp/manifest-tool push from-args --platforms linux/amd64,linux/ppc64le,linux/s390x --template $(REGISTRY)/$(OPERATOR_IMAGE_NAME)-ARCH:$(VERSION) --target $(REGISTRY)/$(OPERATOR_IMAGE_NAME):$(VERSION)
-endif
+multiarch-image: $(CONFIG_DOCKER_TARGET)
+	@MAX_PULLING_RETRY=20 RETRY_INTERVAL=30 common/scripts/multiarch_image.sh $(REGISTRY) $(OPERATOR_IMAGE_NAME) $(VERSION) $(PREVIOUS_VERSION)
 
 ############################################################
 ##@ Help
