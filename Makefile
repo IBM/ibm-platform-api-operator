@@ -254,8 +254,6 @@ build-operator-image: $(CONFIG_DOCKER_TARGET) ## Build the operator image.
 	--build-arg VCS_REF=$(VCS_REF) --build-arg VCS_URL=$(VCS_URL) \
 	-f Dockerfile .
 
-### TODO delete power & z Dockerfile
-
 # Build and Push image
 build-push-image: $(CONFIG_DOCKER_TARGET) build-operator-image  ## Build and push the operator images.
 	@echo "Pushing the $(OPERATOR_IMAGE_NAME) docker image for $(LOCAL_ARCH)..."
