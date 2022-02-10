@@ -24,7 +24,6 @@ ALL_PLATFORMS="amd64 ppc64le s390x"
 IMAGE_REPO=${1}
 IMAGE_NAME=${2}
 VERSION=${3}
-RELEASE_VERSION=${4}
 MAX_PULLING_RETRY=${MAX_PULLING_RETRY-10}
 RETRY_INTERVAL=${RETRY_INTERVAL-10}
 # support other container tools, e.g. podman
@@ -37,7 +36,7 @@ do
     for i in $(seq 1 "${MAX_PULLING_RETRY}")
     do
         echo "Checking image '${IMAGE_REPO}'/'${IMAGE_NAME}'-'${arch}':'${VERSION}'..."
-        ${CONTAINER_CLI} manifest inspect "${IMAGE_REPO}"/"${IMAGE_NAME}"-"${arch}":"${VERSION}" && breakXin Li, 1 year ago: • Fix build multi arch image issue (#495)
+        ${CONTAINER_CLI} manifest inspect "${IMAGE_REPO}"/"${IMAGE_NAME}"-"${arch}":"${VERSION}" && break
         sleep "${RETRY_INTERVAL}"
         if [ "${i}" -eq "${MAX_PULLING_RETRY}" ]; then
             echo "Failed to found image '${IMAGE_REPO}'/'${IMAGE_NAME}'-'${arch}':'${VERSION}'!!!"
@@ -47,8 +46,8 @@ do
 done
 
 # create multi-arch manifest
-echo "Creating the multi-arch image manifest for ${IMAGE_REPO}/${IMAGE_NAME}:${RELEASE_VERSION}..."
-${CONTAINER_CLI} manifest create "${IMAGE_REPO}"/"${IMAGE_NAME}":"${RELEASE_VERSION}" \
+echo "Creating the multi-arch image manifest for ${IMAGE_REPO}/${IMAGE_NAME}:${VERSION}..."
+${CONTAINER_CLI} manifest create "${IMAGE_REPO}"/"${IMAGE_NAME}":"${VERSION}" \
     "${IMAGE_REPO}"/"${IMAGE_NAME}"-amd64:"${VERSION}" \
     "${IMAGE_REPO}"/"${IMAGE_NAME}"-ppc64le:"${VERSION}" \
     "${IMAGE_REPO}"/"${IMAGE_NAME}"-s390x:"${VERSION}"
@@ -59,7 +58,7 @@ ${CONTAINER_CLI} manifest create "${IMAGE_REPO}"/"${IMAGE_NAME}":latest \
     "${IMAGE_REPO}"/"${IMAGE_NAME}"-s390x:"${VERSION}"
 
 # push multi-arch manifest
-echo "Pushing the multi-arch image manifest for ${IMAGE_REPO}/${IMAGE_NAME}:${RELEASE_VERSION}..."
-${CONTAINER_CLI} manifest push "${IMAGE_REPO}"/"${IMAGE_NAME}":"${RELEASE_VERSION}"
+echo "Pushing the multi-arch image manifest for ${IMAGE_REPO}/${IMAGE_NAME}:${VERSION}..."
+${CONTAINER_CLI} manifest push "${IMAGE_REPO}"/"${IMAGE_NAME}":"${VERSION}"
 echo "Pushing the multi-arch image manifest for ${IMAGE_REPO}/${IMAGE_NAME}:latest..."
 ${CONTAINER_CLI} manifest push "${IMAGE_REPO}"/"${IMAGE_NAME}":latest
