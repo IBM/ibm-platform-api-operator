@@ -53,3 +53,7 @@ platformApi:
 replicaCount: 1
 # replicas: 1
 runAsUser: 65534
+
+kubectl:
+  image:
+    repository: quay.io/opencloudio/kubectl:v1.15.9.7

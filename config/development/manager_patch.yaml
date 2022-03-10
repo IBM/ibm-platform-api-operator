@@ -11,5 +11,7 @@ spec:
           value: "hyc-cloud-private-integration-docker-local.artifactory.swg-devops.com/ibmcom/audit-syslog-service:1.0.7"
         - name: ICP_PLATFORM_API_IMAGE
           value: "hyc-cloud-private-integration-docker-local.artifactory.swg-devops.com/ibmcom/icp-platform-api:3.8.0"
+        - name: KUBECTL_IMAGE
+          value: "hyc-cloud-private-integration-docker-local.artifactory.swg-devops.com/ibmcom/kubectl:v1.15.9.7"
         name: ibm-platform-api-operator
         image: "hyc-cloud-private-scratch-docker-local.artifactory.swg-devops.com/ibmcom/ibm-platform-api-operator-amd64:dev"

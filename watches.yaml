@@ -6,4 +6,5 @@
   overrideValues:
     auditService.image.repository: ${AUDIT_SYSLOG_SERVICE_IMAGE}
     platformApi.image.repository: ${ICP_PLATFORM_API_IMAGE}
+    kubectl.image.repository: ${KUBECTL_IMAGE}
 # +kubebuilder:scaffold:watch
