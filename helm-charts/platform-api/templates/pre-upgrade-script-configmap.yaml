@@ -31,7 +31,6 @@ data:
 
     kubectl get secrets -n ${NAMESPACE} | grep ibm-platform-api-operand-token | grep -v "${SECRET_NAME}" | cut -d ' ' -f1 | while read secret ; do
         kubectl delete secret $secret -n ${NAMESPACE}
-        sleep 1
     done
 
     if [ $? -ne 0 ]; then
