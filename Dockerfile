@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 # Build the manager binary
-FROM quay.io/operator-framework/helm-operator:v1.18.0
+FROM hyc-cloud-private-edge-docker-local.artifactory.swg-devops.com/build-images/helm-operator:latest
 
 ARG VCS_REF
 ARG VCS_URL
