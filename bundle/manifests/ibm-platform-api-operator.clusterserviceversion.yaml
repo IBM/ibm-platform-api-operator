@@ -270,6 +270,8 @@ spec:
                         value: quay.io/opencloudio/audit-syslog-service:1.0.7
                       - name: ICP_PLATFORM_API_IMAGE
                         value: quay.io/opencloudio/icp-platform-api:3.8.0
+                      - name: KUBECTL_IMAGE
+                        value: quay.io/opencloudio/kubectl:v1.15.9.7
                     image: quay.io/opencloudio/ibm-platform-api-operator:latest
                     imagePullPolicy: Always
                     name: ibm-platform-api-operator
@@ -503,6 +505,18 @@ spec:
               verbs:
                 - create
                 - patch
+            - apiGroups:
+                - batch
+              resources:
+                - jobs
+              verbs:
+                - create
+                - delete
+                - get
+                - list
+                - patch
+                - update
+                - watch
           serviceAccountName: ibm-platform-api-operator
     strategy: deployment
   installModes:

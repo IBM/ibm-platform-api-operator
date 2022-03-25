@@ -1,0 +1,100 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    app: {{ .Values.platformApi.name }}-upgrade-job
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/name:  {{ .Values.platformApi.name }}-upgrade-job
+    helm.sh/chart: {{ .Release.Name }}
+  name: {{ .Values.platformApi.name }}-upgrade-job
+  annotations:
+    "helm.sh/hook": pre-upgrade
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+spec:
+  backoffLimit: 5
+  activeDeadlineSeconds: 300
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.platformApi.name }}-upgrade-job
+        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+        heritage: {{ .Release.Service }}
+        k8s-app: {{ .Values.platformApi.name }}-upgrade-job
+        component: {{ .Values.platformApi.name }}-upgrade-job
+        release: {{ .Release.Name }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/managed-by: {{ .Release.Service }}
+        app.kubernetes.io/name:  {{ .Values.platformApi.name }}-upgrade-job
+        helm.sh/chart: {{ .Release.Name }}
+      annotations:
+        productName: IBM Cloud Platform Common Services
+        productID: "068a62892a1e4db39641342e592daa25"
+        productMetric: FREE
+        clusterhealth.ibm.com/dependencies: "auth-idp, auth-pap, auth-pdp, cert-manager, icp-management-ingress"
+    spec:
+      serviceAccount: ibm-platform-api-operand
+      serviceAccountName: ibm-platform-api-operand
+      hostPID: false
+      hostIPC: false
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/arch
+                operator: In
+                values:
+                - amd64
+                - ppc64le
+                - s390x
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - {{ .Values.platformApi.name }}-upgrade-job
+              topologyKey: "kubernetes.io/hostname"
+            weight: 100
+      topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: topology.kubernetes.io/zone
+        whenUnsatisfiable: ScheduleAnyway
+        labelSelector:
+          matchLabels:
+            key: app
+            values: {{ .Values.platformApi.name }}-upgrade-job
+      - maxSkew: 1
+        topologyKey: topology.kubernetes.io/region
+        whenUnsatisfiable: ScheduleAnyway
+        labelSelector:
+          matchLabels:
+            key: app
+            values: {{ .Values.platformApi.name }}-upgrade-job
+      terminationGracePeriodSeconds: 60
+      containers:
+      - name: remove-token-secrets
+        image: {{ .Values.kubectl.image.repository }}
+        imagePullPolicy: {{ .Values.imagePullPolicy }}
+        env:
+          - name: NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+        command:
+        - bash
+        - /opt/platform-api/bin/clean-up.sh
+        volumeMounts:
+        - name: script
+          mountPath: /opt/platform-api/bin/
+      volumes:
+      - name: script
+        configMap:
+          name: platform-api-pre-upgrade-script
+      restartPolicy: OnFailure

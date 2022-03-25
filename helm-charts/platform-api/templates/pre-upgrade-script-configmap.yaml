@@ -1,0 +1,41 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: platform-api-pre-upgrade-script
+  labels:
+    app: {{ .Values.platformApi.name }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    heritage: {{ .Release.Service }}
+    k8s-app: {{ .Values.platformApi.name }}
+    component: {{ .Values.platformApi.name }}
+    release: {{ .Release.Name }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/name:  {{ .Values.platformApi.name }}
+    helm.sh/chart: {{ .Release.Name }}
+  annotations:
+    "helm.sh/hook": pre-upgrade
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+data:
+  clean-up.sh: |
+    #/bin/bash
+
+    echo "Get secrets from platform-api service account..."
+    SECRET_NAME=`kubectl get sa ibm-platform-api-operand -n ${NAMESPACE} -o yaml | grep "\- name: ibm-platform-api-operand-token" | awk '{print $3}'`
+    
+    if [ $? -ne 0 ]; then
+        echo "Failed to get secret ibm-platform-api-operand-token."
+        exit 1
+    fi
+
+    kubectl get secrets -n ${NAMESPACE} | grep ibm-platform-api-operand-token | grep -v "${SECRET_NAME}" | cut -d ' ' -f1 | while read secret ; do
+        kubectl delete secret $secret -n ${NAMESPACE}
+    done
+
+    if [ $? -ne 0 ]; then
+        echo "Failed to get secret ibm-platform-api-operand-token."
+        exit 1
+    fi
+
+    echo "Finish secret clean up."
