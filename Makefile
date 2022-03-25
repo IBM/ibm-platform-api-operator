@@ -240,7 +240,7 @@ build-catalog-source:
 	$(CONTAINER_CLI) push $(REGISTRY)/$(OPERATOR_IMAGE_NAME)-catalog:$(VERSION)
 
 # Build image for development
-build-image-dev:
+build-image-dev: $(CONFIG_DOCKER_TARGET)
 	$(eval ARCH := $(shell uname -m|sed 's/x86_64/amd64/'))
 	$(CONTAINER_CLI) build -t $(REGISTRY)/$(OPERATOR_IMAGE_NAME)-$(ARCH):dev \
 	--build-arg VCS_REF=$(VCS_REF) --build-arg VCS_URL=$(VCS_URL) \
