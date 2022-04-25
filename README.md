@@ -16,7 +16,7 @@ Red Hat OpenShift Container Platform 4.3 or newer installed on one of the follow
   
 ## Operator versions
 
-- 3.18.0
+- 3.20.0
 
 ## Prerequisites
 
@@ -153,7 +153,7 @@ Use the following commands to debug the operator:
 #### Check the Cluster Service Version (CSV) installation status
 ```
 # oc get csv
-# oc describe csv ibm-platform-api-operator.v3.9.0
+# oc describe csv ibm-platform-api-operator.v3.20.0
 ```
 
 #### Check the custom resource status
