@@ -12,7 +12,7 @@ auditService:
       }
     logrotateConf: include /etc/logrotate.d
   image:
-    repository: quay.io/opencloudio/audit-syslog-service:1.0.7
+    repository: icr.io/cpopen/cpfs/audit-syslog-service:1.0.7
     pullPolicy: IfNotPresent
   resources:
     limits:
@@ -34,7 +34,7 @@ platformApi:
     kubeApiserverSecurePort: 6443
   hostNetwork: false
   image:
-    repository: quay.io/opencloudio/icp-platform-api:3.8.0
+    repository: icr.io/cpopen/cpfs/icp-platform-api:3.8.0
     pullPolicy: IfNotPresent
   name: platform-api
   resources:
@@ -56,4 +56,4 @@ runAsUser: 65534
 
 kubectl:
   image:
-    repository: quay.io/opencloudio/kubectl:v1.15.9.7
+    repository: icr.io/cpopen/cpfs/kubectl:v1.15.9.7

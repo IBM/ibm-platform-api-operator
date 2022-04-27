@@ -174,7 +174,7 @@ Parameter                                        | Description                  
 `replicas`                                       | number of deployment replicas                             | 1
 `platformApi.hostNetwork`                        | host network                                              | false               
 `platformApi.name`                               | platformApi container name                                | platform-api        
-`platformApi.image.repository`                   | platformApi image path                                    | quay.io/opencloudio/icp-platform-api   
+`platformApi.image.repository`                   | platformApi image path                                    | icr.io/cpopen/cpfs/icp-platform-api   
 `platformApi.image.tag`                          | platformApi image tag                                     | latest              
 `platformApi.image.pullPolicy`                   | platformApi pullpolicy                                    | IfNotPresent        
 `platformApi.resources.limits.cpu`               | platformApi cpu limits                                    | 500m
@@ -190,7 +190,7 @@ Parameter                                        | Description                  
 `platformApi.config.clusterName`                 | Cluster name                                              | mycluster 
 `platformApi.config.clusterCAdomain`             | Cluster CA domain                                         | mycluster.icp
 `platformApi.config.acctName`                    | account name                                              | mycluster account 
-`auditService.image.repository`                  | audit service image path                                  | quay.io/opencloudio/audit-syslog-service   
+`auditService.image.repository`                  | audit service image path                                  | icr.io/cpopen/cpfs/audit-syslog-service   
 `auditService.image.tag`                         | audit service image tag                                   | latest             
 `auditService.image.pullPolicy`                  | auditService pullpolicy                                   | IfNotPresent    
 `auditService.resources.limits.cpu`              | auditService cpu limits                                   | 100m
