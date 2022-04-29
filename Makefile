@@ -32,9 +32,10 @@ BUILD_LOCALLY ?= 1
 
 VCS_URL = $(shell git config --get remote.origin.url)
 VCS_REF ?= $(shell git rev-parse HEAD)
-VERSION ?= $(shell cat RELEASE_VERSION)
+RELEASE_VERSION ?= $(shell cat RELEASE_VERSION)
 PREVIOUS_VERSION ?= $(shell cat PREVIOUS_VERSION)
-
+VERSION ?= $(shell git describe --exact-match 2> /dev/null || \
+                git describe --match=$(git rev-parse --short=8 HEAD) --always --dirty --abbrev=8)
 LOCAL_OS := $(shell uname)
 ifeq ($(LOCAL_OS),Linux)
     TARGET_OS ?= linux
@@ -195,13 +196,13 @@ global-pull-secrets: ## Update global pull secrets to use artifactory registries
 	./common/scripts/update_global_pull_secrets.sh
 
 deploy-catalog: build-catalog ## Deploy the operator bundle catalogsource for testing
-	./common/scripts/update_catalogsource.sh $(OPERATOR_IMAGE_NAME) $(REGISTRY)/$(OPERATOR_IMAGE_NAME)-catalog:$(VERSION)
+	./common/scripts/update_catalogsource.sh $(OPERATOR_IMAGE_NAME) $(REGISTRY)/$(OPERATOR_IMAGE_NAME)-catalog:$(RELEASE_VERSION)
 
 undeploy-catalog: ## Undeploy the operator bundle catalogsource
 	- kubectl -n openshift-marketplace delete catalogsource $(OPERATOR_IMAGE_NAME)
 
 run-bundle:
-	$(OPERATOR_SDK) run bundle $(REGISTRY)/$(BUNDLE_IMAGE_NAME)-$(ARCH):$(VERSION) --pull-secret-name pull-secret-copy
+	$(OPERATOR_SDK) run bundle $(REGISTRY)/$(BUNDLE_IMAGE_NAME)-$(ARCH):$(RELEASE_VERSION) --pull-secret-name pull-secret-copy
 	$(KUBECTL) apply -f config/samples/operator_v1alpha1_platformapi.yaml
 
 upgrade-bundle:
@@ -230,14 +231,14 @@ build-bundle-image:
 	$(eval ARCH := $(shell uname -m|sed 's/x86_64/amd64/'))
 	@cp -f bundle/manifests/ibm-platform-api-operator.clusterserviceversion.yaml /tmp/ibm-platform-api-operator.clusterserviceversion.yaml
 	@$(YQ) d -i bundle/manifests/ibm-platform-api-operator.clusterserviceversion.yaml "spec.replaces"
-	$(CONTAINER_CLI) build -f bundle.Dockerfile -t $(REGISTRY)/$(BUNDLE_IMAGE_NAME)-$(ARCH):$(VERSION) .
-	$(CONTAINER_CLI) push $(REGISTRY)/$(BUNDLE_IMAGE_NAME)-$(ARCH):$(VERSION)
+	$(CONTAINER_CLI) build -f bundle.Dockerfile -t $(REGISTRY)/$(BUNDLE_IMAGE_NAME)-$(ARCH):$(RELEASE_VERSION) .
+	$(CONTAINER_CLI) push $(REGISTRY)/$(BUNDLE_IMAGE_NAME)-$(ARCH):$(RELEASE_VERSION)
 	@mv /tmp/ibm-platform-api-operator.clusterserviceversion.yaml bundle/manifests/ibm-platform-api-operator.clusterserviceversion.yaml
 
 # Build catalog source
 build-catalog-source:
-	$(OPM) -u $(CONTAINER_CLI) index add --bundles $(REGISTRY)/$(BUNDLE_IMAGE_NAME)-$(ARCH):$(VERSION) --tag $(REGISTRY)/$(OPERATOR_IMAGE_NAME)-catalog:$(VERSION)
-	$(CONTAINER_CLI) push $(REGISTRY)/$(OPERATOR_IMAGE_NAME)-catalog:$(VERSION)
+	$(OPM) -u $(CONTAINER_CLI) index add --bundles $(REGISTRY)/$(BUNDLE_IMAGE_NAME)-$(ARCH):$(RELEASE_VERSION) --tag $(REGISTRY)/$(OPERATOR_IMAGE_NAME)-catalog:$(RELEASE_VERSION)
+	$(CONTAINER_CLI) push $(REGISTRY)/$(OPERATOR_IMAGE_NAME)-catalog:$(RELEASE_VERSION)
 
 # Build image for development
 build-image-dev: $(CONFIG_DOCKER_TARGET)
@@ -270,12 +271,12 @@ bundle: kustomize ## Generate bundle manifests and metadata, then validate the g
 
 bundle-manifests:
 	$(KUSTOMIZE) build config/manifests | $(OPERATOR_SDK) generate bundle \
-	-q --overwrite --version $(VERSION) $(BUNDLE_METADATA_OPTS)
+	-q --overwrite --version $(RELEASE_VERSION) $(BUNDLE_METADATA_OPTS)
 	$(OPERATOR_SDK) bundle validate ./bundle
-	@./common/scripts/adjust_manifests.sh $(VERSION) $(PREVIOUS_VERSION)
+	@./common/scripts/adjust_manifests.sh $(RELEASE_VERSION) $(PREVIOUS_VERSION)
 
 multiarch-image: $(CONFIG_DOCKER_TARGET)
-	@MAX_PULLING_RETRY=20 RETRY_INTERVAL=30 common/scripts/multiarch_image.sh $(REGISTRY) $(OPERATOR_IMAGE_NAME) $(VERSION) $(PREVIOUS_VERSION)
+	@MAX_PULLING_RETRY=20 RETRY_INTERVAL=30 common/scripts/multiarch_image.sh $(REGISTRY) $(OPERATOR_IMAGE_NAME) $(VERSION) $(RELEASE_VERSION)
 
 ############################################################
 ##@ Help
