@@ -542,4 +542,13 @@ spec:
   minKubeVersion: 1.19.0
   provider:
     name: IBM
+  relatedImages:
+    - image: icr.io/cpopen/cpfs/audit-syslog-service:1.0.7
+      name: AUDIT_SYSLOG_SERVICE_IMAGE
+    - image: icr.io/cpopen/cpfs/icp-platform-api:3.8.0
+      name: ICP_PLATFORM_API_IMAGE
+    - image: icr.io/cpopen/cpfs/kubectl:v1.15.9.7
+      name: KUBECTL_IMAGE
+    - image: icr.io/cpopen/ibm-platform-api-operator:3.20.0
+      name: IBM_PLATFORM_API_OPERATOR_IMAGE
   version: 3.20.0
