@@ -551,5 +551,4 @@ spec:
       name: KUBECTL_IMAGE
     - image: icr.io/cpopen/ibm-platform-api-operator:3.22.0
       name: IBM_PLATFORM_API_OPERATOR_IMAGE
-  replaces: ibm-platform-api-operator.v3.21.0
   version: 3.22.0
