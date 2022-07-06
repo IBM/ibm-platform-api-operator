@@ -13,10 +13,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#
 
-OPERATOR_VERSION=$1
-PREVIOUS_VERSION=$2
+YQ=$1
+JQ=$2
+OPERATOR_VERSION=$3
+PREVIOUS_VERSION=$4
 OPERATOR_NAME=ibm-platform-api-operator
 BUNDLE_DOCKERFILE_PATH=bundle.Dockerfile
 BUNDLE_ANNOTATIONS_PATH=bundle/metadata/annotations.yaml
@@ -46,14 +47,14 @@ if [[ -f "${CSV_PATH}" ]]; then
     echo "[INFO] Adjusting ${CSV_PATH}"
 
     # alm-examples
-    NEW_AL_EXAMPLES_JSON=$(yq r ${CSV_PATH} metadata.annotations.alm-examples | jq ".[.|length] |= . + $(cat ${OPERANDREQUEST_PATH})")
-    yq w ${CSV_PATH} "metadata.annotations.alm-examples" "${NEW_AL_EXAMPLES_JSON}" 1<>${CSV_PATH}
+    NEW_AL_EXAMPLES_JSON=$(${YQ} r ${CSV_PATH} metadata.annotations.alm-examples | ${JQ} ".[.|length] |= . + $(cat ${OPERANDREQUEST_PATH})")
+    ${YQ} w ${CSV_PATH} "metadata.annotations.alm-examples" "${NEW_AL_EXAMPLES_JSON}" 1<>${CSV_PATH}
 
     # olm.skipRange
-    yq w ${CSV_PATH} "metadata.annotations[olm.skipRange]" ">=3.5.0 <${OPERATOR_VERSION}" 1<>${CSV_PATH}
+    ${YQ} w ${CSV_PATH} "metadata.annotations[olm.skipRange]" ">=3.5.0 <${OPERATOR_VERSION}" 1<>${CSV_PATH}
 
     # replaces
-    yq w ${CSV_PATH} "spec.replaces" "${OPERATOR_NAME}.v${PREVIOUS_VERSION}" 1<>${CSV_PATH}
+    ${YQ} w ${CSV_PATH} "spec.replaces" "${OPERATOR_NAME}.v${PREVIOUS_VERSION}" 1<>${CSV_PATH}
     # yq d -i ${CSV_PATH} "spec.replaces" # temporary adjustment for moving to v3 channel
 fi
 
@@ -62,5 +63,5 @@ if [[ -f "${CHART_PATH}" ]]; then
     echo "[INFO] Adjusting ${CHART_PATH}"
 
     # version
-    yq w ${CHART_PATH} version "${OPERATOR_VERSION}" 1<>${CHART_PATH}
+    ${YQ} w ${CHART_PATH} version "${OPERATOR_VERSION}" 1<>${CHART_PATH}
 fi
