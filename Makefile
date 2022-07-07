@@ -24,6 +24,8 @@ KUSTOMIZE_VERSION=v3.8.7
 HELM_OPERATOR_VERSION=v1.3.0
 OPM_VERSION=v1.15.2
 YQ_VERSION=3.4.1
+JQ_VERSION=1.6
+OPERATOR_SDK_VERSION=v1.20.0
 
 # Specify whether this repo is build locally or not, default values is '1';
 # If set to 1, then you need to also set 'DOCKER_USERNAME' and 'DOCKER_PASSWORD'
@@ -109,6 +111,22 @@ else
 KUSTOMIZE=$(shell which kustomize)
 endif
 
+operator-sdk: ## Install operator-sdk
+ifneq ($(shell operator-sdk version | cut -d ',' -f1 | cut -d ':' -f2 | tr -d '"' | xargs | cut -d '.' -f1), v1)
+	@{ \
+	if [ "$(shell ./bin/operator-sdk version | cut -d ',' -f1 | cut -d ':' -f2 | tr -d '"' | xargs)" != $(OPERATOR_SDK_VERSION) ]; then \
+		set -e ; \
+		mkdir -p bin ;\
+		echo "Downloading operator-sdk..." ;\
+		curl -sSLo ./bin/operator-sdk "https://github.com/operator-framework/operator-sdk/releases/download/$(OPERATOR_SDK_VERSION)/operator-sdk_$(LOCAL_OS)_$(LOCAL_ARCH)" ;\
+		chmod +x ./bin/operator-sdk ;\
+	fi ;\
+	}
+OPERATOR_SDK=$(realpath ./bin/operator-sdk)
+else
+OPERATOR_SDK=$(shell which operator-sdk)
+endif
+
 helm-operator: ## Install helm-operator
 ifeq (, $(shell which helm-operator 2>/dev/null))
 	@{ \
@@ -153,6 +171,22 @@ ifeq (, $(shell which yq 2>/dev/null))
 YQ=$(realpath ./bin/yq)
 else
 YQ=$(shell which yq)
+endif
+
+jq: ## Install jq, a yaml processor
+ifeq (, $(shell which jq 2>/dev/null))
+	@{ \
+	set -e ;\
+	mkdir -p bin ;\
+	$(eval ARCH := $(shell uname -m|sed 's/x86_64/64/')) \
+	echo "Downloading jq ...";\
+	curl -LO https://github.com/stedolan/jq/releases/download/jq-$(JQ_VERSION)/jq-$(OS)$(ARCH);\
+	mv jq-$(OS)$(ARCH) ./bin/jq ;\
+	chmod +x ./bin/jq ;\
+	}
+JQ=$(realpath ./bin/jq)
+else
+JQ=$(shell which jq)
 endif
 
 ############################################################
@@ -265,7 +299,7 @@ build-push-image: $(CONFIG_DOCKER_TARGET) build-operator-image  ## Build and pus
 ##@ Release
 ############################################################
 
-bundle: kustomize ## Generate bundle manifests and metadata, then validate the generated files
+bundle: kustomize operator-sdk yq jq ## Generate bundle manifests and metadata, then validate the generated files
 	$(OPERATOR_SDK) generate kustomize manifests -q
 	- make bundle-manifests CHANNELS=beta,stable-v1 DEFAULT_CHANNEL=stable-v1
 
@@ -273,7 +307,7 @@ bundle-manifests:
 	$(KUSTOMIZE) build config/manifests | $(OPERATOR_SDK) generate bundle \
 	-q --overwrite --version $(RELEASE_VERSION) $(BUNDLE_METADATA_OPTS)
 	$(OPERATOR_SDK) bundle validate ./bundle
-	@./common/scripts/adjust_manifests.sh $(RELEASE_VERSION) $(PREVIOUS_VERSION)
+	@./common/scripts/adjust_manifests.sh $(YQ) $(JQ) $(RELEASE_VERSION) $(PREVIOUS_VERSION) 
 
 multiarch-image: $(CONFIG_DOCKER_TARGET)
 	@MAX_PULLING_RETRY=20 RETRY_INTERVAL=30 common/scripts/multiarch_image.sh $(REGISTRY) $(OPERATOR_IMAGE_NAME) $(VERSION) $(RELEASE_VERSION)
