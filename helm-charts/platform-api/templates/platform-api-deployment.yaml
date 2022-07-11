@@ -121,19 +121,19 @@ spec:
             command:
             - cat
             - /opt/ibm/icp-audit/VERSION
-          failureThreshold: 3
+          failureThreshold: 10
           initialDelaySeconds: 5
-          periodSeconds: 10
-          timeoutSeconds: 5
+          periodSeconds: 30
+          timeoutSeconds: 10
         livenessProbe:
           exec:
             command:
             - cat
             - /opt/ibm/icp-audit/VERSION
-          failureThreshold: 3
+          failureThreshold: 10
           initialDelaySeconds: 15
-          periodSeconds: 20
-          timeoutSeconds: 5
+          periodSeconds: 30
+          timeoutSeconds: 10
         securityContext:
           allowPrivilegeEscalation: false
           capabilities:
@@ -174,19 +174,19 @@ spec:
             path: "/v1/config"
             scheme: HTTP
             port: 6969
-          failureThreshold: 3
+          failureThreshold: 10
           initialDelaySeconds: 5
-          periodSeconds: 10
-          timeoutSeconds: 5
+          periodSeconds: 30
+          timeoutSeconds: 10
         livenessProbe:
           httpGet:
             path: "/v1/config"
             scheme: HTTP
             port: 6969
-          failureThreshold: 3
+          failureThreshold: 10
           initialDelaySeconds: 15
-          periodSeconds: 20
-          timeoutSeconds: 5
+          periodSeconds: 30
+          timeoutSeconds: 10
         env:
           - name: WLP_CLIENT_ID
             valueFrom:
