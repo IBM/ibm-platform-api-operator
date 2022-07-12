@@ -124,7 +124,7 @@ spec:
           failureThreshold: 10
           initialDelaySeconds: 5
           periodSeconds: 30
-          timeoutSeconds: 10
+          timeoutSeconds: 30
         livenessProbe:
           exec:
             command:
@@ -133,7 +133,7 @@ spec:
           failureThreshold: 10
           initialDelaySeconds: 15
           periodSeconds: 30
-          timeoutSeconds: 10
+          timeoutSeconds: 30
         securityContext:
           allowPrivilegeEscalation: false
           capabilities:
@@ -177,7 +177,7 @@ spec:
           failureThreshold: 10
           initialDelaySeconds: 5
           periodSeconds: 30
-          timeoutSeconds: 10
+          timeoutSeconds: 30
         livenessProbe:
           httpGet:
             path: "/v1/config"
@@ -186,7 +186,7 @@ spec:
           failureThreshold: 10
           initialDelaySeconds: 15
           periodSeconds: 30
-          timeoutSeconds: 10
+          timeoutSeconds: 30
         env:
           - name: WLP_CLIENT_ID
             valueFrom:
