@@ -172,7 +172,7 @@ spec:
         readinessProbe:
           httpGet:
             path: "/v1/config"
-            scheme: HTTPS
+            scheme: HTTP
             port: 6969
           failureThreshold: 10
           initialDelaySeconds: 5
@@ -181,7 +181,7 @@ spec:
         livenessProbe:
           httpGet:
             path: "/v1/config"
-            scheme: HTTPS
+            scheme: HTTP
             port: 6969
           failureThreshold: 10
           initialDelaySeconds: 15
