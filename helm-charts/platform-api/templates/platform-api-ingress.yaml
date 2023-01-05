@@ -15,6 +15,7 @@ metadata:
     helm.sh/chart: {{ .Release.Name }}
   annotations:
     kubernetes.io/ingress.class: "ibm-icp-management"
+    icp.management.ibm.com/secure-backends: "true"
     icp.management.ibm.com/rewrite-target: "/"
     icp.management.ibm.com/configuration-snippet: |
       add_header Cache-Control "no-cache, no-store, must-revalidate";
