@@ -23,10 +23,26 @@ CURRENT_DEV_CSV=$1
 NEW_DEV_CSV=$2
 PREVIOUS_DEV_CSV=$3
 
-gsed -i "s/$CURRENT_DEV_CSV/$NEW_DEV_CSV/g" RELEASE_VERSION
-gsed -i "s/$PREVIOUS_DEV_CSV/$CURRENT_DEV_CSV/g" PREVIOUS_VERSION
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    # Linux OS
+    sed -i "s/$CURRENT_DEV_CSV/$NEW_DEV_CSV/g" RELEASE_VERSION
+    sed -i "s/$PREVIOUS_DEV_CSV/$CURRENT_DEV_CSV/g" PREVIOUS_VERSION
 
-gsed -i "s/$CURRENT_DEV_CSV/$NEW_DEV_CSV/g" bundle/manifests/ibm-platform-api-operator.clusterserviceversion.yaml
-gsed -i "s/$PREVIOUS_DEV_CSV/$CURRENT_DEV_CSV/g" bundle/manifests/ibm-platform-api-operator.clusterserviceversion.yaml
+    sed -i "s/$CURRENT_DEV_CSV/$NEW_DEV_CSV/g" bundle/manifests/ibm-platform-api-operator.clusterserviceversion.yaml
+    sed -i "s/$PREVIOUS_DEV_CSV/$CURRENT_DEV_CSV/g" bundle/manifests/ibm-platform-api-operator.clusterserviceversion.yaml
 
-gsed -i "s/$CURRENT_DEV_CSV/$NEW_DEV_CSV/g" helm-charts/platform-api/Chart.yaml
+    sed -i "s/$CURRENT_DEV_CSV/$NEW_DEV_CSV/g" helm-charts/platform-api/Chart.yaml
+
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+    # Mac OSX
+    sed -i "" "s/$CURRENT_DEV_CSV/$NEW_DEV_CSV/g" RELEASE_VERSION
+    sed -i "" "s/$PREVIOUS_DEV_CSV/$CURRENT_DEV_CSV/g" PREVIOUS_VERSION
+
+    sed -i "" "s/$CURRENT_DEV_CSV/$NEW_DEV_CSV/g" bundle/manifests/ibm-platform-api-operator.clusterserviceversion.yaml
+    sed -i "" "s/$PREVIOUS_DEV_CSV/$CURRENT_DEV_CSV/g" bundle/manifests/ibm-platform-api-operator.clusterserviceversion.yaml
+
+    sed -i "" "s/$CURRENT_DEV_CSV/$NEW_DEV_CSV/g" helm-charts/platform-api/Chart.yaml
+
+else
+    echo "Not support on other operating system"
+fi
