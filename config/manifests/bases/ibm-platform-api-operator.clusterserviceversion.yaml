@@ -13,6 +13,7 @@ metadata:
       and upgrade platform-api.
     olm.skipRange: ""
     operators.operatorframework.io/builder: operator-sdk-v1.3.0
+    operators.operatorframework.io/operator-type: 'non-standalone'
     operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1
     repository: https://github.com/IBM/ibm-platform-api-operator
     support: IBM
