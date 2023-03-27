@@ -83,6 +83,7 @@ metadata:
     description: The PlatformAPI operator provides a simple Kubernetes CRD-Based API to manage the lifecycle of PlatformAPI. With this operator, you can simply deploy and upgrade platform-api.
     olm.skipRange: '>=3.5.0 <3.25.1'
     operators.operatorframework.io/builder: operator-sdk-v1.19.0+git
+    operators.operatorframework.io/operator-type: 'non-standalone'
     operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1
     repository: https://github.com/IBM/ibm-platform-api-operator
     support: IBM
