@@ -14,6 +14,7 @@ metadata:
     olm.skipRange: ""
     operators.operatorframework.io/builder: operator-sdk-v1.3.0
     operators.operatorframework.io/project_layout: helm.sdk.operatorframework.io/v1
+    operators.openshift.io/infrastructure-features: '["disconnected"]'
     repository: https://github.com/IBM/ibm-platform-api-operator
     support: IBM
   labels:
