@@ -68,15 +68,13 @@ spec:
         whenUnsatisfiable: ScheduleAnyway
         labelSelector:
           matchLabels:
-            key: app
-            values: {{ .Values.platformApi.name }}-upgrade-job
+            app: {{ .Values.platformApi.name }}-upgrade-job
       - maxSkew: 1
         topologyKey: topology.kubernetes.io/region
         whenUnsatisfiable: ScheduleAnyway
         labelSelector:
           matchLabels:
-            key: app
-            values: {{ .Values.platformApi.name }}-upgrade-job
+            app: {{ .Values.platformApi.name }}-upgrade-job
       terminationGracePeriodSeconds: 60
       containers:
       - name: remove-token-secrets
