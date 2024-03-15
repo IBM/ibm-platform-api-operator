@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 # Build the manager binary
-FROM docker-na-public.artifactory.swg-devops.com/hyc-cloud-private-edge-docker-local/build-images/helm-operator:latest
+FROM docker-na-public.artifactory.swg-devops.com/hyc-cloud-private-edge-docker-local/build-images/helm-operator:v1.33.0
 
 ARG VCS_REF
 ARG VCS_URL
